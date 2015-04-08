@@ -1,6 +1,8 @@
 package draftkit;
 
+import static draftkit.DK_PropertyType.*;
 import static draftkit.DK_StartupConstants.*;
+import dk.gui.DK_GUI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -39,7 +41,7 @@ public class DraftKit extends Application {
                 // Used for exporting, when the time comes
                 //DraftExporter exporter = new DraftExporter(PATH_BASE, PATH_SITES);
                 
-                ArrayList<String> subjects = jsonFileManager.loadSubjects(JSON_FILE_PATH_SUBJECTS);
+                //ArrayList<String> subjects = jsonFileManager.loadSubjects(JSON_FILE_PATH_SUBJECTS);
                                 
                 // AND NOW GIVE ALL OF THIS STUFF TO THE GUI
                 // INITIALIZE THE USER INTERFACE COMPONENTS
