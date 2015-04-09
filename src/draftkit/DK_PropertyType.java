@@ -20,6 +20,11 @@ public enum DK_PropertyType {
     EXIT_ICON,
     ADD_ICON,
     MINUS_ICON,
+    PLAYER_SELECT_ICON,
+    TEAM_SELECT_ICON,
+    STANDINGS_SELECT_ICON,
+    DRAFT_SELECT_ICON,
+    MLB_TEAMS_SELECT_ICON,
     
     //tooltips for buttons
     NEW_DRAFT_TOOLTIP,
