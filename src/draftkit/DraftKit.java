@@ -2,6 +2,7 @@ package draftkit;
 
 import static draftkit.DK_PropertyType.*;
 import static draftkit.DK_StartupConstants.*;
+import dk.error.ErrorHandler;
 import dk.gui.DK_GUI;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class DraftKit extends Application {
                 gui.setDataManager(dataManager);
 
                 // start the user inferface
-                gui.initGUI(appTitle, subjects);                
+                gui.initGUI(appTitle);                
             }
             catch(IOException ioe) {
                 eH = ErrorHandler.getErrorHandler();
