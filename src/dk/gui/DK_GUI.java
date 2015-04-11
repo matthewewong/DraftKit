@@ -1,5 +1,6 @@
 package dk.gui;
 
+import dk.data.DraftDataManager;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
@@ -263,7 +264,7 @@ public class DK_GUI {
         initDialogs();
         
         // init the toolbar
-        initFileToolbar();
+        initTopToolbar();
 
         // init the center workspace
         initWorkspace();

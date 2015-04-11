@@ -1,5 +1,6 @@
 package dk.error;
 
+import dk.gui.MessageDialog;
 import static draftkit.DK_StartupConstants.CLOSE_BUTTON_LABEL;
 import static draftkit.DK_StartupConstants.PROPERTIES_FILE_ERROR_MESSAGE;
 import javafx.stage.Stage;
@@ -43,7 +44,7 @@ public class ErrorHandler {
      * @param owner The parent window for the modal message dialog.
      */
     public void initMessageDialog(Stage owner) {
-        // WE'LL USE THIS DIALOG TO PROVIDE FEEDBACK WHEN ERRORS OCCUR
+        //use this dialog to provide feedback
         messageDialog = new MessageDialog(owner, CLOSE_BUTTON_LABEL);        
     }
 
