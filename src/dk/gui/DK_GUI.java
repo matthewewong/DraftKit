@@ -4,6 +4,8 @@ import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -11,13 +13,18 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import properties_manager.PropertiesManager;
 /**
  * This class provides the GUI for this application, managing all the UI components
  * for editing a draft and exporting it to a site.
@@ -43,7 +50,7 @@ public class DK_GUI {
     DraftFileManager draftFileManager;
     
     //manages the exporting of the pages
-    DraftExporter draftExporter;
+    //DraftExporter draftExporter;
     
     //handles interactions with files
     FileHandler fileHandler;
@@ -58,13 +65,16 @@ public class DK_GUI {
     PlayerHandler playerHandler;
     
     //handles requests to add or edit team stuff
-    TeamHandler teamHandler;
+    //TeamHandler teamHandler;
     
-    //hhands requests to edit draft stuff
-    DraftHandler draftHandler;
+    //handles requests to edit draft stuff
+    //DraftHandler draftHandler;
     
     //application window
     Stage primaryStage;
+    
+    //stage's scene graph
+    Scene primaryScene;
     
     //organizes the big picture containers for the application GUI
     BorderPane draftPane;
@@ -97,7 +107,7 @@ public class DK_GUI {
     VBox MLBTeamsPane;
     
     //used for the players pane
-    Pane playerDataPane;
+    GridPane playerDataPane;
     Label playersHeadingLabel;
     HBox playersToolbar;
     ToggleGroup group;
@@ -448,5 +458,98 @@ public class DK_GUI {
     //initializes controls in the MLB Teams screen
     private void initMLBTeamsScreenControls() throws IOException {
         MLBTeamsPane = new VBox();
+    }
+    
+    //set the window
+    private void initWindow(String windowTitle) {
+        //set the title
+        primaryStage.setTitle(windowTitle);
+        
+        //get the size of the screen
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        //and size the window
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+        
+        //add the top toolbar only
+        draftPane = new BorderPane();
+        draftPane.setTop(topToolbarPane);
+        primaryScene = new Scene(draftPane);
+        
+        //tie the scene to the window, select the stylesheet, and open the window
+        primaryScene.getStylesheets().add(PRIMARY_STYLE_SHEET);
+        primaryStage.setScene(primaryScene);
+        primaryStage.show();
+    }
+    
+    //init the event handlers
+    private void initEventHandlers() throws IOException {
+        
+    }
+    
+    //register the event listener for a text field
+    private void registerTextFieldController(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            editHandler.handleCourseChangeRequest(this);
+        });
+    }
+    
+    //init a button and add it to a container in a toolbar
+    private Button initChildButton(Pane toolbar, DK_PropertyType icon, DK_PropertyType tooltip, boolean disabled) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imagePath = "file:" + PATH_IMAGES + props.getProperty(icon.toString());
+        Image buttonImage = new Image(imagePath);
+        Button button = new Button();
+        button.setDisable(disabled);
+        button.setGraphic(new ImageView(buttonImage));
+        Tooltip buttonTooltip = new Tooltip(props.getProperty(tooltip.toString()));
+        button.setTooltip(buttonTooltip);
+        toolbar.getChildren().add(button);
+        return button;
+    }
+    
+    
+    //init a label and set its stylesheet class
+    private Label initLabel(DK_PropertyType labelProperty, String styleClass) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String labelText = props.getProperty(labelProperty);
+        Label label = new Label(labelText);
+        label.getStyleClass().add(styleClass);
+        return label;
+    }
+    
+    //init a label and place it in a GridPane
+    private Label initGridLabel(GridPane container, DK_PropertyType labelProperty, String styleClass, int col, int row, int colSpan, int rowSpan) {
+        Label label = initLabel(labelProperty, styleClass);
+        container.add(label, col, row, colSpan, rowSpan);
+        return label;
+    }
+    
+    //init a combo box and put it in a grid pane; NOT USED FOR HW 5
+    private ComboBox initGridComboBox(GridPane container, int col, int row, int colSpan, int rowSpan) throws IOException {
+        ComboBox comboBox = new ComboBox();
+        container.add(comboBox, col, row, colSpan, rowSpan);
+        return comboBox;
+    }
+    
+    //init a text field and put it in a GridPane
+    private TextField initGridTextField(GridPane container, int size, String initText, boolean editable, int col, int row, int colSpan, int rowSpan) {
+        TextField tf = new TextField();
+        tf.setPrefColumnCount(size);
+        tf.setText(initText);
+        tf.setEditable(editable);
+        container.add(tf, col, row, colSpan, rowSpan);
+        return tf;
+    }
+    
+    //init an HBox and put it in a GridPane
+    private HBox initGridHBox(GridPane container, int col, int row, int colSpan, int rowSpan) {
+        HBox hBox = new HBox();
+        container.add(hBox, col, row, colSpan, rowSpan);
+        return hBox;
     }
 }
