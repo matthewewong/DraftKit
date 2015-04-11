@@ -1,5 +1,7 @@
 package dk.data;
 
+import dk.file.DraftFileManager;
+
 /**
  * This class manages a Draft, which means it knows how to reset one with default
  * values.

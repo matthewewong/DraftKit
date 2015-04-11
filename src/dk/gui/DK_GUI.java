@@ -1,6 +1,7 @@
 package dk.gui;
 
 import dk.data.DraftDataManager;
+import dk.file.DraftFileManager;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
@@ -241,8 +242,8 @@ public class DK_GUI {
      *
      * @param initDraftFileManager the DraftFileManager to be used by this UI.
      */
-    public void setDraftFileManager(DraftFileManager initCourseFileManager) {
-        draftFileManager = initCourseFileManager;
+    public void setDraftFileManager(DraftFileManager initDraftFileManager) {
+        draftFileManager = initDraftFileManager;
     }
 
     /**
