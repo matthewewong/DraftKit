@@ -1,6 +1,7 @@
 package draftkit;
 
 import dk.data.DraftDataManager;
+import dk.data.DraftDataView;
 import static draftkit.DK_PropertyType.*;
 import static draftkit.DK_StartupConstants.*;
 import dk.error.ErrorHandler;
@@ -38,7 +39,7 @@ public class DraftKit extends Application {
             try {                
                 // save data using a json file format, so we let this object do
                 // this for us
-                JsonDraftFileManager jsonFileManager = new JsonDraftFileManager();
+                //JsonDraftFileManager jsonFileManager = new JsonDraftFileManager();
                 
                 // Used for exporting, when the time comes
                 //DraftExporter exporter = new DraftExporter(PATH_BASE, PATH_SITES);
@@ -48,7 +49,7 @@ public class DraftKit extends Application {
                 // AND NOW GIVE ALL OF THIS STUFF TO THE GUI
                 // INITIALIZE THE USER INTERFACE COMPONENTS
                 gui = new DK_GUI(primaryStage);
-                gui.setDraftFileManager(jsonFileManager);
+                //gui.setDraftFileManager(jsonFileManager);
                 //gui.setSiteExporter(exporter);
                 
                 // CONSTRUCT THE DATA MANAGER AND GIVE IT TO THE GUI

@@ -1,6 +1,9 @@
 package dk.gui;
 
+import dk.data.Draft;
 import dk.data.DraftDataManager;
+import dk.data.DraftDataView;
+import dk.data.Player;
 import dk.file.DraftFileManager;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
@@ -33,7 +36,7 @@ import properties_manager.PropertiesManager;
  *
  * @author Matthew Wong
  */
-public class DK_GUI {
+public class DK_GUI implements DraftDataView {
     //constants that grabs the style sheet to get a nice presentation
     static final String PRIMARY_STYLE_SHEET = PATH_CSS + "csb_style.css";
     static final String CLASS_BORDERED_PANE = "bordered_pane";
@@ -55,21 +58,21 @@ public class DK_GUI {
     //DraftExporter draftExporter;
     
     //handles interactions with files
-    FileHandler fileHandler;
+    //FileHandler fileHandler;
     
     //handles screen selections
-    ScreenSelectHandler screenHandler;
+    //ScreenSelectHandler screenHandler;
     
-    //handles interactions with info controls
-    DraftEditHandler editHandler;
+    //handles interactions with draft info controls
+    //DraftEditHandler editHandler;
     
     //handles requests to add or edit player stuff
-    PlayerHandler playerHandler;
+    //PlayerHandler playerHandler;
     
     //handles requests to add or edit team stuff
     //TeamHandler teamHandler;
     
-    //handles requests to edit draft stuff
+    //handles requests to edit draft screen stuff
     //DraftHandler draftHandler;
     
     //application window
@@ -157,10 +160,10 @@ public class DK_GUI {
     
     //tables
     TableView<Player> playersTable;
-    TableView<Player> teamsTable;
-    TableView<Team> standingsTable;
-    TableView<Player> draftTable;
-    TableView<Player> mlbTeamsTable;
+    //TableView<Player> teamsTable; //NOT USED FOR HW5
+    //TableView<Team> standingsTable; //NOT USED FOR HW5
+    //TableView<Player> draftTable; //NOT USED FOR  HW5
+    //TableView<Player> mlbTeamsTable; //NOT USED FOR HW5
     
     //dialogs
     MessageDialog messageDialog;
@@ -189,9 +192,9 @@ public class DK_GUI {
      * 
      * @return the FileHandler used by this UI.
      */
-    public FileHandler getFileController() {
+    /*public FileHandler getFileController() {
         return fileHandler;
-    }
+    }*/
     
     /**
      * Accessor method for the draft file manager.
@@ -203,13 +206,13 @@ public class DK_GUI {
     }
     
     /**
-     * Accessor method for the site exporter.
+     * Accessor method for the site exporter. NOT USED FOR HW 5 
      * 
      * @return the SiteExporter used by this UI.
      */
-    public DraftExporter getDraftExporter() {
+    /*public DraftExporter getDraftExporter() {
         return draftExporter;
-    }
+    }*/
     
     /**
      * Accessor method for the window (stage).
@@ -247,13 +250,13 @@ public class DK_GUI {
     }
 
     /**
-     * Mutator method for the site exporter.
+     * Mutator method for the site exporter.  NOT USED FOR HW 5
      *
      * @param initSiteExporter the draftExporter to be used by this UI.
      */
-    public void setSiteExporter(DraftSiteExporter initSiteExporter) {
+    /*public void setSiteExporter(DraftSiteExporter initSiteExporter) {
         draftExporter = initSiteExporter;
-    }
+    }*/
     /**
      * initialize the user interface for use.
      *
@@ -295,7 +298,6 @@ public class DK_GUI {
      * 
      * @param draftToReload the draft whose data we'll load into the GUI.
      */
-    @Override
     public void reloadDraft(Draft draftToReload) {
         // if necessary, activate the workspace
         if (!workspaceActivated) {
@@ -303,12 +305,12 @@ public class DK_GUI {
         }
         
         // we don't want to respond to events when initializing the selections
-        draftHandler.enable(false);
+        //editHandler.enable(false);
 
         //get the players table
         
         // enable the handler so we can respond to user interactions
-        draftHandler.enable(true);
+        //editHandler.enable(true);
     }
     
     /**
@@ -496,7 +498,7 @@ public class DK_GUI {
     //register the event listener for a text field
     private void registerTextFieldController(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            editHandler.handleCourseChangeRequest(this);
+    //        editHandler.handleCourseChangeRequest(this);
         });
     }
     

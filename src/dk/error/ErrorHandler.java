@@ -1,5 +1,6 @@
 package dk.error;
 
+import dk.data.Draft;
 import dk.gui.MessageDialog;
 import static draftkit.DK_StartupConstants.CLOSE_BUTTON_LABEL;
 import static draftkit.DK_StartupConstants.PROPERTIES_FILE_ERROR_MESSAGE;
