@@ -10,6 +10,7 @@ import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -302,7 +303,6 @@ public class DK_GUI implements DraftDataView {
         if (!workspaceActivated) {
             // put the workspace in the GUI
             draftPane.setCenter(teamPane);
-            //initBotToolbar();
             draftPane.setBottom(botToolbarPane);
             lastSelection = TEAM_BUTTON;
             workspaceActivated = true;
@@ -401,25 +401,28 @@ public class DK_GUI implements DraftDataView {
     
     //initializes controls in the player screen
     private void initPlayerScreenControls() throws IOException {
-        //entire player screen
+        //entire player screen; make it look nice
         playersPane = new VBox();
+        playersPane.setPadding(new Insets(10, 20, 20, 20));
+        playersPane.setSpacing(10);
         
         //holds the search bar, add/remove a player, and the player label
         playerDataPane = new GridPane();
         playersHeadingLabel = initGridLabel(playerDataPane, DK_PropertyType.PLAYERS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
         
         //gets the toolbar for the table
-        playersToolbar = initGridHBox(playerDataPane, 0, 1, 1, 1);
+        playersToolbar = initGridHBox(playerDataPane, 0, 2, 1, 1);
         addPlayerButton = initChildButton(playersToolbar, DK_PropertyType.ADD_ICON, DK_PropertyType.ADD_PLAYER_TOOLTIP, false);
         removePlayerButton = initChildButton(playersToolbar, DK_PropertyType.MINUS_ICON, DK_PropertyType.REMOVE_PLAYER_TOOLTIP, false);
-        searchPlayerLabel = initGridLabel(playerDataPane, DK_PropertyType.SEARCH_PLAYER_LABEL, CLASS_PROMPT_LABEL, 2, 1, 1, 1);
-        searchPlayerTextField = initGridTextField(playerDataPane, LARGE_TEXT_FIELD_LENGTH, EMPTY_TEXT, true, 3, 1, 1, 1);
+        searchPlayerLabel = initGridLabel(playerDataPane, DK_PropertyType.SEARCH_PLAYER_LABEL, CLASS_PROMPT_LABEL, 4, 2, 1, 1);
+        searchPlayerTextField = initGridTextField(playerDataPane, LARGE_TEXT_FIELD_LENGTH, EMPTY_TEXT, true, 5, 2, 5, 1);
         
         //holds the radio buttons
-        playersRadioButton = initGridHBox(playerDataPane, 1, 3, 5, 1);
+        playersRadioButton = initGridHBox(playerDataPane, 1, 4, 5, 1);
         group = new ToggleGroup();
         allButton = new RadioButton("All");
         allButton.setToggleGroup(group);
+        allButton.setSelected(true);
         cButton = new RadioButton("C");
         cButton.setToggleGroup(group);
         firstBaseButton = new RadioButton("1B");
@@ -451,6 +454,10 @@ public class DK_GUI implements DraftDataView {
         playersRadioButton.getChildren().add(ofButton);
         playersRadioButton.getChildren().add(uButton);
         playersRadioButton.getChildren().add(pButton);
+        
+        //make it look nicer
+        playersRadioButton.setPadding(new Insets(20, 30, 30, 30));
+        playersRadioButton.setSpacing(20);
         
         playersTable = new TableView();
         playersPane.getChildren().add(playerDataPane);

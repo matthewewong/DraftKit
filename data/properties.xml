@@ -51,7 +51,7 @@ Draft Kit.
         
         <!-- players labels -->
         <property name="RADIO_BUTTON_PLAYERS_LABEL"     value="Positions:"></property>
-        <property name="SEARCH_PLAYER_LABEL"          value="Search Player:"></property>
+        <property name="SEARCH_PLAYER_LABEL"          value="Search Player:   "></property>
         <property name="ADD_PLAYER_LABEL"           value="Add Player"></property>
         <property name="REMOVE_PLAYER_LABEL"        value="Remove Player"></property>
         
