@@ -44,9 +44,9 @@ Draft Kit.
         <!-- GUI LABELS -->
         <property name="DRAFT_HEADING_LABEL"           value="Draft Details"></property>
         <property name="PLAYERS_SCREEN_HEADING_LABEL"       value="Available Players"></property>
-        <property name="TEAM_SCREEN_HEADING_LABEL"           value="Teams"></property>
-        <property name="STANDINGS_SCREEN_HEADING_LABEL"       value="Standings"></property>
-        <property name="DRAFT_SCREEN_HEADING_LABEL"          value="Draft"></property>
+        <property name="TEAM_SCREEN_HEADING_LABEL"           value="Fantasy Teams"></property>
+        <property name="STANDINGS_SCREEN_HEADING_LABEL"       value="Fantasy Standings"></property>
+        <property name="DRAFT_SCREEN_HEADING_LABEL"          value="Draft Summary"></property>
         <property name="MLB_TEAMS_SCREEN_HEADING_LABEL"        value="MLB Teams"></property>
         
         <!-- players labels -->

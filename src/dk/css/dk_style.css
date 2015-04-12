@@ -1,0 +1,35 @@
+/* 
+    This style sheet stylizes the controls inside our Wolfieball Draft Kit JavaFX
+    application. Note that controls in the UI must have the same class as those 
+    below in order to be rendered using those properties.
+
+    Author     : MAVIRI
+*/
+
+//big panes
+.bordered_pane {
+    -fx-background-color: #aaaaff;
+    -fx-background-radius: 5.0;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-border-width: 2px;
+    -fx-border-color: #7777dd;
+}
+
+//large sections in the GUI
+.heading_label {
+    -fx-font-size: 20pt;
+    -fx-font-weight: bold;
+}
+
+//heading subsections in the GUI
+.subheading_label {
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+}
+
+//label prompts in the GUI
+.prompt_label {
+    -fx-font-size: 10pt;
+    -fx-font-weight: bold;
+}

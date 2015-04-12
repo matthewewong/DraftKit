@@ -5,6 +5,7 @@ import dk.data.DraftDataManager;
 import dk.data.DraftDataView;
 import dk.data.Player;
 import dk.file.DraftFileManager;
+import dk.handler.FileHandler;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import properties_manager.PropertiesManager;
  */
 public class DK_GUI implements DraftDataView {
     //constants that grabs the style sheet to get a nice presentation
-    static final String PRIMARY_STYLE_SHEET = PATH_CSS + "csb_style.css";
+    static final String PRIMARY_STYLE_SHEET = PATH_CSS + "dk_style.css";
     static final String CLASS_BORDERED_PANE = "bordered_pane";
     static final String CLASS_SUBJECT_PANE = "subject_pane";
     static final String CLASS_HEADING_LABEL = "heading_label";
@@ -47,6 +48,16 @@ public class DK_GUI implements DraftDataView {
     static final String EMPTY_TEXT = "";
     static final int LARGE_TEXT_FIELD_LENGTH = 20;
     static final int SMALL_TEXT_FIELD_LENGTH = 5;
+    
+    //these are for the buttons
+    static final String PLAYERS_BUTTON = "Players";
+    static final String TEAM_BUTTON = "Team";
+    static final String STANDINGS_BUTTON = "Standings";
+    static final String DRAFT_BUTTON = "Draft";
+    static final String MLB_TEAMS_BUTTON = "MLB Teams";
+    
+    String lastSelection;
+    String newSelection = "";
     
     //manage all the data
     DraftDataManager dataManager;
@@ -58,16 +69,16 @@ public class DK_GUI implements DraftDataView {
     //DraftExporter draftExporter;
     
     //handles interactions with files
-    //FileHandler fileHandler;
+    FileHandler fileHandler;
     
     //handles screen selections
-    //ScreenSelectHandler screenHandler;
+    //ScreenSelectHandler screenHandler; CHANGE
     
     //handles interactions with draft info controls
-    //DraftEditHandler editHandler;
+    //DraftEditHandler editHandler; CHANGE
     
     //handles requests to add or edit player stuff
-    //PlayerHandler playerHandler;
+    //PlayerHandler playerHandler; CHANGE
     
     //handles requests to add or edit team stuff
     //TeamHandler teamHandler;
@@ -146,6 +157,7 @@ public class DK_GUI implements DraftDataView {
     Label teamSelectLabel;
     
     //used for the standings pane
+    GridPane standingsDataPane;
     Label standingsHeadingLabel;
     
     //used for the draft pane
@@ -156,6 +168,7 @@ public class DK_GUI implements DraftDataView {
     Button pauseAutoDraftButton;
     
     //used for the mlbTeams pane
+    GridPane mlbTeamsDataPane;
     Label mlbTeamsHeadingLabel;
     
     //tables
@@ -192,9 +205,9 @@ public class DK_GUI implements DraftDataView {
      * 
      * @return the FileHandler used by this UI.
      */
-    /*public FileHandler getFileController() {
+    public FileHandler getFileController() {
         return fileHandler;
-    }*/
+    }
     
     /**
      * Accessor method for the draft file manager.
@@ -241,7 +254,7 @@ public class DK_GUI implements DraftDataView {
     }
 
     /**
-     * Mutator method for the course file manager.
+     * Mutator method for the draft file manager.
      *
      * @param initDraftFileManager the DraftFileManager to be used by this UI.
      */
@@ -257,6 +270,7 @@ public class DK_GUI implements DraftDataView {
     /*public void setSiteExporter(DraftSiteExporter initSiteExporter) {
         draftExporter = initSiteExporter;
     }*/
+    
     /**
      * initialize the user interface for use.
      *
@@ -288,6 +302,9 @@ public class DK_GUI implements DraftDataView {
         if (!workspaceActivated) {
             // put the workspace in the GUI
             draftPane.setCenter(teamDataPane);
+            initBotToolbar();
+            draftPane.setBottom(botToolbarPane);
+            lastSelection = TEAM_BUTTON;
             workspaceActivated = true;
         }
     }
@@ -305,12 +322,12 @@ public class DK_GUI implements DraftDataView {
         }
         
         // we don't want to respond to events when initializing the selections
-        //editHandler.enable(false);
+        //editHandler.enable(false); CHANGE
 
         //get the players table
         
         // enable the handler so we can respond to user interactions
-        //editHandler.enable(true);
+        //editHandler.enable(true); CHANGE
     }
     
     /**
@@ -319,7 +336,7 @@ public class DK_GUI implements DraftDataView {
      * 
      * @param saved Describes whether the loaded Course has been saved or not.
      */
-    /*public void updateTopToolbarControls(boolean saved) {
+    public void updateTopToolbarControls(boolean saved) {
         //tells the button whether it should be saved
         saveDraftButton.setDisable(saved);
 
@@ -328,7 +345,7 @@ public class DK_GUI implements DraftDataView {
         exportDraftButton.setDisable(false);
 
         //new, load and exit buttons are never disabled
-    }*/
+    }
     
     //Initialize dialogs
     private void initDialogs() {
@@ -374,7 +391,6 @@ public class DK_GUI implements DraftDataView {
         workspacePane = new BorderPane();
         workspacePane.setTop(topToolbarPane);
         workspacePane.setCenter(teamPane);
-        workspacePane.setBottom(botToolbarPane);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
 
         // NOTE THAT WE HAVE NOT PUT THE WORKSPACE INTO THE WINDOW,
@@ -390,7 +406,7 @@ public class DK_GUI implements DraftDataView {
         
         //holds the search bar, add/remove a player, and the player label
         playerDataPane = new GridPane();
-        playersHeadingLabel = initGridLabel(playerDataPane, DK_PropertyType.PLAYERS_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
+        playersHeadingLabel = initGridLabel(playerDataPane, DK_PropertyType.PLAYERS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
         
         //gets the toolbar for the table
         playersToolbar = initGridHBox(playerDataPane, 0, 1, 1, 1);
@@ -440,28 +456,56 @@ public class DK_GUI implements DraftDataView {
         playersPane.getChildren().add(playerDataPane);
         playersPane.getChildren().add(playersTable);
         playersPane.getStyleClass().add(CLASS_BORDERED_PANE);
+        
+        //add everything to the screen
     }
     
     //initializes controls in the team screen
     private void initTeamScreenControls() throws IOException {
         teamPane = new VBox();
+        
+        //holds the controls for the team screen
+        teamDataPane = new GridPane();
+        teamHeadingLabel = initGridLabel(teamDataPane, DK_PropertyType.TEAM_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
         //NOT FOR HW 5
+        
+        teamPane.getChildren().add(teamDataPane);
     }
     
     //initializes controls in the standings screen
     private void initStandingsScreenControls() throws IOException {
         standingsPane = new VBox();
+        
+        //used for the data
+        standingsDataPane = new GridPane();
+        standingsHeadingLabel = initGridLabel(standingsDataPane, DK_PropertyType.STANDINGS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
         //NOT FOR HW 5
+        
+        standingsPane.getChildren().add(standingsDataPane);
     }
     
     //initializes controls in the draft screen
     private void initDraftScreenControls() throws IOException {
         draftSelectPane = new VBox();
+        
+        //used for the data
+        draftOptionsPane = new GridPane();
+        draftHeadingLabel = initGridLabel(draftOptionsPane, DK_PropertyType.DRAFT_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
+        //NOT FOR HW 5
+        
+        draftSelectPane.getChildren().add(draftOptionsPane);
     }
     
     //initializes controls in the MLB Teams screen
     private void initMLBTeamsScreenControls() throws IOException {
         MLBTeamsPane = new VBox();
+        
+        //used to get the data
+        mlbTeamsDataPane = new GridPane();
+        mlbTeamsHeadingLabel = initGridLabel(mlbTeamsDataPane, DK_PropertyType.MLB_TEAMS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
+        //NOT FOR HW 5
+        
+        MLBTeamsPane.getChildren().add(mlbTeamsDataPane);
     }
     
     //set the window
@@ -492,13 +536,18 @@ public class DK_GUI implements DraftDataView {
     
     //init the event handlers
     private void initEventHandlers() throws IOException {
+        fileHandler = new FileHandler(messageDialog, draftFileManager);
+        newDraftButton.setOnAction(e -> {
+            fileHandler.handleNewDraftRequest(this);
+        });
+        
         
     }
     
     //register the event listener for a text field
     private void registerTextFieldController(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-    //        editHandler.handleCourseChangeRequest(this);
+    //        editHandler.handleCourseChangeRequest(this); CHANGE
         });
     }
     
