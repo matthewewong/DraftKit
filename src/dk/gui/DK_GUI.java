@@ -71,9 +71,6 @@ public class DK_GUI implements DraftDataView {
     //handles interactions with files
     FileHandler fileHandler;
     
-    //handles screen selections
-    //ScreenSelectHandler screenHandler; CHANGE
-    
     //handles interactions with draft info controls
     //DraftEditHandler editHandler; CHANGE
     
@@ -281,8 +278,11 @@ public class DK_GUI implements DraftDataView {
         // init dialogs
         initDialogs();
         
-        // init the toolbar
+        // init the top toolbar
         initTopToolbar();
+        
+        // init the bot toolbar
+        initBotToolbar();
 
         // init the center workspace
         initWorkspace();
@@ -301,8 +301,8 @@ public class DK_GUI implements DraftDataView {
     public void activateWorkspace() {
         if (!workspaceActivated) {
             // put the workspace in the GUI
-            draftPane.setCenter(teamDataPane);
-            initBotToolbar();
+            draftPane.setCenter(teamPane);
+            //initBotToolbar();
             draftPane.setBottom(botToolbarPane);
             lastSelection = TEAM_BUTTON;
             workspaceActivated = true;
@@ -541,7 +541,30 @@ public class DK_GUI implements DraftDataView {
             fileHandler.handleNewDraftRequest(this);
         });
         
+        playerScreenButton.setOnAction(e -> {
+            newSelection = PLAYERS_BUTTON;
+            screenSelectHandler(lastSelection, newSelection);
+        });
         
+        teamScreenButton.setOnAction(e -> {
+            newSelection = TEAM_BUTTON;
+            screenSelectHandler(lastSelection, newSelection);
+        });
+        
+        standingsScreenButton.setOnAction(e -> {
+            newSelection = STANDINGS_BUTTON;
+            screenSelectHandler(lastSelection, newSelection);
+        });
+        
+        draftScreenButton.setOnAction(e -> {
+            newSelection = DRAFT_BUTTON;
+            screenSelectHandler(lastSelection, newSelection);
+        });
+        
+        mlbTeamsButton.setOnAction(e -> {
+            newSelection = MLB_TEAMS_BUTTON;
+            screenSelectHandler(lastSelection, newSelection);
+        });
     }
     
     //register the event listener for a text field
@@ -604,5 +627,46 @@ public class DK_GUI implements DraftDataView {
         HBox hBox = new HBox();
         container.add(hBox, col, row, colSpan, rowSpan);
         return hBox;
+    }
+    
+    //selects the creen to be loaded to the GUI.
+    private void screenSelectHandler(String lastSelection, String newSelection) {
+        //making the disabled button to be enabled
+        if (lastSelection.equals(PLAYERS_BUTTON))
+            playerScreenButton.setDisable(false);
+        else if (lastSelection.equals(TEAM_BUTTON))
+            teamScreenButton.setDisable(false);
+        else if (lastSelection.equals(STANDINGS_BUTTON))
+            standingsScreenButton.setDisable(false);
+        else if (lastSelection.equals(DRAFT_BUTTON))
+            draftScreenButton.setDisable(false);
+        else
+            mlbTeamsButton.setDisable(false);
+        
+        //make the enabled (pressed) button disabled
+        if (newSelection.equals(PLAYERS_BUTTON))
+            playerScreenButton.setDisable(true);
+        else if (newSelection.equals(TEAM_BUTTON))
+            teamScreenButton.setDisable(true);
+        else if (newSelection.equals(STANDINGS_BUTTON))
+            standingsScreenButton.setDisable(true);
+        else if (newSelection.equals(DRAFT_BUTTON))
+            draftScreenButton.setDisable(true);
+        else
+            mlbTeamsButton.setDisable(true);
+        
+        //make the lastSelection the newSelection
+        this.lastSelection = newSelection;
+        //open the correct screen
+        if (newSelection.equals(PLAYERS_BUTTON))
+            draftPane.setCenter(playersPane);
+        else if (newSelection.equals(TEAM_BUTTON))
+            draftPane.setCenter(teamPane);
+        else if (newSelection.equals(STANDINGS_BUTTON))
+            draftPane.setCenter(standingsPane);
+        else if (newSelection.equals(DRAFT_BUTTON))
+            draftPane.setCenter(draftOptionsPane);
+        else
+            draftPane.setCenter(MLBTeamsPane);
     }
 }
