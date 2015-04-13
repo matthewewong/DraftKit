@@ -5,6 +5,7 @@ import dk.data.DraftDataView;
 import static draftkit.DK_PropertyType.*;
 import static draftkit.DK_StartupConstants.*;
 import dk.error.ErrorHandler;
+import dk.file.JsonDraftFileManager;
 import dk.gui.DK_GUI;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,17 +40,21 @@ public class DraftKit extends Application {
             try {                
                 // save data using a json file format, so we let this object do
                 // this for us
-                //JsonDraftFileManager jsonFileManager = new JsonDraftFileManager();
+                JsonDraftFileManager jsonFileManager = new JsonDraftFileManager();
                 
                 // Used for exporting, when the time comes
                 //DraftExporter exporter = new DraftExporter(PATH_BASE, PATH_SITES);
                 
-                //ArrayList<String> subjects = jsonFileManager.loadSubjects(JSON_FILE_PATH_SUBJECTS);
-                                
+                //get the hitters and pitchers
+                //ArrayList<String> hitters = jsonFileManager.loadHitters(JSON_FILE_PATH_HITTERS);
+                //ArrayList<String> pitchers = jsonFileManager.loadPitchers(JSON_FILE_PATH_PITCHERS);
+                
+                //pass the hitters and pitchers to the Player class
+                
                 // AND NOW GIVE ALL OF THIS STUFF TO THE GUI
                 // INITIALIZE THE USER INTERFACE COMPONENTS
                 gui = new DK_GUI(primaryStage);
-                //gui.setDraftFileManager(jsonFileManager);
+                gui.setDraftFileManager(jsonFileManager);
                 //gui.setSiteExporter(exporter);
                 
                 // CONSTRUCT THE DATA MANAGER AND GIVE IT TO THE GUI
