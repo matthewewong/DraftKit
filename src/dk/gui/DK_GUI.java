@@ -574,6 +574,17 @@ public class DK_GUI implements DraftDataView {
         valueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
         notesColumn.setCellValueFactory(new PropertyValueFactory<String, String>("notes"));
         
+        //cannot sort columns when you are in the ALL button
+        RorWColumn.setSortable(false);
+        HRorSVColumn.setSortable(false);
+        RBIorKColumn.setSortable(false);
+        SBorERAColumn.setSortable(false);
+        BAorWHIPColumn.setSortable(false);
+        
+        //the user can edit the notes column, so we set the table to editable; in the
+        //event handler we set the notes column to be editable
+        playersTable.setEditable(true);
+        
         //not used at the beginning
         runsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("runs"));
         homeRunsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("homeRuns"));
