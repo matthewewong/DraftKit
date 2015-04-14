@@ -26,6 +26,11 @@ public class Player implements Comparable {
     final DoubleProperty ba;
     final IntegerProperty value;
     final StringProperty notes;
+    final IntegerProperty win;
+    final IntegerProperty sv;
+    final IntegerProperty k;
+    final DoubleProperty era;
+    final DoubleProperty whip;
     //public static final String DEFAULT_TEAM = "<ENTER TEAM>"; //not for HW 5
     //public static final String DEAFAULT_SALARY = "<ENTER SALARY>"; //not for HW 5
     public Player() {
@@ -41,6 +46,11 @@ public class Player implements Comparable {
         ba = new SimpleDoubleProperty();
         value = new SimpleIntegerProperty();
         notes = new SimpleStringProperty();
+        win = new SimpleIntegerProperty();
+        sv = new SimpleIntegerProperty();
+        k = new SimpleIntegerProperty();
+        era = new SimpleDoubleProperty();
+        whip = new SimpleDoubleProperty();
     }
     
     public String getFirstName() {
@@ -186,11 +196,91 @@ public class Player implements Comparable {
         return notes;
     }
     
-    public void calculateBA() {
-        int hits = 0;
-        double ab = 1.0;
-        double ba = hits / ab;
+    public void calculateBA(int hits, int ab) {
+        double ba;
+        if (ab == 0)
+            ba = 0.000;
+        else
+            ba = ((hits / ab) * 1000) / 1000.0;
         setBA(ba);
+    }
+    
+    public int getWins() {
+        return win.get();
+    }
+    
+    public void setWins(int initWins) {
+        win.set(initWins);
+    }
+    
+    public IntegerProperty winsProperty() {
+        return win;
+    }
+    
+    public int getSaves() {
+        return sv.get();
+    }
+    
+    public void setSaves(int initSv) {
+        sv.set(initSv);
+    }
+    
+    public IntegerProperty savesProperty() {
+        return sv;
+    }
+    
+    public int getStrikeouts() {
+        return k.get();
+    }
+    
+    public void setStrikeouts(int initK) {
+        k.set(initK);
+    }
+    
+    public IntegerProperty strikeoutsProperty() {
+        return k;
+    }
+    
+    public double getERA() {
+        return era.get();
+    }
+    
+    public void setERA(double initERA) {
+        era.set(initERA);
+    }
+    
+    public DoubleProperty eraProperty() {
+        return era;
+    }
+    
+    public double getWHIP() {
+        return whip.get();
+    }
+    
+    public void setWHIP(double initWHIP) {
+        whip.set(initWHIP);
+    }
+    
+    public DoubleProperty whipProperty() {
+        return whip;
+    }
+    
+    public void calculateERA(double IP, int ER) {
+        double era;
+        if (IP == 0.0)
+            era = 0.00;
+        else
+            era = (int)(((ER * 9) / IP) * 100) / 100.0;
+        setERA(era);
+    }
+    
+    public void calculateWHIP(int hits, int walks, double IP) {
+        double whip;
+        if (IP == 0.0)
+            whip = 0.00;
+        else
+            whip = (int)(((hits + walks) / IP) * 100) / 100.0;
+        setWHIP(whip);
     }
     
     @Override
