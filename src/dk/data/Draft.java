@@ -1,6 +1,8 @@
 package dk.data;
 
 import dk.data.Player;
+import java.util.ArrayList;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,8 +13,10 @@ import javafx.collections.ObservableList;
  */
 public class Draft {
     //things we'll put in the page
-    ObservableList<Player> players;
+    ObservableList<String> players;
     //ObservableList<Team> teams; //not for HW 5
+    ObservableList<String> hitters;
+    ObservableList<String> pitchers;
     
     /**
      * Constructor for setting up a Draft
@@ -21,6 +25,8 @@ public class Draft {
         //init the lists
         players = FXCollections.observableArrayList();
         //teams = FXCollections.observableArrayList(); //not for HW5
+        hitters = FXCollections.observableArrayList();
+        pitchers = FXCollections.observableArrayList();
     }
     
     //Accessor and mutator methods for a draft.
@@ -32,7 +38,7 @@ public class Draft {
         teams.clear();
     }*/
     
-    public ObservableList<Player> getPlayers() {
+    public ObservableList<String> getPlayers() {
         return players;
     }
     
@@ -40,6 +46,36 @@ public class Draft {
         return teams;
     }*/
     
+    public ObservableList<String> getHitters() {
+        return hitters;
+    }
+    
+    public ObservableList<String> getPitchers() {
+        return pitchers;
+    }
+    
+    public void setHitters(ArrayList<String> hitters) {
+        this.hitters = FXCollections.observableArrayList(hitters);
+    }
+    
+    public void setPitchers(ArrayList<String> pitchers) {
+        this.pitchers = FXCollections.observableArrayList(pitchers);
+    }
+    
+    public void setPlayers() {
+        //add hitters
+        for (String s : hitters) {
+            players.add(s);
+        }
+        
+        //add pitchers
+        for (String s : pitchers) {
+            players.add(s);
+        }
+        
+        //sort by name
+        Collections.sort(players);
+    }
     public void removePlayer(Player playerToRemove) {
         players.remove(playerToRemove);
     }
@@ -48,7 +84,7 @@ public class Draft {
         teams.remove(teamToRemove);
     }*/
     
-    public void addPlayer(Player p) {
+    public void addPlayer(String p) {
         players.add(p);
     }
     

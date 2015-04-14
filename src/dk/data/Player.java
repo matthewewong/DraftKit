@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  * 
@@ -25,7 +26,6 @@ public class Player implements Comparable {
     final DoubleProperty ba;
     final IntegerProperty value;
     final StringProperty notes;
-    //public static final String DEFAULT_FIRST_NAME = "First";
     //public static final String DEFAULT_TEAM = "<ENTER TEAM>"; //not for HW 5
     //public static final String DEAFAULT_SALARY = "<ENTER SALARY>"; //not for HW 5
     public Player() {

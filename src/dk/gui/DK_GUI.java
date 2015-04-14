@@ -10,6 +10,9 @@ import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -169,6 +172,10 @@ public class DK_GUI implements DraftDataView {
     GridPane mlbTeamsDataPane;
     Label mlbTeamsHeadingLabel;
     
+    //used for getting the players
+    ArrayList<String> hitters;
+    ArrayList<String> pitchers;
+    
     //tables
     TableView<Player> playersTable;
     //TableView<Player> teamsTable; //NOT USED FOR HW5
@@ -275,7 +282,14 @@ public class DK_GUI implements DraftDataView {
      * @param windowTitle the text to appear in the UI window's title bar.
      * @throws IOException Thrown if any initialization files fail to load.
      */
-    public void initGUI(String windowTitle) throws IOException {
+    public void initGUI(String windowTitle, ArrayList<String> hitters, ArrayList<String> pitchers) throws IOException {
+        //get the players
+        this.hitters = hitters;
+        this.pitchers = pitchers;
+        dataManager.getDraft().setHitters(hitters);
+        dataManager.getDraft().setPitchers(pitchers);
+        dataManager.getDraft().setPlayers();
+
         // init dialogs
         initDialogs();
         

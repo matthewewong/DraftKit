@@ -2,6 +2,7 @@ package draftkit;
 
 import dk.data.DraftDataManager;
 import dk.data.DraftDataView;
+import dk.data.Player;
 import static draftkit.DK_PropertyType.*;
 import static draftkit.DK_StartupConstants.*;
 import dk.error.ErrorHandler;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
 import xml_utilities.InvalidXMLFileFormatException;
@@ -46,10 +48,9 @@ public class DraftKit extends Application {
                 //DraftExporter exporter = new DraftExporter(PATH_BASE, PATH_SITES);
                 
                 //get the hitters and pitchers
-                //ArrayList<String> hitters = jsonFileManager.loadHitters(JSON_FILE_PATH_HITTERS);
-                //ArrayList<String> pitchers = jsonFileManager.loadPitchers(JSON_FILE_PATH_PITCHERS);
+                ArrayList<String> hitters = jsonFileManager.loadHitters(JSON_FILE_PATH_HITTERS);
+                ArrayList<String> pitchers = jsonFileManager.loadPitchers(JSON_FILE_PATH_PITCHERS);
                 
-                //pass the hitters and pitchers to the Player class
                 
                 // AND NOW GIVE ALL OF THIS STUFF TO THE GUI
                 // INITIALIZE THE USER INTERFACE COMPONENTS
@@ -62,7 +63,7 @@ public class DraftKit extends Application {
                 gui.setDataManager(dataManager);
 
                 // start the user inferface
-                gui.initGUI(appTitle);                
+                gui.initGUI(appTitle, hitters, pitchers);                
             }
             catch(IOException ioe) {
                 eH = ErrorHandler.getErrorHandler();

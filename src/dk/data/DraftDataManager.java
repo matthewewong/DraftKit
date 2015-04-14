@@ -1,6 +1,7 @@
 package dk.data;
 
 import dk.file.DraftFileManager;
+import java.util.ArrayList;
 
 /**
  * This class manages a Draft, which means it knows how to reset one with default
@@ -25,6 +26,7 @@ public class DraftDataManager {
     
     public DraftDataManager(DraftDataView initView) {
         view = initView;
+        draft = new Draft();
     }
     
     //accessor method for getting the draft
