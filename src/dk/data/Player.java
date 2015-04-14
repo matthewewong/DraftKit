@@ -1,5 +1,6 @@
 package dk.data;
 
+import java.text.DecimalFormat;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -22,7 +23,7 @@ public class Player implements Comparable {
     final IntegerProperty r;
     final IntegerProperty hr;
     final IntegerProperty rbi;
-    final IntegerProperty sb;
+    final DoubleProperty sb;
     final DoubleProperty ba;
     final IntegerProperty value;
     final StringProperty notes;
@@ -31,6 +32,14 @@ public class Player implements Comparable {
     final IntegerProperty k;
     final DoubleProperty era;
     final DoubleProperty whip;
+    
+    //used for ALL players
+    final IntegerProperty RorW;
+    final IntegerProperty HRorSV;
+    final IntegerProperty RBIorK;
+    final DoubleProperty SBorERA;
+    final DoubleProperty BAorWHIP;
+    boolean isHitter = true; //notify us if this is a hitter
     //public static final String DEFAULT_TEAM = "<ENTER TEAM>"; //not for HW 5
     //public static final String DEAFAULT_SALARY = "<ENTER SALARY>"; //not for HW 5
     public Player() {
@@ -42,7 +51,7 @@ public class Player implements Comparable {
         r = new SimpleIntegerProperty();
         hr = new SimpleIntegerProperty();
         rbi = new SimpleIntegerProperty();
-        sb = new SimpleIntegerProperty();
+        sb = new SimpleDoubleProperty();
         ba = new SimpleDoubleProperty();
         value = new SimpleIntegerProperty();
         notes = new SimpleStringProperty();
@@ -51,6 +60,19 @@ public class Player implements Comparable {
         k = new SimpleIntegerProperty();
         era = new SimpleDoubleProperty();
         whip = new SimpleDoubleProperty();
+        RorW = new SimpleIntegerProperty();
+        HRorSV = new SimpleIntegerProperty();
+        RBIorK = new SimpleIntegerProperty();
+        SBorERA = new SimpleDoubleProperty();
+        BAorWHIP = new SimpleDoubleProperty();
+    }
+    
+    public boolean isAHitter() {
+        return isHitter;
+    }
+    
+    public void setHitter(boolean b) {
+        isHitter = b;
     }
     
     public String getFirstName() {
@@ -148,15 +170,15 @@ public class Player implements Comparable {
     public IntegerProperty rbiProperty() {
         return rbi;
     }
-    public int getStolenBases() {
+    public double getStolenBases() {
         return sb.get();
     }
     
-    public void setStolenBases(int initSB) {
+    public void setStolenBases(double initSB) {
         sb.set(initSB);
     }
     
-    public IntegerProperty stolenBasesProperty() {
+    public DoubleProperty stolenBasesProperty() {
         return sb;
     }
     
@@ -194,15 +216,6 @@ public class Player implements Comparable {
     
     public StringProperty notesProperty() {
         return notes;
-    }
-    
-    public void calculateBA(int hits, int ab) {
-        double ba;
-        if (ab == 0)
-            ba = 0.000;
-        else
-            ba = ((hits / ab) * 1000) / 1000.0;
-        setBA(ba);
     }
     
     public int getWins() {
@@ -264,22 +277,72 @@ public class Player implements Comparable {
     public DoubleProperty whipProperty() {
         return whip;
     }
+
+    public IntegerProperty RorWProperty() {
+        if (isHitter)
+            return r;
+        else
+            return win;
+    }
+
+    public IntegerProperty HRorSVProperty() {
+        if (isHitter)
+            return hr;
+        else
+            return sv;
+    }
+
+    public IntegerProperty RBIorKProperty() {
+        if (isHitter)
+            return rbi;
+        else
+            return k;
+    }
+
+    public DoubleProperty SBorERAProperty() {
+        if (isHitter)
+            return sb;
+        else
+            return era;
+    }
+    
+    public DoubleProperty BAorWHIPProperty() {
+        if (isHitter)
+            return ba;
+        else
+            return whip;
+    }
+    
+    public void calculateBA(int hits, int ab) {
+        DecimalFormat df = new DecimalFormat("0.000");
+        double ba;
+        if (ab == 0)
+            ba = 0.000;
+        else
+            ba = ((double)hits / ab);
+        ba = Double.parseDouble(df.format(ba));
+        setBA(ba);
+    }
     
     public void calculateERA(double IP, int ER) {
+        DecimalFormat df = new DecimalFormat("#.00");
         double era;
         if (IP == 0.0)
             era = 0.00;
         else
-            era = (int)(((ER * 9) / IP) * 100) / 100.0;
+            era = ((ER * 9) / IP);
+        era = Double.parseDouble(df.format(era));
         setERA(era);
     }
     
     public void calculateWHIP(int hits, int walks, double IP) {
+        DecimalFormat df = new DecimalFormat("#.00");
         double whip;
         if (IP == 0.0)
             whip = 0.00;
         else
-            whip = (int)(((hits + walks) / IP) * 100) / 100.0;
+            whip = ((hits + walks) / IP);
+        whip = Double.parseDouble(df.format(whip));
         setWHIP(whip);
     }
     

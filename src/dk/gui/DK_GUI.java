@@ -20,10 +20,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -182,6 +184,61 @@ public class DK_GUI implements DraftDataView {
     //TableView<Team> standingsTable; //NOT USED FOR HW5
     //TableView<Player> draftTable; //NOT USED FOR  HW5
     //TableView<Player> mlbTeamsTable; //NOT USED FOR HW5
+    
+    //table columns
+    TableColumn firstNameColumn;
+    TableColumn lastNameColumn;
+    TableColumn proTeamColumn;
+    TableColumn positionsColumn;
+    TableColumn yearOfBirthColumn;
+    
+    TableColumn runsColumn;
+    TableColumn homeRunsColumn;
+    TableColumn RBIsColumn;
+    TableColumn stolenBaseColumn;
+    TableColumn baColumn;
+    
+    TableColumn winsColumn;
+    TableColumn savesColumn;
+    TableColumn strikeoutsColumn;
+    TableColumn eraColumn;
+    TableColumn whipColumn;
+    
+    TableColumn valueColumn;
+    TableColumn notesColumn;
+    
+    TableColumn RorWColumn;
+    TableColumn HRorSVColumn;
+    TableColumn RBIorKColumn;
+    TableColumn SBorERAColumn;
+    TableColumn BAorWHIPColumn;
+    
+    //and the column description
+    static final String COL_FIRST_NAME = "First";
+    static final String COL_LAST_NAME = "Last";
+    static final String COL_PRO_TEAM = "Pro Team";
+    static final String COL_POSITIONS = "Positions";
+    static final String COL_YEAR_OF_BIRTH = "Year Of Birth";
+    static final String COL_ESTIMATED_VALUE = "Estimated Value";
+    static final String COL_NOTES = "Notes";
+    
+    static final String COL_RUNS = "R";
+    static final String COL_HOMERUNS = "HR";
+    static final String COL_RBIS = "RBI";
+    static final String COL_STOLEN_BASES = "SB";
+    static final String COL_BATTING_AVERAGE = "BA";
+    
+    static final String COL_WINS = "W";
+    static final String COL_SAVES = "SV";
+    static final String COL_STRIKEOUTS = "K";
+    static final String COL_ERA = "ERA";
+    static final String COL_WHIP = "WHIP";
+    
+    static final String COL_RORW = "R/W";
+    static final String COL_HRORSV = "HR/SV";
+    static final String COL_RBIORK = "RBI/K";
+    static final String COL_SBORERA = "SB/ERA";
+    static final String COL_BAORWHIP = "BA/WHIP";
     
     //dialogs
     MessageDialog messageDialog;
@@ -473,12 +530,81 @@ public class DK_GUI implements DraftDataView {
         playersRadioButton.setPadding(new Insets(20, 30, 30, 30));
         playersRadioButton.setSpacing(20);
         
+        //add the table
         playersTable = new TableView();
+        
+        //and the columns
+        firstNameColumn = new TableColumn(COL_FIRST_NAME);
+        lastNameColumn = new TableColumn(COL_LAST_NAME);
+        proTeamColumn = new TableColumn(COL_PRO_TEAM);
+        positionsColumn = new TableColumn(COL_POSITIONS);
+        yearOfBirthColumn = new TableColumn(COL_YEAR_OF_BIRTH);
+        RorWColumn = new TableColumn(COL_RORW);
+        HRorSVColumn = new TableColumn(COL_HRORSV);
+        RBIorKColumn = new TableColumn(COL_RBIORK);
+        SBorERAColumn = new TableColumn(COL_SBORERA);
+        BAorWHIPColumn = new TableColumn(COL_BAORWHIP);
+        valueColumn = new TableColumn(COL_ESTIMATED_VALUE);
+        notesColumn = new TableColumn(COL_NOTES);
+        
+        //columns not used at the beginning
+        runsColumn = new TableColumn(COL_RUNS);
+        homeRunsColumn = new TableColumn(COL_HOMERUNS);
+        RBIsColumn = new TableColumn(COL_RBIS);
+        stolenBaseColumn = new TableColumn(COL_STOLEN_BASES);
+        baColumn = new TableColumn(COL_BATTING_AVERAGE);
+        
+        winsColumn = new TableColumn(COL_WINS);
+        savesColumn = new TableColumn(COL_SAVES);
+        strikeoutsColumn = new TableColumn(COL_STRIKEOUTS);
+        eraColumn = new TableColumn(COL_ERA);
+        whipColumn = new TableColumn(COL_WHIP);
+        
+        //link the columns to the data
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        proTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
+        positionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        yearOfBirthColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("yearOfBirth"));
+        RorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
+        HRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
+        RBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
+        SBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
+        BAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
+        valueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
+        notesColumn.setCellValueFactory(new PropertyValueFactory<String, String>("notes"));
+        
+        //not used at the beginning
+        runsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("runs"));
+        homeRunsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("homeRuns"));
+        RBIsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("rbi"));
+        stolenBaseColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("stolenBases"));
+        baColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("ba"));
+        
+        winsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("wins"));
+        savesColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("saves"));
+        strikeoutsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("strikeouts"));
+        eraColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("era"));
+        whipColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("whip"));
+        
+        playersTable.getColumns().add(firstNameColumn);
+        playersTable.getColumns().add(lastNameColumn);
+        playersTable.getColumns().add(proTeamColumn);
+        playersTable.getColumns().add(positionsColumn);
+        playersTable.getColumns().add(yearOfBirthColumn);
+        playersTable.getColumns().add(RorWColumn);
+        playersTable.getColumns().add(HRorSVColumn);
+        playersTable.getColumns().add(RBIorKColumn);
+        playersTable.getColumns().add(SBorERAColumn);
+        playersTable.getColumns().add(BAorWHIPColumn);
+        playersTable.getColumns().add(valueColumn);
+        playersTable.getColumns().add(notesColumn);
+        playersTable.setItems(dataManager.getDraft().getPlayers());
+        
+        //add everything to the screen
         playersPane.getChildren().add(playerDataPane);
         playersPane.getChildren().add(playersTable);
         playersPane.getStyleClass().add(CLASS_BORDERED_PANE);
-        
-        //add everything to the screen
     }
     
     //initializes controls in the team screen

@@ -82,13 +82,13 @@ public class Draft {
             values[5] = values[5].substring(2); //gets rid of "R:"
             p.setRuns(Integer.parseInt(values[5]));
             values[6] = values[6].substring(2); //gets rid of "H:"
-            p.calculateBA(Integer.parseInt(values[6]), Integer.parseInt(values[5])); //BA = hits/ab
+            p.calculateBA(Integer.parseInt(values[6]), Integer.parseInt(values[4])); //BA = hits/ab
             values[7] = values[7].substring(3); //gets rid of "HR:"
             p.setHomeRuns(Integer.parseInt(values[7]));
             values[8] = values[8].substring(4); //gets rid of "RBI:"
             p.setRBIs(Integer.parseInt(values[8]));
             values[9] = values[9].substring(3); //gets rid of "SB:"
-            p.setStolenBases(Integer.parseInt(values[9]));
+            p.setStolenBases(Double.parseDouble(values[9]));
             values[10] = values[10].substring(6); //gets rid of "NOTES:"
             p.setNotes(values[10]);
             values[11] = values[11].substring(14); //gets rid of "YEAR_OF_BIRTH:"
@@ -129,6 +129,7 @@ public class Draft {
             p.setYearOfBirth(Integer.parseInt(values[11]));
             values[12] = values[12].substring(16, values[12].length() - 1); //gets rid of "NATION_OF_BIRTH:"
             p.setPositions("P");
+            p.setHitter(false);
             pitchersList.add(p);
         }
     }
