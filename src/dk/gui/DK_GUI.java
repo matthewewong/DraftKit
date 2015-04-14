@@ -6,6 +6,7 @@ import dk.data.DraftDataView;
 import dk.data.Player;
 import dk.file.DraftFileManager;
 import dk.handler.FileHandler;
+import dk.handler.PlayerHandler;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
@@ -65,6 +66,14 @@ public class DK_GUI implements DraftDataView {
     String lastSelection;
     String newSelection = "";
     
+    //these are for the radio buttons
+    static final String ALL_RADIO_BUTTON = "All";
+    static final String HITTERS_RADIO_BUTTON = "Hitters";
+    static final String PITCHERS_RADIO_BUTTON = "Pitchers";
+    
+    String lastRadioButtonClicked;
+    String newRadioButtonClicked = "";
+    
     //manage all the data
     DraftDataManager dataManager;
     
@@ -81,13 +90,13 @@ public class DK_GUI implements DraftDataView {
     //DraftEditHandler editHandler; CHANGE
     
     //handles requests to add or edit player stuff
-    //PlayerHandler playerHandler; CHANGE
+    PlayerHandler playerHandler;
     
     //handles requests to add or edit team stuff
-    //TeamHandler teamHandler;
+    //TeamHandler teamHandler; NOT FOR HW 5
     
     //handles requests to edit draft screen stuff
-    //DraftHandler draftHandler;
+    //DraftHandler draftHandler; NOT FOR HW 5
     
     //application window
     Stage primaryStage;
@@ -526,6 +535,9 @@ public class DK_GUI implements DraftDataView {
         playersRadioButton.getChildren().add(uButton);
         playersRadioButton.getChildren().add(pButton);
         
+        //for getting the correct table
+        lastRadioButtonClicked = ALL_RADIO_BUTTON;
+        
         //make it look nicer
         playersRadioButton.setPadding(new Insets(20, 30, 30, 30));
         playersRadioButton.setSpacing(20);
@@ -580,6 +592,30 @@ public class DK_GUI implements DraftDataView {
         RBIorKColumn.setSortable(false);
         SBorERAColumn.setSortable(false);
         BAorWHIPColumn.setSortable(false);
+        
+        //let these columns look nicer by setting its width
+        firstNameColumn.setMinWidth(75.0);
+        lastNameColumn.setMinWidth(95.0);
+        RorWColumn.setMinWidth(45.0);
+        HRorSVColumn.setMinWidth(60.0);
+        RBIorKColumn.setMinWidth(60.0);
+        SBorERAColumn.setMinWidth(65.0);
+        BAorWHIPColumn.setMinWidth(75.0);
+        
+        runsColumn.setMinWidth(RorWColumn.getMinWidth());
+        homeRunsColumn.setMinWidth(HRorSVColumn.getMinWidth());
+        RBIsColumn.setMinWidth(RBIorKColumn.getMinWidth());
+        stolenBaseColumn.setMinWidth(SBorERAColumn.getMinWidth());
+        baColumn.setMinWidth(BAorWHIPColumn.getMinWidth());
+        
+        winsColumn.setMinWidth(RorWColumn.getMinWidth());
+        savesColumn.setMinWidth(HRorSVColumn.getMinWidth());
+        strikeoutsColumn.setMinWidth(RBIorKColumn.getMinWidth());
+        eraColumn.setMinWidth(SBorERAColumn.getMinWidth());
+        whipColumn.setMinWidth(BAorWHIPColumn.getMinWidth());
+        
+        //so we can see the notes
+        notesColumn.setMinWidth(100.0);
         
         //the user can edit the notes column, so we set the table to editable; in the
         //event handler we set the notes column to be editable
@@ -694,7 +730,9 @@ public class DK_GUI implements DraftDataView {
     
     //init the event handlers
     private void initEventHandlers() throws IOException {
+        //file handlers
         fileHandler = new FileHandler(messageDialog, draftFileManager);
+        
         newDraftButton.setOnAction(e -> {
             fileHandler.handleNewDraftRequest(this);
         });
@@ -722,6 +760,64 @@ public class DK_GUI implements DraftDataView {
         mlbTeamsButton.setOnAction(e -> {
             newSelection = MLB_TEAMS_BUTTON;
             screenSelectHandler(lastSelection, newSelection);
+        });
+        
+        //player handlers
+        playerHandler = new PlayerHandler(messageDialog, yesNoCancelDialog);
+        
+        allButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, RorWColumn, HRorSVColumn, RBIorKColumn, SBorERAColumn, BAorWHIPColumn);
+            playerHandler.handleAllRadioButtonRequest(this, playersTable);
+        });
+        
+        cButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleCatcherRadioButtonRequest(this, playersTable);
+        });
+        
+        firstBaseButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleFirstBaseRadioButtonRequest(this, playersTable);
+        });
+        
+        ciButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleCornerInfieldRadioButtonRequest(this, playersTable);
+        });
+        
+        thirdBaseButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleThirdBaseRadioButtonRequest(this, playersTable);
+        });
+        
+        secondBaseButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleSecondBaseRadioButtonRequest(this, playersTable);
+        });
+        
+        miButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleMiddleInfieldRadioButtonRequest(this, playersTable);
+        });
+        
+        ssButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleShortstopRadioButtonRequest(this, playersTable);
+        });
+        
+        ofButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleOutfieldRadioButtonRequest(this, playersTable);
+        });
+        
+        uButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
+            playerHandler.handleUtilityRadioButtonRequest(this, playersTable);
+        });
+        
+        pButton.setOnAction(e -> {
+            playerHandler.handleChangePlayersTableRequest(playersTable, winsColumn, savesColumn, strikeoutsColumn, eraColumn, whipColumn);
+            playerHandler.handlePitcherRadioButtonRequest(this, playersTable);
         });
     }
     

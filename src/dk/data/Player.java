@@ -349,6 +349,6 @@ public class Player implements Comparable {
     @Override
     public int compareTo(Object o) {
         Player otherPlayer = (Player)o;
-        return getFirstName().compareTo(otherPlayer.getFirstName());
+        return getLastName().compareTo(otherPlayer.getLastName());
     }
 }

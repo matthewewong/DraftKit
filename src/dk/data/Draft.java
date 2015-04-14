@@ -148,6 +148,15 @@ public class Draft {
         //sort by name
         Collections.sort(players);
     }
+    
+    public ObservableList<Player> getObservableHitters() {
+        return hittersList;
+    }
+    
+    public ObservableList<Player> getObservablePitchers() {
+        return pitchersList;
+    }
+    
     public void removePlayer(Player playerToRemove) {
         players.remove(playerToRemove);
     }
