@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -624,9 +625,9 @@ public class DK_GUI implements DraftDataView {
         //so we can see the notes
         notesColumn.setMinWidth(100.0);
         
-        //the user can edit the notes column, so we set the table to editable; in the
-        //event handler we set the notes column to be editable
+        //the user can edit the notes column, so we set the table to editable
         playersTable.setEditable(true);
+        notesColumn.setCellFactory(TextFieldTableCell.forTableColumn()); //MAKES COLUMN EDITABLE
         
         //not used at the beginning
         runsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("runs"));
