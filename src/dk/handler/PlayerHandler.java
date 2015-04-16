@@ -24,14 +24,143 @@ public class PlayerHandler {
     TableView<Player> playersTable;
     
     //player lists
-    ObservableList<Player> playerList; //sent to specific table
     ObservableList<Player> regularPlayerList; //list we loaded
+    ObservableList<Player> hitterList; //all the hitters
+    ObservableList<Player> pitcherList; //all the pitchers
+    ObservableList<Player> allPlayersList; //all the players list
+    ObservableList<Player> catcherList; //catcher list
+    ObservableList<Player> firstBaseList; //first base list
+    ObservableList<Player> thirdBaseList; //third base list
+    ObservableList<Player> ciList; //middle infield list
+    ObservableList<Player> secondBaseList; //second base list
+    ObservableList<Player> ssList; //shortstop list
+    ObservableList<Player> miList; //middle infield list
+    ObservableList<Player> ofList; //outfield list
+    ObservableList<Player> utilityList; //utility list (hitters)
+    ObservableList<Player> pitchersList; //pitchers list
     
-    public PlayerHandler(MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog) {
+    //constant strings
+    static final String ALL_RADIO_BUTTON = "All";
+    static final String HITTERS_RADIO_BUTTON = "Hitters"; //utility
+    static final String PITCHERS_RADIO_BUTTON = "Pitchers"; //pitchers
+    static final String C_RADIO_BUTTON = "Catcher";
+    static final String FIRSTBASE_RADIO_BUTTON = "First Base";
+    static final String SECONDBASE_RADIO_BUTTON = "Second Base";
+    static final String THIRDBASE_RADIO_BUTTON = "Third Base";
+    static final String SS_RADIO_BUTTON = "Shortstop";
+    static final String CI_RADIO_BUTTON = "Corner Infield";
+    static final String MI_RADIO_BUTTON = "Middle Infield";
+    static final String OF_RADIO_BUTTON = "Outfield";
+    
+    public PlayerHandler(MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
-        playerList = FXCollections.observableArrayList();
         regularPlayerList = FXCollections.observableArrayList();
+        hitterList = FXCollections.observableArrayList();
+        pitcherList = FXCollections.observableArrayList();
+        allPlayersList = FXCollections.observableArrayList();
+        catcherList = FXCollections.observableArrayList();
+        firstBaseList = FXCollections.observableArrayList();
+        thirdBaseList = FXCollections.observableArrayList();
+        ciList = FXCollections.observableArrayList();
+        secondBaseList = FXCollections.observableArrayList();
+        ssList = FXCollections.observableArrayList();
+        miList = FXCollections.observableArrayList();
+        ofList = FXCollections.observableArrayList();
+        utilityList = FXCollections.observableArrayList();
+        pitchersList = FXCollections.observableArrayList();
+        initLists(gui);
+    }
+    
+    public void initLists(DK_GUI gui) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        regularPlayerList = FXCollections.observableArrayList(draft.getPlayers()); //gets all the players
+        hitterList = FXCollections.observableArrayList(draft.getObservableHitters()); //gets all the hitters
+        pitcherList = FXCollections.observableArrayList(draft.getObservablePitchers()); //gets all the pitchers
+        
+        //fill the ALL list
+        allPlayersList = FXCollections.observableArrayList(regularPlayerList);
+        
+        //fill the CATCHERS list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("C"); //finds all the players at the position
+            if (findPlayers != -1) //we found a player
+                catcherList.add(p);
+        }
+        
+        //fill the FIRST BASEMEN list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("1B"); //finds all the players at the position
+            if (findPlayers != -1) //we found a player
+                firstBaseList.add(p);
+        }
+        
+        //fill the CORNER INFIELD list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("1B"); //finds all the players at first base
+            if (findPlayers != -1) //we found a player at first base; that's a CI position!
+                ciList.add(p);
+            else {
+                findPlayers = positions.indexOf("3B"); //finds all players at third base
+                if (findPlayers != -1) //we found a player at third base; that's a CI position!
+                    ciList.add(p);
+            }
+        }
+        
+        //fill the THIRD BASE list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("3B"); //finds all the players at the position
+            if (findPlayers != -1) //we found a player
+                thirdBaseList.add(p);
+        }
+        
+        //fill hte SECOND BASE list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("2B"); //finds all the players at the position
+            if (findPlayers != -1) //we found a player
+                secondBaseList.add(p);
+        }
+        
+        //fill the MIDDLE INFIELD list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("2B"); //finds all the players at second base
+            if (findPlayers != -1) //we found a player at second base; that's a MI position!
+                miList.add(p);
+            else {
+                findPlayers = positions.indexOf("SS"); //finds all players at shortstop
+                if (findPlayers != -1) //we found a player at shortstop; that's a MI position!
+                    miList.add(p);
+            }
+        }
+        
+        //fill the SHORTSTOP list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("SS"); //finds all the players at the position
+            if (findPlayers != -1) //we found a player
+                ssList.add(p);
+        }
+        
+        //fill the OUTFIELD list
+        for (Player p : hitterList) {
+            String positions = p.getPositions(); //gets the positions
+            int findPlayers = positions.indexOf("OF"); //finds all the players at the position
+            if (findPlayers != -1) //we found a player
+                ofList.add(p);
+        }
+        
+        //fill the UTILITY list
+        utilityList = FXCollections.observableArrayList(hitterList);
+        
+        //fill the PITCHERS list
+        pitchersList = FXCollections.observableArrayList(pitcherList);
     }
     
     /**
@@ -65,15 +194,7 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleAllRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getPlayers()); //gets all the players
         playersTable = table;
-        
         playersTable.setItems(regularPlayerList);
     }
     
@@ -83,24 +204,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleCatcherRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the CATCHERS
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("C"); //finds all the players at the position
-            if (findPlayers != -1) //we found a player
-                playerList.add(p);
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(catcherList);
     }
     
     /**
@@ -109,24 +214,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleFirstBaseRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the FIRST BASEMEN
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("1B"); //finds all the players at the position
-            if (findPlayers != -1) //we found a player
-                playerList.add(p);
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(firstBaseList);
     }
     
     /**
@@ -135,29 +224,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleCornerInfieldRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the CORNER INFIELDERS
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("1B"); //finds all the players at first base
-            if (findPlayers != -1) //we found a player at first base; that's a CI position!
-                playerList.add(p);
-            else {
-                findPlayers = positions.indexOf("3B"); //finds all players at third base
-                if (findPlayers != -1) //we found a player at third base; that's a CI position!
-                    playerList.add(p);
-            }
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(ciList);
     }
     
     /**
@@ -166,24 +234,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleThirdBaseRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the THIRD BASEMEN
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("3B"); //finds all the players at the position
-            if (findPlayers != -1) //we found a player
-                playerList.add(p);
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(thirdBaseList);
     }
     
     /**
@@ -192,24 +244,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleSecondBaseRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the SECOND BASEMEN
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("2B"); //finds all the players at the position
-            if (findPlayers != -1) //we found a player
-                playerList.add(p);
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(secondBaseList);
     }
     
     /**
@@ -218,29 +254,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleMiddleInfieldRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the MIDDLE INFIELDERS
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("2B"); //finds all the players at second base
-            if (findPlayers != -1) //we found a player at second base; that's a MI position!
-                playerList.add(p);
-            else {
-                findPlayers = positions.indexOf("SS"); //finds all players at shortstop
-                if (findPlayers != -1) //we found a player at shortstop; that's a MI position!
-                    playerList.add(p);
-            }
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(miList);
     }
     
     /**
@@ -249,24 +264,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleShortstopRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the SHORTSTOPS
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("SS"); //finds all the players at the position
-            if (findPlayers != -1) //we found a player
-                playerList.add(p);
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(ssList);
     }
     
     /**
@@ -275,24 +274,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleOutfieldRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
-        
         playersTable = table;
-        
-        //now find the OUTFIELDERS
-        for (Player p : regularPlayerList) {
-            String positions = p.getPositions(); //gets the positions
-            int findPlayers = positions.indexOf("OF"); //finds all the players at the position
-            if (findPlayers != -1) //we found a player
-                playerList.add(p);
-        }
-        playersTable.setItems(playerList);
+        playersTable.setItems(ofList);
     }
     
     /**
@@ -301,16 +284,8 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handleUtilityRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservableHitters());
         playersTable = table;
-        
-        playersTable.setItems(regularPlayerList);
+        playersTable.setItems(utilityList);
     }
     
     /**
@@ -319,15 +294,54 @@ public class PlayerHandler {
      * @param table the table
      */
     public void handlePitcherRadioButtonRequest(DK_GUI gui, TableView<Player> table) {
-        //before we do anything, clear the tables
-        playerList.clear();
-        regularPlayerList.clear();
-        
-        DraftDataManager ddm = gui.getDataManager();
-        Draft draft = ddm.getDraft();
-        regularPlayerList = FXCollections.observableArrayList(draft.getObservablePitchers());
         playersTable = table;
+        playersTable.setItems(pitchersList);
+    }
+    
+    public void handleTextFieldChangeRequest(DK_GUI gui, String selection, TableView<Player> table, String text) {
+        playersTable = table;
+        ObservableList<Player> unchangedList = FXCollections.observableArrayList();
+        ObservableList<Player> changedList = FXCollections.observableArrayList();
         
-        playersTable.setItems(regularPlayerList);
+        //get the list we want
+        if (selection.equals(ALL_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(allPlayersList);
+        else if (selection.equals(C_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(catcherList);
+        else if (selection.equals(FIRSTBASE_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(firstBaseList);
+        else if (selection.equals(CI_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(ciList);
+        else if (selection.equals(THIRDBASE_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(thirdBaseList);
+        else if (selection.equals(SECONDBASE_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(secondBaseList);
+        else if (selection.equals(MI_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(miList);
+        else if (selection.equals(SS_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(ssList);
+        else if (selection.equals(OF_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(ofList);
+        else if (selection.equals(HITTERS_RADIO_BUTTON))
+            unchangedList = FXCollections.observableArrayList(utilityList);
+        else
+            unchangedList = FXCollections.observableArrayList(pitcherList);
+        
+        //get the list to present to the table
+        text = text.toLowerCase();
+        if (text.equals("")) //empty string
+        {
+            changedList = unchangedList;
+            playersTable.setItems(changedList);
+        }
+        else {
+            for (Player p : unchangedList) { //scroll through each player
+                String firstName = p.getFirstName().toLowerCase();
+                String lastName = p.getLastName().toLowerCase();
+                if (firstName.startsWith(text) || lastName.startsWith(text)) //player matches text
+                    changedList.add(p);
+            }
+        }
+        playersTable.setItems(changedList);
     }
 }

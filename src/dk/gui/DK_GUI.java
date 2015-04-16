@@ -68,11 +68,18 @@ public class DK_GUI implements DraftDataView {
     
     //these are for the radio buttons
     static final String ALL_RADIO_BUTTON = "All";
-    static final String HITTERS_RADIO_BUTTON = "Hitters";
-    static final String PITCHERS_RADIO_BUTTON = "Pitchers";
+    static final String HITTERS_RADIO_BUTTON = "Hitters"; //utility
+    static final String PITCHERS_RADIO_BUTTON = "Pitchers"; //pitchers
+    static final String C_RADIO_BUTTON = "Catcher";
+    static final String FIRSTBASE_RADIO_BUTTON = "First Base";
+    static final String SECONDBASE_RADIO_BUTTON = "Second Base";
+    static final String THIRDBASE_RADIO_BUTTON = "Third Base";
+    static final String SS_RADIO_BUTTON = "Shortstop";
+    static final String CI_RADIO_BUTTON = "Corner Infield";
+    static final String MI_RADIO_BUTTON = "Middle Infield";
+    static final String OF_RADIO_BUTTON = "Outfield";
     
     String lastRadioButtonClicked;
-    String newRadioButtonClicked = "";
     
     //manage all the data
     DraftDataManager dataManager;
@@ -763,68 +770,83 @@ public class DK_GUI implements DraftDataView {
         });
         
         //player handlers
-        playerHandler = new PlayerHandler(messageDialog, yesNoCancelDialog);
+        playerHandler = new PlayerHandler(messageDialog, yesNoCancelDialog, this);
         
         allButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, RorWColumn, HRorSVColumn, RBIorKColumn, SBorERAColumn, BAorWHIPColumn);
             playerHandler.handleAllRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = ALL_RADIO_BUTTON;
         });
         
         cButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleCatcherRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = C_RADIO_BUTTON;
         });
         
         firstBaseButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleFirstBaseRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = FIRSTBASE_RADIO_BUTTON;
         });
         
         ciButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleCornerInfieldRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = CI_RADIO_BUTTON;
         });
         
         thirdBaseButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleThirdBaseRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = THIRDBASE_RADIO_BUTTON;
         });
         
         secondBaseButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleSecondBaseRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = SECONDBASE_RADIO_BUTTON;
         });
         
         miButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleMiddleInfieldRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = MI_RADIO_BUTTON;
         });
         
         ssButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleShortstopRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = SS_RADIO_BUTTON;
         });
         
         ofButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleOutfieldRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = OF_RADIO_BUTTON;
         });
         
         uButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, runsColumn, homeRunsColumn, RBIsColumn, stolenBaseColumn, baColumn);
             playerHandler.handleUtilityRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = HITTERS_RADIO_BUTTON;
         });
         
         pButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, winsColumn, savesColumn, strikeoutsColumn, eraColumn, whipColumn);
             playerHandler.handlePitcherRadioButtonRequest(this, playersTable);
+            lastRadioButtonClicked = PITCHERS_RADIO_BUTTON;
         });
+        
+        //register the search players textfield
+        registerSearchPlayerTextFieldController(searchPlayerTextField);
     }
     
     //register the event listener for a text field
-    private void registerTextFieldController(TextField textField) {
+    private void registerSearchPlayerTextFieldController(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-    //        editHandler.handleCourseChangeRequest(this); CHANGE
+            String text = textField.textProperty().getValue();
+            playerHandler.handleTextFieldChangeRequest(this, lastRadioButtonClicked, playersTable, text);
         });
     }
     
