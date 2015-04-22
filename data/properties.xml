@@ -16,6 +16,7 @@ Draft Kit.
         <property name="DELETE_ICON"        value="Delete.png"></property>
         <property name="EXIT_ICON"          value="Exit.png"></property>        
         <property name="ADD_ICON"           value="Add.png"></property>
+        <property name="EDIT_ICON"          value="Edit.png"></property>
         <property name="MINUS_ICON"         value="Minus.png"></property>
         <property name="PLAYER_SELECT_ICON"    value="players.png"></property>
         <property name="TEAM_SELECT_ICON"        value="teams.png"></property>
@@ -34,6 +35,7 @@ Draft Kit.
         <property name="ADD_PLAYER_TOOLTIP"           value="Add Player"></property>
         <property name="REMOVE_PLAYER_TOOLTIP"        value="Remove Player"></property>
         <property name="ADD_TEAM_TOOLTIP"           value="Add Team"></property>
+        <property name="EDIT_TEAM_TOOLTIP"          value="Edit Team"></property>
         <property name="REMOVE_TEAM_TOOLTIP"        value="Remove Team"></property>
         <property name="PLAYER_SELECT_TOOLTIP"      value="Select the Players Screen"></property>
         <property name="TEAM_SELECT_TOOLTIP"      value="Select the Teams Screen"></property>
@@ -56,11 +58,12 @@ Draft Kit.
         <property name="REMOVE_PLAYER_LABEL"        value="Remove Player"></property>
         
         <!-- teams labels -->
-        <property name="TEAM_SELECT_LABEL"         value="Select Team:"></property>
+        <property name="TEAM_SELECT_LABEL"         value="Select Fantasy Team:   "></property>
         <property name="TEAM_NAME_LABEL"          value="Team Name:"></property>
         <property name="TEAM_OWNER_LABEL"          value="Team Owner:"></property>
-        <property name="ADD_TEAM_LABEL"            value="Add Team"></property>
-        <property name="REMOVE_TEAM_LABEL"        value="Remove Team"></property>
+        <property name="TEAM_STARTING_LINEUP_HEADING_LABEL"         value="Starting Lineup"></property>
+        <property name="TEAM_TAXI_SQUAD_HEADING_LABEL"              value="Taxi Squad"></property>
+        <property name="DRAFT_NAME_LABEL"               value="     Draft Name: "></property>
         
         <!-- draft labels -->
         <property name="DRAFT_BEST_PLAYER_LABEL"     value="Draft Best Player:"></property>

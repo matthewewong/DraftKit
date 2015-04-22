@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -167,14 +168,17 @@ public class DK_GUI implements DraftDataView {
     //used for the teams pane
     GridPane teamDataPane;
     Label teamHeadingLabel;
-    TextField teamNameTextField;
-    Label teamNameLabel;
-    TextField teamOwnerTextField;
-    Label teamOwnerLabel;
+    Label draftNameLabel;
+    TextField draftNameTextField;
+    HBox teamToolbar;
     Button addTeamButton;
     Button removeTeamButton;
+    Button editTeamButton;
     ComboBox teamSelectComboBox;
     Label teamSelectLabel;
+    Label startingLineupHeadingLabel;
+    Label taxiSquadHeadingLabel;
+    ScrollPane teamScrollPane;
     
     //used for the standings pane
     GridPane standingsDataPane;
@@ -197,7 +201,8 @@ public class DK_GUI implements DraftDataView {
     
     //tables
     TableView<Player> playersTable;
-    //TableView<Player> teamsTable; //NOT USED FOR HW5
+    TableView<Player> teamsStartingTable;
+    TableView<Player> teamsTaxiTable;
     //TableView<Team> standingsTable; //NOT USED FOR HW5
     //TableView<Player> draftTable; //NOT USED FOR  HW5
     //TableView<Player> mlbTeamsTable; //NOT USED FOR HW5
@@ -230,6 +235,10 @@ public class DK_GUI implements DraftDataView {
     TableColumn SBorERAColumn;
     TableColumn BAorWHIPColumn;
     
+    TableColumn teamPositionColumn;
+    TableColumn contractColumn;
+    TableColumn salaryColumn;
+    
     //and the column description
     static final String COL_FIRST_NAME = "First";
     static final String COL_LAST_NAME = "Last";
@@ -256,6 +265,10 @@ public class DK_GUI implements DraftDataView {
     static final String COL_RBIORK = "RBI/K";
     static final String COL_SBORERA = "SB/ERA";
     static final String COL_BAORWHIP = "BA/WHIP";
+    
+    static final String COL_TEAM_POSITION = "Position";
+    static final String COL_CONTRACT = "Contract";
+    static final String COL_SALARY = "Salary";
     
     //dialogs
     MessageDialog messageDialog;
@@ -496,7 +509,7 @@ public class DK_GUI implements DraftDataView {
         
         //holds the search bar, add/remove a player, and the player label
         playerDataPane = new GridPane();
-        playersHeadingLabel = initGridLabel(playerDataPane, DK_PropertyType.PLAYERS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
+        playersHeadingLabel = initGridLabel(playerDataPane, DK_PropertyType.PLAYERS_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
         
         //gets the toolbar for the table
         playersToolbar = initGridHBox(playerDataPane, 0, 2, 1, 1);
@@ -665,13 +678,114 @@ public class DK_GUI implements DraftDataView {
     //initializes controls in the team screen
     private void initTeamScreenControls() throws IOException {
         teamPane = new VBox();
+        teamPane.setPadding(new Insets(10, 20, 20, 20));
+        teamPane.setSpacing(10);
+        
+        //scrollpane
+        teamScrollPane = new ScrollPane();
+        teamScrollPane.setContent(teamPane);
+        teamScrollPane.setFitToWidth(true);
         
         //holds the controls for the team screen
         teamDataPane = new GridPane();
-        teamHeadingLabel = initGridLabel(teamDataPane, DK_PropertyType.TEAM_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
-        //NOT FOR HW 5
+        teamHeadingLabel = initGridLabel(teamDataPane, DK_PropertyType.TEAM_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
         
+        //name of the draft
+        draftNameLabel = initGridLabel(teamDataPane, DK_PropertyType.DRAFT_NAME_LABEL, CLASS_PROMPT_LABEL, 0, 2, 1, 1);
+        draftNameTextField = initGridTextField(teamDataPane, LARGE_TEXT_FIELD_LENGTH, EMPTY_TEXT, true, 1, 2, 5, 1);
+        
+        //team toolbar
+        teamToolbar = initGridHBox(teamDataPane, 0, 3, 1, 1);
+        addTeamButton = initChildButton(teamToolbar, DK_PropertyType.ADD_ICON, DK_PropertyType.ADD_TEAM_TOOLTIP, false);
+        removeTeamButton = initChildButton(teamToolbar, DK_PropertyType.MINUS_ICON, DK_PropertyType.ADD_TEAM_TOOLTIP, true);
+        editTeamButton = initChildButton(teamToolbar, DK_PropertyType.EDIT_ICON, DK_PropertyType.EDIT_TEAM_TOOLTIP, true);
+        teamSelectLabel = initGridLabel(teamDataPane, DK_PropertyType.TEAM_SELECT_LABEL, CLASS_PROMPT_LABEL, 4, 3, 1, 1);
+        teamSelectComboBox = initGridComboBox(teamDataPane, 5, 3, 2, 1);
+        
+        //labels for the tables
+        startingLineupHeadingLabel = initLabel(DK_PropertyType.TEAM_STARTING_LINEUP_HEADING_LABEL, CLASS_SUBHEADING_LABEL);
+        taxiSquadHeadingLabel = initLabel(DK_PropertyType.TEAM_TAXI_SQUAD_HEADING_LABEL, CLASS_SUBHEADING_LABEL);
+        
+        //tables for the tables
+        teamsStartingTable = new TableView<Player>();
+        teamsTaxiTable = new TableView<Player>();
+        
+        //columns for the tables
+        teamPositionColumn = new TableColumn(COL_TEAM_POSITION);
+        firstNameColumn = new TableColumn(COL_FIRST_NAME);
+        lastNameColumn = new TableColumn(COL_LAST_NAME);
+        proTeamColumn = new TableColumn(COL_PRO_TEAM);
+        positionsColumn = new TableColumn(COL_POSITIONS);
+        yearOfBirthColumn = new TableColumn(COL_YEAR_OF_BIRTH);
+        RorWColumn = new TableColumn(COL_RORW);
+        HRorSVColumn = new TableColumn(COL_HRORSV);
+        RBIorKColumn = new TableColumn(COL_RBIORK);
+        SBorERAColumn = new TableColumn(COL_SBORERA);
+        BAorWHIPColumn = new TableColumn(COL_BAORWHIP);
+        valueColumn = new TableColumn(COL_ESTIMATED_VALUE);
+        contractColumn = new TableColumn(COL_CONTRACT);
+        salaryColumn = new TableColumn(COL_SALARY);
+        
+        teamPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        proTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
+        positionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        yearOfBirthColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("yearOfBirth"));
+        RorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
+        HRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
+        RBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
+        SBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
+        BAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
+        valueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
+        contractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
+        salaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
+        
+        //cannot sort these columns
+        RorWColumn.setSortable(false);
+        HRorSVColumn.setSortable(false);
+        RBIorKColumn.setSortable(false);
+        SBorERAColumn.setSortable(false);
+        BAorWHIPColumn.setSortable(false);
+        
+        //link to the tables
+        teamsStartingTable.getColumns().add(teamPositionColumn);
+        teamsStartingTable.getColumns().add(firstNameColumn);
+        teamsStartingTable.getColumns().add(lastNameColumn);
+        teamsStartingTable.getColumns().add(proTeamColumn);
+        teamsStartingTable.getColumns().add(positionsColumn);
+        teamsStartingTable.getColumns().add(yearOfBirthColumn);
+        teamsStartingTable.getColumns().add(RorWColumn);
+        teamsStartingTable.getColumns().add(HRorSVColumn);
+        teamsStartingTable.getColumns().add(RBIorKColumn);
+        teamsStartingTable.getColumns().add(SBorERAColumn);
+        teamsStartingTable.getColumns().add(BAorWHIPColumn);
+        teamsStartingTable.getColumns().add(valueColumn);
+        teamsStartingTable.getColumns().add(contractColumn);
+        teamsStartingTable.getColumns().add(salaryColumn);
+        
+        teamsTaxiTable.getColumns().add(teamPositionColumn);
+        teamsTaxiTable.getColumns().add(firstNameColumn);
+        teamsTaxiTable.getColumns().add(lastNameColumn);
+        teamsTaxiTable.getColumns().add(proTeamColumn);
+        teamsTaxiTable.getColumns().add(positionsColumn);
+        teamsTaxiTable.getColumns().add(yearOfBirthColumn);
+        teamsTaxiTable.getColumns().add(RorWColumn);
+        teamsTaxiTable.getColumns().add(HRorSVColumn);
+        teamsTaxiTable.getColumns().add(RBIorKColumn);
+        teamsTaxiTable.getColumns().add(SBorERAColumn);
+        teamsTaxiTable.getColumns().add(BAorWHIPColumn);
+        teamsTaxiTable.getColumns().add(valueColumn);
+        teamsTaxiTable.getColumns().add(contractColumn);
+        teamsTaxiTable.getColumns().add(salaryColumn);
+        
+        //add everything to the pane
         teamPane.getChildren().add(teamDataPane);
+        teamPane.getChildren().add(startingLineupHeadingLabel);
+        teamPane.getChildren().add(teamsStartingTable);
+        teamPane.getChildren().add(taxiSquadHeadingLabel);
+        teamPane.getChildren().add(teamsTaxiTable);
+        teamPane.getStyleClass().add(CLASS_BORDERED_PANE);
     }
     
     //initializes controls in the standings screen
@@ -680,7 +794,7 @@ public class DK_GUI implements DraftDataView {
         
         //used for the data
         standingsDataPane = new GridPane();
-        standingsHeadingLabel = initGridLabel(standingsDataPane, DK_PropertyType.STANDINGS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
+        standingsHeadingLabel = initGridLabel(standingsDataPane, DK_PropertyType.STANDINGS_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
         //NOT FOR HW 5
         
         standingsPane.getChildren().add(standingsDataPane);
@@ -692,7 +806,7 @@ public class DK_GUI implements DraftDataView {
         
         //used for the data
         draftOptionsPane = new GridPane();
-        draftHeadingLabel = initGridLabel(draftOptionsPane, DK_PropertyType.DRAFT_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
+        draftHeadingLabel = initGridLabel(draftOptionsPane, DK_PropertyType.DRAFT_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
         //NOT FOR HW 5
         
         draftSelectPane.getChildren().add(draftOptionsPane);
@@ -704,7 +818,7 @@ public class DK_GUI implements DraftDataView {
         
         //used to get the data
         mlbTeamsDataPane = new GridPane();
-        mlbTeamsHeadingLabel = initGridLabel(mlbTeamsDataPane, DK_PropertyType.MLB_TEAMS_SCREEN_HEADING_LABEL, CLASS_SUBHEADING_LABEL, 0, 0, 4, 1);
+        mlbTeamsHeadingLabel = initGridLabel(mlbTeamsDataPane, DK_PropertyType.MLB_TEAMS_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
         //NOT FOR HW 5
         
         MLBTeamsPane.getChildren().add(mlbTeamsDataPane);
