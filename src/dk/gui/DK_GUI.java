@@ -7,6 +7,7 @@ import dk.data.Player;
 import dk.file.DraftFileManager;
 import dk.handler.FileHandler;
 import dk.handler.PlayerHandler;
+import dk.handler.TeamHandler;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
 import java.io.IOException;
@@ -102,10 +103,10 @@ public class DK_GUI implements DraftDataView {
     PlayerHandler playerHandler;
     
     //handles requests to add or edit team stuff
-    //TeamHandler teamHandler; NOT FOR HW 5
+    TeamHandler teamHandler;
     
     //handles requests to edit draft screen stuff
-    //DraftHandler draftHandler; NOT FOR HW 5
+    //DraftHandler draftHandler; NOT FOR HW 6
     
     //application window
     Stage primaryStage;
@@ -334,6 +335,10 @@ public class DK_GUI implements DraftDataView {
     
     public YesNoCancelDialog getYesNoCancelDialog() {
         return yesNoCancelDialog;
+    }
+    
+    public ComboBox getTeamsComboBox() {
+        return teamSelectComboBox;
     }
     
     /**
@@ -955,6 +960,12 @@ public class DK_GUI implements DraftDataView {
         
         //register the search players textfield
         registerSearchPlayerTextFieldController(searchPlayerTextField);
+        
+        teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
+        addTeamButton.setOnAction(e -> {
+            teamHandler.handleAddTeamRequest(this);
+            teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
+        });
     }
     
     //register the event listener for a text field

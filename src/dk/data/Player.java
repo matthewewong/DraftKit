@@ -33,6 +33,10 @@ public class Player implements Comparable {
     final DoubleProperty era;
     final DoubleProperty whip;
     
+    final StringProperty teamPosition;
+    final StringProperty contract;
+    final IntegerProperty salary;
+    
     //used for ALL players
     final IntegerProperty RorW;
     final IntegerProperty HRorSV;
@@ -40,8 +44,7 @@ public class Player implements Comparable {
     final DoubleProperty SBorERA;
     final DoubleProperty BAorWHIP;
     boolean isHitter = true; //notify us if this is a hitter
-    //public static final String DEFAULT_TEAM = "<ENTER TEAM>"; //not for HW 5
-    //public static final String DEAFAULT_SALARY = "<ENTER SALARY>"; //not for HW 5
+    
     public Player() {
         first = new SimpleStringProperty();
         last = new SimpleStringProperty();
@@ -65,6 +68,9 @@ public class Player implements Comparable {
         RBIorK = new SimpleIntegerProperty();
         SBorERA = new SimpleDoubleProperty();
         BAorWHIP = new SimpleDoubleProperty();
+        teamPosition = new SimpleStringProperty();
+        contract = new SimpleStringProperty();
+        salary = new SimpleIntegerProperty();
     }
     
     public boolean isAHitter() {
@@ -311,6 +317,42 @@ public class Player implements Comparable {
             return ba;
         else
             return whip;
+    }
+    
+    public String getTeamPosition() {
+        return teamPosition.get();
+    }
+    
+    public void setTeamPosition(String initTeamPosition) {
+        teamPosition.set(initTeamPosition);
+    }
+    
+    public StringProperty teamPositionProperty() {
+        return teamPosition;
+    }
+
+    public String getContract() {
+        return contract.get();
+    }
+    
+    public void setContract(String initContract) {
+        contract.set(initContract);
+    }
+    
+    public StringProperty contractProperty() {
+        return contract;
+    }
+    
+    public int getSalary() {
+        return salary.get();
+    }
+    
+    public void setSalary(int initSalary) {
+        salary.set(initSalary);
+    }
+    
+    public IntegerProperty salaryProperty() {
+        return salary;
     }
     
     public void calculateBA(int hits, int ab) {
