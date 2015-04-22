@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 public class Draft {
     //Strings of the players
     ObservableList<Player> players;
-    //ObservableList<Team> teams; //not for HW 5
+    ObservableList<Team> teams;
     ObservableList<String> hitters;
     ObservableList<String> pitchers;
     
@@ -28,7 +28,7 @@ public class Draft {
     public Draft() {
         //init the lists
         players = FXCollections.observableArrayList();
-        //teams = FXCollections.observableArrayList(); //not for HW5
+        teams = FXCollections.observableArrayList();
         hitters = FXCollections.observableArrayList();
         pitchers = FXCollections.observableArrayList();
         
@@ -42,17 +42,26 @@ public class Draft {
         players.clear();
     }
     
-    /*public void clearTeams() {
+    public void clearTeams() {
         teams.clear();
-    }*/
+    }
     
     public ObservableList<Player> getPlayers() {
         return players;
     }
     
-    /*public ObservableList<Team> getTeams() {
+    public ObservableList<Team> getTeams() {
         return teams;
-    }*/
+    }
+    
+    public Team getTeam(String teamName) {
+        Team team = new Team();
+        for (int i = 0; i < teams.size(); i++) {
+            if (teams.get(i).getTeamName().equals(teamName))
+                team = teams.get(i);
+        }
+        return team;
+    }
     
     public ObservableList<String> getHitters() {
         return hitters;
@@ -161,15 +170,15 @@ public class Draft {
         players.remove(playerToRemove);
     }
     
-    /*public void removeTeam(Team teamToRemove) {
+    public void removeTeam(Team teamToRemove) {
         teams.remove(teamToRemove);
-    }*/
+    }
     
     public void addPlayer(Player p) {
         players.add(p);
     }
     
-    /*public void addTeam(Team t) {
+    public void addTeam(Team t) {
         teams.add(t);
-    }*/
+    }
 }

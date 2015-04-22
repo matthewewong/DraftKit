@@ -68,7 +68,7 @@ public class FileHandler {
         saved = false;
         
         //let UI know
-        //gui.updateTopToolbarControls(saved);
+        gui.updateTopToolbarControls(saved);
     }
     
     /**

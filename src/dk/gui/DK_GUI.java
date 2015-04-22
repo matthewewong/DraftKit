@@ -961,9 +961,20 @@ public class DK_GUI implements DraftDataView {
         //register the search players textfield
         registerSearchPlayerTextFieldController(searchPlayerTextField);
         
+        //team handlers
         teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
+        
         addTeamButton.setOnAction(e -> {
             teamHandler.handleAddTeamRequest(this);
+            teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
+        });
+        
+        editTeamButton.setOnAction(e -> {
+            teamHandler.handleEditTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString());
+        });
+        
+        removeTeamButton.setOnAction(e -> {
+            teamHandler.handleRemoveTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString());
             teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
         });
     }
