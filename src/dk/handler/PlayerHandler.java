@@ -52,6 +52,18 @@ public class PlayerHandler {
     static final String MI_RADIO_BUTTON = "Middle Infield";
     static final String OF_RADIO_BUTTON = "Outfield";
     
+    //used for adding a player to a team
+    public final String CATCHERS = "C";
+    public final String FIRST_BASE = "1B";
+    public final String SECOND_BASE = "2B";
+    public final String THIRD_BASE = "3B";
+    public final String SHORTSTOP = "SS";
+    public final String CORNER_INFIELD = "CI";
+    public final String MIDDLE_INFIELD = "MI";
+    public final String OUTFIELD = "OF";
+    public final String UTILITY = "U";
+    public final String PITCHERS = "P";
+    
     public PlayerHandler(MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
@@ -343,5 +355,9 @@ public class PlayerHandler {
             }
         }
         playersTable.setItems(changedList);
+    }
+    
+    public void handleAddNewPlayerRequest(DK_GUI gui) {
+        
     }
 }
