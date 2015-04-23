@@ -5,11 +5,13 @@ import dk.data.DraftDataManager;
 import dk.data.Player;
 import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
+import dk.gui.PlayerDialog;
 import dk.gui.YesNoCancelDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
 /**
  * This class deals with all of the stuff in the player screen
@@ -17,8 +19,9 @@ import javafx.scene.control.TableView;
  * @author Matthew Wong
  */
 public class PlayerHandler {
-    MessageDialog messageDialog; //NOT FOR HW 5
-    YesNoCancelDialog yesNoCancelDialog; //NOT FOR HW 5
+    MessageDialog messageDialog;
+    YesNoCancelDialog yesNoCancelDialog;
+    PlayerDialog pd;
     
     //table
     TableView<Player> playersTable;
@@ -64,9 +67,10 @@ public class PlayerHandler {
     public final String UTILITY = "U";
     public final String PITCHERS = "P";
     
-    public PlayerHandler(MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
+    public PlayerHandler(Stage primaryStage, Draft draft, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
+        pd = new PlayerDialog(primaryStage, draft, messageDialog);
         regularPlayerList = FXCollections.observableArrayList();
         hitterList = FXCollections.observableArrayList();
         pitcherList = FXCollections.observableArrayList();
@@ -358,6 +362,23 @@ public class PlayerHandler {
     }
     
     public void handleAddNewPlayerRequest(DK_GUI gui) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        pd.showAddPlayerDialog();
         
+        //did the user confirm?
+        if (pd.wasCompleteSelected()) {
+            //get the player
+            Player player = pd.getPlayer();
+            
+            //add it to the available players list
+            draft.addPlayer(player);
+            initLists(gui);
+            //since the draft was edited since it was last saved, update the top toolbar controls
+            gui.getFileController().markAsEdited(gui);
+        }
+        else {
+            //do nothing
+        }
     }
 }

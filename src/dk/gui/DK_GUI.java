@@ -890,7 +890,7 @@ public class DK_GUI implements DraftDataView {
         });
         
         //player handlers
-        playerHandler = new PlayerHandler(messageDialog, yesNoCancelDialog, this);
+        playerHandler = new PlayerHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog, this);
         
         allButton.setOnAction(e -> {
             playerHandler.handleChangePlayersTableRequest(playersTable, RorWColumn, HRorSVColumn, RBIorKColumn, SBorERAColumn, BAorWHIPColumn);
@@ -960,6 +960,11 @@ public class DK_GUI implements DraftDataView {
         
         //register the search players textfield
         registerSearchPlayerTextFieldController(searchPlayerTextField);
+        
+        //add/edit players
+        addPlayerButton.setOnAction(e -> {
+            playerHandler.handleAddNewPlayerRequest(this);
+        });
         
         //team handlers
         teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);

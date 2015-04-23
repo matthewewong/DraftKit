@@ -1,12 +1,14 @@
 package dk.data;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -45,6 +47,8 @@ public class Player implements Comparable {
     final DoubleProperty BAorWHIP;
     boolean isHitter = true; //notify us if this is a hitter
     
+    ArrayList<String> positionsArray;
+    
     public Player() {
         first = new SimpleStringProperty();
         last = new SimpleStringProperty();
@@ -71,6 +75,7 @@ public class Player implements Comparable {
         teamPosition = new SimpleStringProperty();
         contract = new SimpleStringProperty();
         salary = new SimpleIntegerProperty();
+        positionsArray  = new ArrayList<String>();
     }
     
     public boolean isAHitter() {
@@ -386,6 +391,32 @@ public class Player implements Comparable {
             whip = ((hits + walks) / IP);
         whip = Double.parseDouble(df.format(whip));
         setWHIP(whip);
+    }
+    
+    public ObservableList<String> getPositionsArray() {
+        ObservableList<String> positions = FXCollections.observableArrayList();
+        String positionsString = this.getPositions();
+        String[] positionsArray = positionsString.split("_");
+        for (String s : positionsArray) {
+            positions.add(s);
+        }
+        return positions;
+    }
+    
+    public void selectPositions(String position, boolean isSelected) {
+        if (isSelected) {
+            if (!positionsArray.contains(position))
+                positionsArray.add(position);
+        }
+        else {
+            positionsArray.remove(position);
+        }
+        String positionsForPrint = "";
+        for (int i = 0; i < positionsArray.size(); i++) {
+            positionsForPrint += positionsArray.get(i) + "_";
+        }
+        positionsForPrint = positionsForPrint.substring(0, positionsForPrint.length() - 1);
+        this.setPositions(positionsForPrint);
     }
     
     @Override
