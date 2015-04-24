@@ -2,10 +2,16 @@ package dk.gui;
 
 import dk.data.Draft;
 import dk.data.Player;
+import dk.data.Team;
 import static dk.gui.DK_GUI.CLASS_HEADING_LABEL;
 import static dk.gui.DK_GUI.CLASS_PROMPT_LABEL;
+import static dk.gui.DK_GUI.CLASS_SUBHEADING_LABEL;
+import static dk.gui.DK_GUI.CLASS_SUBSUBHEADING_LABEL;
 import static dk.gui.DK_GUI.PRIMARY_STYLE_SHEET;
+import draftkit.DK_PropertyType;
+import static draftkit.DK_StartupConstants.CLOSE_BUTTON_LABEL;
 import static draftkit.DK_StartupConstants.PATH_IMAGES;
+import static draftkit.DK_StartupConstants.PATH_IMAGES_FLAGS;
 import static draftkit.DK_StartupConstants.PATH_IMAGES_PLAYERS;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -75,6 +81,7 @@ public class PlayerDialog extends Stage {
     String selection;
     
     //constants
+    public static final String EMPTY_TEXT = "";
     public static final String COMPLETE = "Complete";
     public static final String CANCEL = "Cancel";
     public static final String PLAYER_FIRST_NAME_PROMPT = "First Name: ";
@@ -114,7 +121,12 @@ public class PlayerDialog extends Stage {
     public final String ST_LOUIS = "STL";
     public final String WASHINGTON = "WAS";
     
-    public PlayerDialog(Stage primaryStage) {
+    //contract status
+    public final String S2_CONTRACT = "S2";
+    public final String S1_CONTRACT = "S1";
+    public final String X_CONTRACT = "X";
+    
+    public PlayerDialog(Stage primaryStage, Draft draft, MessageDialog messageDialog) {
         //make others wait until we finish the dialog options
         initModality(Modality.WINDOW_MODAL);
         initOwner(primaryStage);
@@ -134,19 +146,102 @@ public class PlayerDialog extends Stage {
         flagImage = new ImageView();
         
         playerNameLabel = new Label();
+        playerNameLabel.getStyleClass().add(CLASS_SUBHEADING_LABEL);
         
         playerPositionsLabel = new Label();
+        playerPositionsLabel.getStyleClass().add(CLASS_SUBSUBHEADING_LABEL);
         
         //fantasy team prompts
         fantasyTeamLabel = new Label(FANTASY_TEAM_PROMPT);
         fantasyTeamLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
         fantasyTeamsComboBox = new ComboBox();
-        //LOAD THE TEAMS
+        fantasyTeamsComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                String fantasyTeam = newValue.toString();
+                //DIFFERENT
+            }
+        });
         
-        //LOAD EVERYTHING ELSE
+        //team position prompts
+        teamPositionLabel = new Label(FANTASY_POSITIONS_PROMPT);
+        teamPositionLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
+        teamPositionComboBox = new ComboBox();
+        teamPositionComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                String positions = newValue.toString();
+                player.setTeamPosition(positions);
+            }
+        });
+        
+        //contract prompt
+        contractLabel = new Label(CONTRACT_PROMPT);
+        contractLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
+        contractComboBox = new ComboBox();
+        loadContractComboBox(contractComboBox);
+        contractComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                String contract = newValue.toString();
+                player.setContract(contract);
+            }
+        });
+        
+        //salary prompt
+        salaryLabel = new Label(SALARY_PROMPT);
+        salaryLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
+        salaryTextField = new TextField();
+        salaryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            player.setSalary(Integer.parseInt(newValue));
+        });
+        
+        //buttons
+        completeButton = new Button(COMPLETE);
+        cancelButton = new Button(CANCEL);
+        
+        //event handlers for buttons
+        EventHandler completeCancelHandler = (EventHandler<ActionEvent>) (ActionEvent ae) -> {
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
+            Button sourceButton = (Button)ae.getSource();
+            PlayerDialog.this.selection = sourceButton.getText();
+            if (PlayerDialog.this.selection.equals(COMPLETE)) {
+                if (fantasyTeamsComboBox.getSelectionModel().getSelectedIndex() == 0 || teamPositionComboBox.getSelectionModel().getSelectedIndex() == 0 || contractComboBox.getSelectionModel().getSelectedIndex() == 0 || salaryTextField.getText().equals(EMPTY_TEXT))
+                    messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_EDITING_MESSAGE));
+                else
+                    PlayerDialog.this.hide();
+            }
+            else
+                PlayerDialog.this.hide();
+        };
+        
+        completeButton.setOnAction(completeCancelHandler);
+        cancelButton.setOnAction(completeCancelHandler);
+        
+        //arrange them in a grid pane
+        editPlayerGridPane.add(headingLabel, 0, 0, 2, 1);
+        editPlayerGridPane.add(playerImage, 0, 1, 1, 4);
+        editPlayerGridPane.add(flagImage, 1, 1, 1, 1);
+        editPlayerGridPane.add(playerNameLabel, 1, 2, 1, 1);
+        editPlayerGridPane.add(playerPositionsLabel, 1, 3, 1, 1);
+        editPlayerGridPane.add(fantasyTeamLabel, 0, 6, 1, 1);
+        editPlayerGridPane.add(fantasyTeamsComboBox, 1, 6, 1, 1);
+        editPlayerGridPane.add(teamPositionLabel, 0, 7, 1, 1);
+        editPlayerGridPane.add(teamPositionComboBox, 1, 7, 1, 1);
+        editPlayerGridPane.add(contractLabel, 0, 8, 1, 1);
+        editPlayerGridPane.add(contractComboBox, 1, 8, 1, 1);
+        editPlayerGridPane.add(salaryLabel, 0, 9, 1, 1);
+        editPlayerGridPane.add(salaryTextField, 1, 9, 1, 1);
+        editPlayerGridPane.add(completeButton, 0, 11, 1, 1);
+        editPlayerGridPane.add(cancelButton, 1, 11, 1, 1);
+        
+        //and put the grid pane in the window
+        dialogScene = new Scene(editPlayerGridPane);
+        dialogScene.getStylesheets().add(PRIMARY_STYLE_SHEET);
+        this.setScene(dialogScene);
     }
     
-    public PlayerDialog(Stage primaryStage, Draft draft, MessageDialog messageDialog) {
+    public PlayerDialog(Stage primaryStage, Draft draft) {
         //make others wait until we finish the dialog options
         initModality(Modality.WINDOW_MODAL);
         initOwner(primaryStage);
@@ -306,44 +401,42 @@ public class PlayerDialog extends Stage {
         playerProTeamComboBox.setValue(player.getProTeam());
     }
     
+    public void loadEditGuiData(DK_GUI gui, Player playerToEdit) {
+        if (playerToEdit.getSalary() == 0) { //first time editing
+            loadTeamComboBox(fantasyTeamsComboBox, gui.getDataManager().getDraft());
+            fantasyTeamsComboBox.getSelectionModel().select(0);
+            loadTeamPositionComboBox(teamPositionComboBox, playerToEdit, gui.getDataManager().getDraft().getTeam(fantasyTeamsComboBox.getSelectionModel().getSelectedItem().toString()));
+            teamPositionComboBox.getSelectionModel().select(0);
+            contractComboBox.getSelectionModel().select(0);
+            salaryTextField.setText(EMPTY_TEXT);
+        }
+        else {
+            loadTeamComboBox(fantasyTeamsComboBox, gui.getDataManager().getDraft());
+            fantasyTeamsComboBox.getSelectionModel().select(playerToEdit.getFantasyTeam());
+            teamPositionComboBox.getSelectionModel().select(playerToEdit.getTeamPosition());
+            contractComboBox.getSelectionModel().select(playerToEdit.getContract());
+            salaryTextField.setText(String.valueOf(playerToEdit.getSalary()));
+        }
+    }
+    
     public boolean wasCompleteSelected() {
         return selection.equals(COMPLETE);
     }
     
-    public void showEditPlayerDialog(Player playerToEdit) {
+    public void showEditPlayerDialog(Player playerToEdit, DK_GUI gui) {
         //set the dialog title
         setTitle(EDIT_PLAYER_TITLE);
         
         //load the player into our local object
         player = new Player();
-        player.setFirstName(playerToEdit.getFirstName());
-        player.setLastName(playerToEdit.getLastName());
-        player.setProTeam(playerToEdit.getProTeam());
-        
-        //checkboxes
-        ObservableList<String> positions = player.getPositionsArray();
-        for (int i = 0; i < positions.size(); i++) {
-            if (positions.get(i).equals(CATCHERS))
-                catcherCheckBox.setSelected(true);
-            else if (positions.get(i).equals(FIRST_BASE))
-                firstBaseCheckBox.setSelected(true);
-            else if (positions.get(i).equals(SECOND_BASE))
-                secondBaseCheckBox.setSelected(true);
-            else if (positions.get(i).equals(THIRD_BASE))
-                thirdBaseCheckBox.setSelected(true);
-            else if (positions.get(i).equals(SHORTSTOP))
-                shortstopCheckBox.setSelected(true);
-            else if (positions.get(i).equals(OUTFIELD))
-                outfieldCheckBox.setSelected(true);
-            else if (positions.get(i).equals(PITCHERS))
-                pitcherCheckBox.setSelected(true);
-            
-            //we don't care about the rest, so we end here
-        }
+        playerImage.setImage(getPlayerImage(playerToEdit));
+        flagImage.setImage(getFlagImage(playerToEdit));
+        playerNameLabel.setText(playerToEdit.getFirstName() + " " + playerToEdit.getLastName());
+        playerPositionsLabel.setText(playerToEdit.getPositions());
         
         //and load it to the gui
-        loadGuiData();
-               
+        loadEditGuiData(gui, playerToEdit);
+        
         //and open it up
         this.showAndWait();
     }
@@ -372,12 +465,48 @@ public class PlayerDialog extends Stage {
         cb.getItems().add(WASHINGTON);
     }
     
+    private void loadTeamComboBox(ComboBox cb, Draft draft) {
+        ObservableList<Team> teams = draft.getTeams();
+        cb.getItems().add(EMPTY_TEXT); //empty one
+        for (Team t : teams) {
+            cb.getItems().add(t.getTeamName());
+        }
+    }
+    
+    private void loadTeamPositionComboBox(ComboBox cb, Player p, Team team) {
+        cb.getItems().add(EMPTY_TEXT);
+        ObservableList<String> availablePositions = team.getAvailablePositions();
+        ObservableList<String> playerPositions = p.getPositionsArray();
+        for (int i = 0; i < availablePositions.size(); i++) {           //sorts through each available position
+            for (int j = 0; j < playerPositions.size(); j++) {          //sorts through player's eligible positions
+                if (availablePositions.get(i).equals(playerPositions.get(j))) //eligible AND available!
+                    cb.getItems().add(availablePositions.get(i));
+            }
+        }
+    }
+    
+    private void loadContractComboBox(ComboBox cb) {
+        cb.getItems().add(EMPTY_TEXT);
+        cb.getItems().add(S2_CONTRACT);
+        cb.getItems().add(S1_CONTRACT);
+        cb.getItems().add(X_CONTRACT);
+    }
+    
     private Image getPlayerImage(Player p) {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String imagePath = "file:" + PATH_IMAGES_PLAYERS + props.getProperty(p.getLastName() + p.getFirstName());
+        String imagePath = "file:" + PATH_IMAGES_PLAYERS + p.getLastName() + p.getFirstName() + ".jpg";
         Image playerImage = new Image(imagePath);
         if (playerImage.isError())
-            playerImage = new Image("file:" + PATH_IMAGES_PLAYERS + "AAA_PhotoMissing");
+            playerImage = new Image("file:" + PATH_IMAGES_PLAYERS + "AAA_PhotoMissing.jpg");
         return playerImage;
+    }
+    
+    private Image getFlagImage(Player p) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imagePath = "file:" + PATH_IMAGES_FLAGS + p.getNationOfBirth() + ".png";
+        Image flagImage = new Image(imagePath);
+        if (flagImage.isError())
+            flagImage = new Image("file:" + PATH_IMAGES_FLAGS + "USA.png");
+        return flagImage;
     }
 }

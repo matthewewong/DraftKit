@@ -13,7 +13,7 @@
     -fx-padding: 15;
     -fx-spacing: 10;
     -fx-border-width: 2px;
-    -fx-border-color: #2b6ode;
+    -fx-border-color: #7291e7;
 }
 
 //large sections in the GUI
@@ -25,6 +25,11 @@
 //heading subsections in the GUI
 .subheading_label {
     -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+}
+
+.subsubheading_label {
+    -fx-font-size: 12pt;
     -fx-font-weight: bold;
 }
 

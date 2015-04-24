@@ -3,6 +3,7 @@ package dk.handler;
 import dk.data.Draft;
 import dk.data.DraftDataManager;
 import dk.data.Player;
+import dk.data.Team;
 import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
 import dk.gui.PlayerDialog;
@@ -22,6 +23,7 @@ public class PlayerHandler {
     MessageDialog messageDialog;
     YesNoCancelDialog yesNoCancelDialog;
     PlayerDialog pd;
+    PlayerDialog pdEdit;
     
     //table
     TableView<Player> playersTable;
@@ -70,7 +72,8 @@ public class PlayerHandler {
     public PlayerHandler(Stage primaryStage, Draft draft, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
-        pd = new PlayerDialog(primaryStage, draft, messageDialog);
+        pdEdit = new PlayerDialog(primaryStage, draft, messageDialog);
+        pd = new PlayerDialog(primaryStage, draft);
         regularPlayerList = FXCollections.observableArrayList();
         hitterList = FXCollections.observableArrayList();
         pitcherList = FXCollections.observableArrayList();
@@ -387,6 +390,34 @@ public class PlayerHandler {
             //add it to the available players list
             draft.addPlayer(player);
             initLists(gui);
+            //since the draft was edited since it was last saved, update the top toolbar controls
+            gui.getFileController().markAsEdited(gui);
+        }
+        else {
+            //do nothing
+        }
+    }
+    
+    public void handleEditPlayerRequest(DK_GUI gui, Player playerToEdit) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        pdEdit.showEditPlayerDialog(playerToEdit, gui);
+        
+        //did the user confirm?
+        if (pdEdit.wasCompleteSelected()) {
+            //get the player
+            Player player = pdEdit.getPlayer();
+            playerToEdit.setContract(player.getContract());
+            playerToEdit.setSalary(player.getSalary());
+            playerToEdit.setTeamPosition(player.getTeamPosition());
+            playerToEdit.setFantasyTeam(player.getFantasyTeam());
+            
+            //add player to team, if applicable, and then move it from the available players
+            Team luckyTeam = draft.getTeam(player.getFantasyTeam());
+            luckyTeam.addStartingPlayer(playerToEdit);
+            draft.removePlayer(playerToEdit);
+            initLists(gui);
+            
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }

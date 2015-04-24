@@ -74,6 +74,7 @@ public enum DK_PropertyType {
     PAUSE_AUTO_DRAFT_LABEL,
     
     //error dialog messages
+    ILLEGAL_EDITING_MESSAGE,
     
     //verification messages
     NEW_DRAFT_CREATED_MESSAGE,

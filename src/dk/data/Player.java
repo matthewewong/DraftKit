@@ -22,6 +22,7 @@ public class Player implements Comparable {
     final StringProperty proTeam;
     final StringProperty positions;
     final IntegerProperty yearOfBirth;
+    final StringProperty nationOfBirth;
     final IntegerProperty r;
     final IntegerProperty hr;
     final IntegerProperty rbi;
@@ -48,6 +49,7 @@ public class Player implements Comparable {
     boolean isHitter = true; //notify us if this is a hitter
     
     ArrayList<String> positionsArray;
+    String fantasyTeamName;
     
     public Player() {
         first = new SimpleStringProperty();
@@ -55,6 +57,7 @@ public class Player implements Comparable {
         proTeam = new SimpleStringProperty();
         positions = new SimpleStringProperty();
         yearOfBirth = new SimpleIntegerProperty();
+        nationOfBirth = new SimpleStringProperty();
         r = new SimpleIntegerProperty();
         hr = new SimpleIntegerProperty();
         rbi = new SimpleIntegerProperty();
@@ -144,6 +147,18 @@ public class Player implements Comparable {
     
     public IntegerProperty yearOfBirthProperty() {
         return yearOfBirth;
+    }
+    
+    public String getNationOfBirth() {
+        return nationOfBirth.get();
+    }
+    
+    public void setNationOfBirth(String initNOB) {
+        nationOfBirth.set(initNOB);
+    }
+    
+    public StringProperty nationOfBirthProperty() {
+        return nationOfBirth;
     }
     
     public int getRuns() {
@@ -425,6 +440,14 @@ public class Player implements Comparable {
                 positionsForPrint += "U";
             this.setPositions(positionsForPrint);
         }
+    }
+    
+    public String getFantasyTeam() {
+        return fantasyTeamName;
+    }
+    
+    public void setFantasyTeam(String teamName) {
+        fantasyTeamName = teamName;
     }
     
     @Override

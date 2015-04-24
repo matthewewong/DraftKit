@@ -54,6 +54,7 @@ public class DK_GUI implements DraftDataView {
     static final String CLASS_SUBJECT_PANE = "subject_pane";
     static final String CLASS_HEADING_LABEL = "heading_label";
     static final String CLASS_SUBHEADING_LABEL = "subheading_label";
+    static final String CLASS_SUBSUBHEADING_LABEL = "subsubheading_label";
     static final String CLASS_PROMPT_LABEL = "prompt_label";
     static final String EMPTY_TEXT = "";
     static final int LARGE_TEXT_FIELD_LENGTH = 20;
@@ -964,6 +965,14 @@ public class DK_GUI implements DraftDataView {
         //add/edit players
         addPlayerButton.setOnAction(e -> {
             playerHandler.handleAddNewPlayerRequest(this);
+        });
+        
+        playersTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                //open the playerhandler editor
+                Player p = playersTable.getSelectionModel().getSelectedItem();
+                playerHandler.handleEditPlayerRequest(this, p);
+            }
         });
         
         //team handlers

@@ -103,6 +103,7 @@ public class Draft {
             values[11] = values[11].substring(14); //gets rid of "YEAR_OF_BIRTH:"
             p.setYearOfBirth(Integer.parseInt(values[11]));
             values[12] = values[12].substring(16, values[12].length() - 1); //gets rid of "NATION_OF_BIRTH:"
+            p.setNationOfBirth(values[12]);
             hittersList.add(p);
         }
     }
