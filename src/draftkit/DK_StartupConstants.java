@@ -13,6 +13,8 @@ public class DK_StartupConstants {
     public static final String PATH_IMAGES = "./images/";
     public static final String PATH_CSS = "dk/css/";
     public static final String PATH_EMPTY = ".";
+    public static final String PATH_IMAGES_PLAYERS = ".images/players/";
+    public static final String PATH_IMAGES_FLAGS = "./images/flags/";
     public static final String JSON_FILE_PATH_HITTERS = PATH_DATA + "Hitters.json";
     public static final String JSON_FILE_PATH_PITCHERS = PATH_DATA + "Pitchers.json";
     

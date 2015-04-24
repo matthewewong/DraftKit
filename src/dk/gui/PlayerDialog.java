@@ -5,6 +5,8 @@ import dk.data.Player;
 import static dk.gui.DK_GUI.CLASS_HEADING_LABEL;
 import static dk.gui.DK_GUI.CLASS_PROMPT_LABEL;
 import static dk.gui.DK_GUI.PRIMARY_STYLE_SHEET;
+import static draftkit.DK_StartupConstants.PATH_IMAGES;
+import static draftkit.DK_StartupConstants.PATH_IMAGES_PLAYERS;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -17,11 +19,14 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import properties_manager.PropertiesManager;
 
 /**
  * This class makes a dialog for the player screen (add/editing players)
@@ -52,6 +57,20 @@ public class PlayerDialog extends Stage {
     Button completeButton;
     Button cancelButton;
     
+    GridPane editPlayerGridPane;
+    ImageView playerImage;
+    ImageView flagImage;
+    Label playerNameLabel;
+    Label playerPositionsLabel;
+    Label fantasyTeamLabel;
+    ComboBox fantasyTeamsComboBox;
+    Label teamPositionLabel;
+    ComboBox teamPositionComboBox;
+    Label contractLabel;
+    ComboBox contractComboBox;
+    Label salaryLabel;
+    TextField salaryTextField;
+    
     //see which button the user pressed
     String selection;
     
@@ -64,6 +83,11 @@ public class PlayerDialog extends Stage {
     public static final String PLAYER_HEADING = "Player Details";
     public static final String ADD_PLAYER_TITLE = "Add New Player";
     public static final String EDIT_PLAYER_TITLE = "Edit Player";
+    
+    public static final String FANTASY_TEAM_PROMPT = "Fantasy Team: ";
+    public static final String FANTASY_POSITIONS_PROMPT = "Position: ";
+    public static final String CONTRACT_PROMPT = "Contract: ";
+    public static final String SALARY_PROMPT = "Salary ($): ";
     
     public final String CATCHERS = "C";
     public final String FIRST_BASE = "1B";
@@ -89,6 +113,38 @@ public class PlayerDialog extends Stage {
     public final String SAN_FRANCISCO = "SF";
     public final String ST_LOUIS = "STL";
     public final String WASHINGTON = "WAS";
+    
+    public PlayerDialog(Stage primaryStage) {
+        //make others wait until we finish the dialog options
+        initModality(Modality.WINDOW_MODAL);
+        initOwner(primaryStage);
+        
+        //get our container
+        editPlayerGridPane = new GridPane();
+        editPlayerGridPane.setPadding(new Insets(10, 20, 20, 20));
+        editPlayerGridPane.setHgap(10);
+        editPlayerGridPane.setVgap(10);
+        
+        //heading label; depends on when we're adding or editing
+        headingLabel = new Label(PLAYER_HEADING);
+        headingLabel.getStyleClass().add(CLASS_HEADING_LABEL);
+        
+        //get the player images
+        playerImage = new ImageView();
+        flagImage = new ImageView();
+        
+        playerNameLabel = new Label();
+        
+        playerPositionsLabel = new Label();
+        
+        //fantasy team prompts
+        fantasyTeamLabel = new Label(FANTASY_TEAM_PROMPT);
+        fantasyTeamLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
+        fantasyTeamsComboBox = new ComboBox();
+        //LOAD THE TEAMS
+        
+        //LOAD EVERYTHING ELSE
+    }
     
     public PlayerDialog(Stage primaryStage, Draft draft, MessageDialog messageDialog) {
         //make others wait until we finish the dialog options
@@ -136,7 +192,7 @@ public class PlayerDialog extends Stage {
         
         //and the checkboxes
         playerCheckboxesHBox = new HBox();
-        playerCheckboxesHBox.setPadding(new Insets(10, 20, 20, 20));
+        playerCheckboxesHBox.setSpacing(10);
         catcherCheckBox = initChildCheckBox(playerCheckboxesHBox, CATCHERS);
         firstBaseCheckBox = initChildCheckBox(playerCheckboxesHBox, FIRST_BASE);
         thirdBaseCheckBox = initChildCheckBox(playerCheckboxesHBox, THIRD_BASE);
@@ -229,6 +285,13 @@ public class PlayerDialog extends Stage {
         playerFirstNameTextField.setText(player.getFirstName());
         playerLastNameTextField.setText(player.getLastName());
         playerProTeamComboBox.getSelectionModel().select(0);
+        catcherCheckBox.setSelected(false);
+        firstBaseCheckBox.setSelected(false);
+        thirdBaseCheckBox.setSelected(false);
+        secondBaseCheckBox.setSelected(false);
+        shortstopCheckBox.setSelected(false);
+        outfieldCheckBox.setSelected(false);
+        pitcherCheckBox.setSelected(false);
         
         //and open it up
         this.showAndWait();
@@ -307,5 +370,14 @@ public class PlayerDialog extends Stage {
         cb.getItems().add(SAN_FRANCISCO);
         cb.getItems().add(ST_LOUIS);
         cb.getItems().add(WASHINGTON);
+    }
+    
+    private Image getPlayerImage(Player p) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imagePath = "file:" + PATH_IMAGES_PLAYERS + props.getProperty(p.getLastName() + p.getFirstName());
+        Image playerImage = new Image(imagePath);
+        if (playerImage.isError())
+            playerImage = new Image("file:" + PATH_IMAGES_PLAYERS + "AAA_PhotoMissing");
+        return playerImage;
     }
 }

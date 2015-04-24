@@ -95,6 +95,19 @@ public class PlayerHandler {
         hitterList = FXCollections.observableArrayList(draft.getObservableHitters()); //gets all the hitters
         pitcherList = FXCollections.observableArrayList(draft.getObservablePitchers()); //gets all the pitchers
         
+        //CLEAR THE LISTS
+        allPlayersList.clear();
+        catcherList.clear();
+        firstBaseList.clear();
+        secondBaseList.clear();
+        thirdBaseList.clear();
+        ssList.clear();
+        ciList.clear();
+        miList.clear();
+        ofList.clear();
+        utilityList.clear();
+        pitchersList.clear();
+        
         //fill the ALL list
         allPlayersList = FXCollections.observableArrayList(regularPlayerList);
         

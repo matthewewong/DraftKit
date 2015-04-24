@@ -404,6 +404,7 @@ public class Player implements Comparable {
     }
     
     public void selectPositions(String position, boolean isSelected) {
+        boolean b = false;
         if (isSelected) {
             if (!positionsArray.contains(position))
                 positionsArray.add(position);
@@ -412,11 +413,18 @@ public class Player implements Comparable {
             positionsArray.remove(position);
         }
         String positionsForPrint = "";
-        for (int i = 0; i < positionsArray.size(); i++) {
-            positionsForPrint += positionsArray.get(i) + "_";
+        if (!(positionsArray.isEmpty())) {
+            for (int i = 0; i < positionsArray.size(); i++) {
+                positionsForPrint += positionsArray.get(i) + "_";
+                if (!(positionsArray.get(i).equals("P")))
+                    b = true;
+            }
+            if (!b) //it's a pitcher
+                positionsForPrint = positionsForPrint.substring(0, positionsForPrint.length() - 1);
+            else
+                positionsForPrint += "U";
+            this.setPositions(positionsForPrint);
         }
-        positionsForPrint = positionsForPrint.substring(0, positionsForPrint.length() - 1);
-        this.setPositions(positionsForPrint);
     }
     
     @Override

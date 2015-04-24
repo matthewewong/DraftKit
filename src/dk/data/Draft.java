@@ -175,7 +175,17 @@ public class Draft {
     }
     
     public void addPlayer(Player p) {
+        boolean b = false;
         players.add(p);
+        ObservableList<String> positions = p.getPositionsArray();
+        for (int i = 0; i < positions.size(); i++) {
+            if (positions.get(i).equals("P")) {      //he's a pitcher
+                pitchersList.add(p);
+                b = true;
+            }
+        }
+        if (!b) //he's a hitter
+            hittersList.add(p);
     }
     
     public void addTeam(Team t) {
