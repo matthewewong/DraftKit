@@ -41,6 +41,7 @@ import properties_manager.PropertiesManager;
  */
 public class PlayerDialog extends Stage {
     Player player;
+    Player playerToEdit;
     
     //controls for the dialog
     GridPane gridPane;
@@ -81,7 +82,8 @@ public class PlayerDialog extends Stage {
     String selection;
     
     //constants
-    public static final String EMPTY_TEXT = "";
+    public static final String EMPTY_TEXT = " ";
+    public static final String EMPTY_INTEGER_TEXT = "";
     public static final String COMPLETE = "Complete";
     public static final String CANCEL = "Cancel";
     public static final String PLAYER_FIRST_NAME_PROMPT = "First Name: ";
@@ -158,8 +160,11 @@ public class PlayerDialog extends Stage {
         fantasyTeamsComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                String fantasyTeam = newValue.toString();
-                //DIFFERENT
+                if (!(newValue.equals(null))) {
+                    String fantasyTeam = newValue.toString();
+                    player.setFantasyTeam(fantasyTeam);
+                    loadTeamPositionComboBox(teamPositionComboBox, draft.getTeam(fantasyTeam));
+                }
             }
         });
         
@@ -170,8 +175,10 @@ public class PlayerDialog extends Stage {
         teamPositionComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                String positions = newValue.toString();
-                player.setTeamPosition(positions);
+                if (!(newValue.equals(null))) {
+                    String positions = newValue.toString();
+                    player.setTeamPosition(positions);
+                }
             }
         });
         
@@ -193,7 +200,10 @@ public class PlayerDialog extends Stage {
         salaryLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
         salaryTextField = new TextField();
         salaryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            player.setSalary(Integer.parseInt(newValue));
+            if (!(newValue.isEmpty())) {
+                String salary = newValue;
+                player.setSalary(Integer.parseInt(salary));
+            }
         });
         
         //buttons
@@ -402,13 +412,12 @@ public class PlayerDialog extends Stage {
     }
     
     public void loadEditGuiData(DK_GUI gui, Player playerToEdit) {
-        if (playerToEdit.getSalary() == 0) { //first time editing
+        if (playerToEdit.getFantasyTeam().equals("")) { //first time editing
             loadTeamComboBox(fantasyTeamsComboBox, gui.getDataManager().getDraft());
             fantasyTeamsComboBox.getSelectionModel().select(0);
-            loadTeamPositionComboBox(teamPositionComboBox, playerToEdit, gui.getDataManager().getDraft().getTeam(fantasyTeamsComboBox.getSelectionModel().getSelectedItem().toString()));
             teamPositionComboBox.getSelectionModel().select(0);
             contractComboBox.getSelectionModel().select(0);
-            salaryTextField.setText(EMPTY_TEXT);
+            salaryTextField.setText(EMPTY_INTEGER_TEXT);
         }
         else {
             loadTeamComboBox(fantasyTeamsComboBox, gui.getDataManager().getDraft());
@@ -433,6 +442,7 @@ public class PlayerDialog extends Stage {
         flagImage.setImage(getFlagImage(playerToEdit));
         playerNameLabel.setText(playerToEdit.getFirstName() + " " + playerToEdit.getLastName());
         playerPositionsLabel.setText(playerToEdit.getPositions());
+        setPlayerToEdit(playerToEdit);
         
         //and load it to the gui
         loadEditGuiData(gui, playerToEdit);
@@ -466,6 +476,7 @@ public class PlayerDialog extends Stage {
     }
     
     private void loadTeamComboBox(ComboBox cb, Draft draft) {
+        cb.getItems().clear();
         ObservableList<Team> teams = draft.getTeams();
         cb.getItems().add(EMPTY_TEXT); //empty one
         for (Team t : teams) {
@@ -473,7 +484,9 @@ public class PlayerDialog extends Stage {
         }
     }
     
-    private void loadTeamPositionComboBox(ComboBox cb, Player p, Team team) {
+    private void loadTeamPositionComboBox(ComboBox cb, Team team) {
+        Player p = getPlayerToEdit();
+        cb.getItems().clear();
         cb.getItems().add(EMPTY_TEXT);
         ObservableList<String> availablePositions = team.getAvailablePositions();
         ObservableList<String> playerPositions = p.getPositionsArray();
@@ -490,6 +503,14 @@ public class PlayerDialog extends Stage {
         cb.getItems().add(S2_CONTRACT);
         cb.getItems().add(S1_CONTRACT);
         cb.getItems().add(X_CONTRACT);
+    }
+    
+    private Player getPlayerToEdit() {
+        return playerToEdit;
+    }
+    
+    private void setPlayerToEdit(Player initPlayerToEdit) {
+        playerToEdit = initPlayerToEdit;
     }
     
     private Image getPlayerImage(Player p) {

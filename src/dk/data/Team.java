@@ -2,6 +2,7 @@ package dk.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
 /**
  *
@@ -78,12 +79,57 @@ public class Team {
         ownerName = newOwnerName;
     }
     
-    public void addStartingPlayer(Player p) {
+    public void addStartingPlayer(Player p, TableView<Player> starting) {
         startingPlayers.add(p);
+        String position = p.getTeamPosition();
+        if (position.equals(CATCHERS))
+            numC++;
+        else if (position.equals(FIRST_BASE))
+            num1B++;
+        else if (position.equals(SECOND_BASE))
+            num2B++;
+        else if (position.equals(THIRD_BASE))
+            num3B++;
+        else if (position.equals(SHORTSTOP))
+            numSS++;
+        else if (position.equals(CORNER_INFIELD))
+            numCI++;
+        else if (position.equals(MIDDLE_INFIELD))
+            numMI++;
+        else if (position.equals(OUTFIELD))
+            numOF++;
+        else if (position.equals(UTILITY))
+            numU++;
+        else 
+            numP++;
+        starting.setItems(startingPlayers);
     }
     
-    public void removeStartingPlayer(Player p) {
+    public void removeStartingPlayer(Player p, TableView<Player> starting) {
         startingPlayers.remove(p);
+        starting.setItems(startingPlayers);
+        String position = p.getTeamPosition();
+        if (position.equals(CATCHERS))
+            numC--;
+        else if (position.equals(FIRST_BASE))
+            num1B--;
+        else if (position.equals(SECOND_BASE))
+            num2B--;
+        else if (position.equals(THIRD_BASE))
+            num3B--;
+        else if (position.equals(SHORTSTOP))
+            numSS--;
+        else if (position.equals(CORNER_INFIELD))
+            numCI--;
+        else if (position.equals(MIDDLE_INFIELD))
+            numMI--;
+        else if (position.equals(OUTFIELD))
+            numOF--;
+        else if (position.equals(UTILITY))
+            numU--;
+        else 
+            numP--;
+        starting.setItems(startingPlayers);
     }
     
     public ObservableList<Player> getStartingPlayers() {

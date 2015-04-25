@@ -398,7 +398,7 @@ public class PlayerHandler {
         }
     }
     
-    public void handleEditPlayerRequest(DK_GUI gui, Player playerToEdit) {
+    public void handleEditPlayerRequest(DK_GUI gui, Player playerToEdit, TableView<Player> starting, TableView<Player> taxi) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         pdEdit.showEditPlayerDialog(playerToEdit, gui);
@@ -410,13 +410,26 @@ public class PlayerHandler {
             playerToEdit.setContract(player.getContract());
             playerToEdit.setSalary(player.getSalary());
             playerToEdit.setTeamPosition(player.getTeamPosition());
-            playerToEdit.setFantasyTeam(player.getFantasyTeam());
             
-            //add player to team, if applicable, and then move it from the available players
-            Team luckyTeam = draft.getTeam(player.getFantasyTeam());
-            luckyTeam.addStartingPlayer(playerToEdit);
-            draft.removePlayer(playerToEdit);
-            initLists(gui);
+            if (!(playerToEdit.getFantasyTeam().equals(player.getFantasyTeam()))) {
+                //different teams, so move it
+                if (playerToEdit.getFantasyTeam().equals("")) {
+                    //player was a free agent
+                    Team luckyTeam = draft.getTeam(player.getFantasyTeam());
+                    luckyTeam.addStartingPlayer(playerToEdit, starting);
+                    draft.removePlayer(playerToEdit);
+                    initLists(gui);
+                }
+                else {
+                    Team unluckyTeam = draft.getTeam(playerToEdit.getFantasyTeam()); //get the previous team
+                    unluckyTeam.removeStartingPlayer(playerToEdit, starting);
+                    
+                    Team luckyTeam = draft.getTeam(player.getFantasyTeam()); //get the new team
+                    luckyTeam.addStartingPlayer(playerToEdit, starting);
+                }
+                
+                playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
+            }
             
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);

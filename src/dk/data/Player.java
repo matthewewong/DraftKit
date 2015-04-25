@@ -79,6 +79,7 @@ public class Player implements Comparable {
         contract = new SimpleStringProperty();
         salary = new SimpleIntegerProperty();
         positionsArray  = new ArrayList<String>();
+        fantasyTeamName = "";
     }
     
     public boolean isAHitter() {

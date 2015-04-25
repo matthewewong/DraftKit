@@ -169,6 +169,10 @@ public class Draft {
     
     public void removePlayer(Player playerToRemove) {
         players.remove(playerToRemove);
+        if (playerToRemove.isHitter)
+            hittersList.remove(playerToRemove);
+        else
+            pitchersList.remove(playerToRemove);
     }
     
     public void removeTeam(Team teamToRemove) {

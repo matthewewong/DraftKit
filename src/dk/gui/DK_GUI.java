@@ -753,6 +753,7 @@ public class DK_GUI implements DraftDataView {
         RBIorKColumn.setSortable(false);
         SBorERAColumn.setSortable(false);
         BAorWHIPColumn.setSortable(false);
+        teamPositionColumn.setSortable(false);
         
         //link to the tables
         teamsStartingTable.getColumns().add(teamPositionColumn);
@@ -971,7 +972,7 @@ public class DK_GUI implements DraftDataView {
             if (e.getClickCount() == 2) {
                 //open the playerhandler editor
                 Player p = playersTable.getSelectionModel().getSelectedItem();
-                playerHandler.handleEditPlayerRequest(this, p);
+                playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable);
             }
         });
         
