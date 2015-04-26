@@ -82,8 +82,8 @@ public class PlayerDialog extends Stage {
     String selection;
     
     //constants
-    public static final String EMPTY_TEXT = " ";
-    public static final String EMPTY_INTEGER_TEXT = "";
+    public static final String EMPTY_TEXT = "<ENTER VALUE>";
+    public static final String FREE_AGENT = "Free Agent";
     public static final String COMPLETE = "Complete";
     public static final String CANCEL = "Cancel";
     public static final String PLAYER_FIRST_NAME_PROMPT = "First Name: ";
@@ -163,6 +163,7 @@ public class PlayerDialog extends Stage {
                 if (!(newValue.equals(null))) {
                     String fantasyTeam = newValue.toString();
                     player.setFantasyTeam(fantasyTeam);
+                    //teamPositionComboBox = new ComboBox();
                     loadTeamPositionComboBox(teamPositionComboBox, draft.getTeam(fantasyTeam));
                 }
             }
@@ -200,7 +201,7 @@ public class PlayerDialog extends Stage {
         salaryLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
         salaryTextField = new TextField();
         salaryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!(newValue.isEmpty())) {
+            if (!(newValue.equals(EMPTY_TEXT))) {
                 String salary = newValue;
                 player.setSalary(Integer.parseInt(salary));
             }
@@ -417,7 +418,7 @@ public class PlayerDialog extends Stage {
             fantasyTeamsComboBox.getSelectionModel().select(0);
             teamPositionComboBox.getSelectionModel().select(0);
             contractComboBox.getSelectionModel().select(0);
-            salaryTextField.setText(EMPTY_INTEGER_TEXT);
+            salaryTextField.setText(EMPTY_TEXT);
         }
         else {
             loadTeamComboBox(fantasyTeamsComboBox, gui.getDataManager().getDraft());
@@ -451,6 +452,10 @@ public class PlayerDialog extends Stage {
         this.showAndWait();
     }
     
+    public String getFantasyTeamComboBoxValue() {
+        return fantasyTeamsComboBox.getSelectionModel().getSelectedItem().toString();
+    }
+    
     private CheckBox initChildCheckBox(Pane container, String text) {
         CheckBox cB = new CheckBox(text);
         container.getChildren().add(cB);
@@ -478,7 +483,7 @@ public class PlayerDialog extends Stage {
     private void loadTeamComboBox(ComboBox cb, Draft draft) {
         cb.getItems().clear();
         ObservableList<Team> teams = draft.getTeams();
-        cb.getItems().add(EMPTY_TEXT); //empty one
+        cb.getItems().add(FREE_AGENT); //free agent
         for (Team t : teams) {
             cb.getItems().add(t.getTeamName());
         }

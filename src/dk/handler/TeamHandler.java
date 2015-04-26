@@ -88,8 +88,10 @@ public class TeamHandler {
         if (td.wasCompleteSelected()) {
             //update the team
             Team team = td.getTeam();
+            gui.getTeamsComboBox().getItems().remove(teamName);
             teamToEdit.setTeamName(team.getTeamName());
             teamToEdit.setOwnerName(team.getOwnerName());
+            gui.getTeamsComboBox().getItems().add(team.getTeamName());
             
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);

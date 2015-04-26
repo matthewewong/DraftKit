@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 public class Draft {
     //Strings of the players
     ObservableList<Player> players;
+    ObservableList<Player> totPlayers;
     ObservableList<Team> teams;
     ObservableList<String> hitters;
     ObservableList<String> pitchers;
@@ -28,6 +29,7 @@ public class Draft {
     public Draft() {
         //init the lists
         players = FXCollections.observableArrayList();
+        totPlayers = FXCollections.observableArrayList();
         teams = FXCollections.observableArrayList();
         hitters = FXCollections.observableArrayList();
         pitchers = FXCollections.observableArrayList();
@@ -148,11 +150,13 @@ public class Draft {
         //add hitters
         for (Player p : hittersList) {
             players.add(p);
+            totPlayers.add(p);
         }
         
         //add pitchers
         for (Player p : pitchersList) {
             players.add(p);
+            totPlayers.add(p);
         }
         
         //sort by name
@@ -168,7 +172,7 @@ public class Draft {
     }
     
     public void removePlayer(Player playerToRemove) {
-        players.remove(playerToRemove);
+        //players.remove(playerToRemove);
         if (playerToRemove.isHitter)
             hittersList.remove(playerToRemove);
         else
@@ -182,6 +186,7 @@ public class Draft {
     public void addPlayer(Player p) {
         boolean b = false;
         players.add(p);
+        totPlayers.add(p);
         ObservableList<String> positions = p.getPositionsArray();
         for (int i = 0; i < positions.size(); i++) {
             if (positions.get(i).equals("P")) {      //he's a pitcher

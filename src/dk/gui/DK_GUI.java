@@ -237,7 +237,18 @@ public class DK_GUI implements DraftDataView {
     TableColumn SBorERAColumn;
     TableColumn BAorWHIPColumn;
     
+    //team columns
     TableColumn teamPositionColumn;
+    TableColumn teamFirstNameColumn;
+    TableColumn teamLastNameColumn;
+    TableColumn teamProTeamColumn;
+    TableColumn teamPositionsColumn;
+    TableColumn teamRorWColumn;
+    TableColumn teamHRorSVColumn;
+    TableColumn teamRBIorKColumn;
+    TableColumn teamSBorERAColumn;
+    TableColumn teamBAorWHIPColumn;
+    TableColumn teamValueColumn;
     TableColumn contractColumn;
     TableColumn salaryColumn;
     
@@ -713,76 +724,67 @@ public class DK_GUI implements DraftDataView {
         taxiSquadHeadingLabel = initLabel(DK_PropertyType.TEAM_TAXI_SQUAD_HEADING_LABEL, CLASS_SUBHEADING_LABEL);
         
         //tables for the tables
-        teamsStartingTable = new TableView<Player>();
-        teamsTaxiTable = new TableView<Player>();
+        teamsStartingTable = new TableView();
+        teamsTaxiTable = new TableView();
         
         //columns for the tables
         teamPositionColumn = new TableColumn(COL_TEAM_POSITION);
-        firstNameColumn = new TableColumn(COL_FIRST_NAME);
-        lastNameColumn = new TableColumn(COL_LAST_NAME);
-        proTeamColumn = new TableColumn(COL_PRO_TEAM);
-        positionsColumn = new TableColumn(COL_POSITIONS);
-        yearOfBirthColumn = new TableColumn(COL_YEAR_OF_BIRTH);
-        RorWColumn = new TableColumn(COL_RORW);
-        HRorSVColumn = new TableColumn(COL_HRORSV);
-        RBIorKColumn = new TableColumn(COL_RBIORK);
-        SBorERAColumn = new TableColumn(COL_SBORERA);
-        BAorWHIPColumn = new TableColumn(COL_BAORWHIP);
-        valueColumn = new TableColumn(COL_ESTIMATED_VALUE);
+        teamFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        teamLastNameColumn = new TableColumn(COL_LAST_NAME);
+        teamProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        teamPositionsColumn = new TableColumn(COL_POSITIONS);
+        teamRorWColumn = new TableColumn(COL_RORW);
+        teamHRorSVColumn = new TableColumn(COL_HRORSV);
+        teamRBIorKColumn = new TableColumn(COL_RBIORK);
+        teamSBorERAColumn = new TableColumn(COL_SBORERA);
+        teamBAorWHIPColumn = new TableColumn(COL_BAORWHIP);
+        teamValueColumn = new TableColumn(COL_ESTIMATED_VALUE);
         contractColumn = new TableColumn(COL_CONTRACT);
         salaryColumn = new TableColumn(COL_SALARY);
         
         teamPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
-        proTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
-        positionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
-        yearOfBirthColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("yearOfBirth"));
-        RorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
-        HRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
-        RBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
-        SBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
-        BAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
-        valueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
+        teamFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        teamLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        teamProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
+        teamPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        teamRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
+        teamHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
+        teamRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
+        teamSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
+        teamBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
+        teamValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
         contractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
         salaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
         
-        //cannot sort these columns
-        RorWColumn.setSortable(false);
-        HRorSVColumn.setSortable(false);
-        RBIorKColumn.setSortable(false);
-        SBorERAColumn.setSortable(false);
-        BAorWHIPColumn.setSortable(false);
+        //cannot sort this column
         teamPositionColumn.setSortable(false);
         
         //link to the tables
         teamsStartingTable.getColumns().add(teamPositionColumn);
-        teamsStartingTable.getColumns().add(firstNameColumn);
-        teamsStartingTable.getColumns().add(lastNameColumn);
-        teamsStartingTable.getColumns().add(proTeamColumn);
-        teamsStartingTable.getColumns().add(positionsColumn);
-        teamsStartingTable.getColumns().add(yearOfBirthColumn);
-        teamsStartingTable.getColumns().add(RorWColumn);
-        teamsStartingTable.getColumns().add(HRorSVColumn);
-        teamsStartingTable.getColumns().add(RBIorKColumn);
-        teamsStartingTable.getColumns().add(SBorERAColumn);
-        teamsStartingTable.getColumns().add(BAorWHIPColumn);
-        teamsStartingTable.getColumns().add(valueColumn);
+        teamsStartingTable.getColumns().add(teamFirstNameColumn);
+        teamsStartingTable.getColumns().add(teamLastNameColumn);
+        teamsStartingTable.getColumns().add(teamProTeamColumn);
+        teamsStartingTable.getColumns().add(teamPositionsColumn);
+        teamsStartingTable.getColumns().add(teamRorWColumn);
+        teamsStartingTable.getColumns().add(teamHRorSVColumn);
+        teamsStartingTable.getColumns().add(teamRBIorKColumn);
+        teamsStartingTable.getColumns().add(teamSBorERAColumn);
+        teamsStartingTable.getColumns().add(teamBAorWHIPColumn);
+        teamsStartingTable.getColumns().add(teamValueColumn);
         teamsStartingTable.getColumns().add(contractColumn);
         teamsStartingTable.getColumns().add(salaryColumn);
         
         teamsTaxiTable.getColumns().add(teamPositionColumn);
-        teamsTaxiTable.getColumns().add(firstNameColumn);
-        teamsTaxiTable.getColumns().add(lastNameColumn);
-        teamsTaxiTable.getColumns().add(proTeamColumn);
-        teamsTaxiTable.getColumns().add(positionsColumn);
-        teamsTaxiTable.getColumns().add(yearOfBirthColumn);
-        teamsTaxiTable.getColumns().add(RorWColumn);
-        teamsTaxiTable.getColumns().add(HRorSVColumn);
-        teamsTaxiTable.getColumns().add(RBIorKColumn);
-        teamsTaxiTable.getColumns().add(SBorERAColumn);
-        teamsTaxiTable.getColumns().add(BAorWHIPColumn);
-        teamsTaxiTable.getColumns().add(valueColumn);
+        teamsTaxiTable.getColumns().add(teamFirstNameColumn);
+        teamsTaxiTable.getColumns().add(teamLastNameColumn);
+        teamsTaxiTable.getColumns().add(teamProTeamColumn);
+        teamsTaxiTable.getColumns().add(teamPositionsColumn);
+        teamsTaxiTable.getColumns().add(teamRorWColumn);
+        teamsTaxiTable.getColumns().add(teamHRorSVColumn);
+        teamsTaxiTable.getColumns().add(teamRBIorKColumn);
+        teamsTaxiTable.getColumns().add(teamSBorERAColumn);
+        teamsTaxiTable.getColumns().add(teamBAorWHIPColumn);
+        teamsTaxiTable.getColumns().add(teamValueColumn);
         teamsTaxiTable.getColumns().add(contractColumn);
         teamsTaxiTable.getColumns().add(salaryColumn);
         
@@ -991,6 +993,14 @@ public class DK_GUI implements DraftDataView {
         removeTeamButton.setOnAction(e -> {
             teamHandler.handleRemoveTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString());
             teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
+        });
+        
+        teamsStartingTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                //open the playerhandler editor
+                Player p = playersTable.getSelectionModel().getSelectedItem();
+                playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable);
+            }
         });
     }
     
