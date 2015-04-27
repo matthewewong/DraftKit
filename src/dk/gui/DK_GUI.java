@@ -743,16 +743,16 @@ public class DK_GUI implements DraftDataView {
         salaryColumn = new TableColumn(COL_SALARY);
         
         teamPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
-        teamFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
-        teamLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
-        teamProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
-        teamPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
-        teamRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
-        teamHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
-        teamRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
-        teamSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
-        teamBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
-        teamValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
+        teamFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingFirstName"));
+        teamLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingLastName"));
+        teamProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingProTeam"));
+        teamPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingPositions"));
+        teamRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("startingRorW"));
+        teamHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("startingHRorSV"));
+        teamRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("startingRBIorK"));
+        teamSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("startingSBorERA"));
+        teamBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("startingBAorWHIP"));
+        teamValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingValue"));
         contractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
         salaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
         
@@ -965,6 +965,9 @@ public class DK_GUI implements DraftDataView {
         //register the search players textfield
         registerSearchPlayerTextFieldController(searchPlayerTextField);
         
+        //register the draft name text field
+        registerDraftNameTextFieldController(draftNameTextField);
+        
         //add/edit players
         addPlayerButton.setOnAction(e -> {
             playerHandler.handleAddNewPlayerRequest(this);
@@ -1009,6 +1012,13 @@ public class DK_GUI implements DraftDataView {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             String text = textField.textProperty().getValue();
             playerHandler.handleTextFieldChangeRequest(this, lastRadioButtonClicked, playersTable, text);
+        });
+    }
+    
+    private void registerDraftNameTextFieldController(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String text = textField.textProperty().getValue();
+            teamHandler.handleTextFieldChangeRequest(this, text);
         });
     }
     

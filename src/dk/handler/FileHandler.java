@@ -1,13 +1,19 @@
 package dk.handler;
 
 //import static draftkit.DK_PropertyType.DRAFT_SAVED_MESSAGE;
+import dk.data.Draft;
 import dk.data.DraftDataManager;
 import dk.error.ErrorHandler;
 import dk.file.DraftFileManager;
 import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
+import dk.gui.YesNoCancelDialog;
 import static draftkit.DK_PropertyType.NEW_DRAFT_CREATED_MESSAGE;
+import static draftkit.DK_PropertyType.SAVE_UNSAVED_WORK_MESSAGE;
+import static draftkit.DK_StartupConstants.PATH_DRAFTS;
+import java.io.File;
 import java.io.IOException;
+import javafx.stage.FileChooser;
 import properties_manager.PropertiesManager;
 
 /**
@@ -32,8 +38,8 @@ public class FileHandler {
     //provide feedback to user after work has completed
     MessageDialog messageDialog;
     
-    //ask yes/no/cancel questions       NOT FOR HW 5
-    //YesNoCancelDialog yesNoCancelDialog;
+    //ask yes/no/cancel questions
+    YesNoCancelDialog yesNoCancelDialog;
     
     //get our verification feedback
     PropertiesManager properties;
@@ -109,7 +115,7 @@ public class FileHandler {
      * sure data for the current Draft is not lost. NOT FOR HW 5
      * @param gui the UI editing the Draft
      */
-    /*public void handleLoadDraftRequest(DK_GUI gui) {
+    public void handleLoadDraftRequest(DK_GUI gui) {
         try {
             //we may have to save
             boolean continueToOpen = true;
@@ -125,8 +131,73 @@ public class FileHandler {
             }
         } catch (IOException ioe) {
             //something went wrong
-            errorHandler.handleLoadCourseError();
+            errorHandler.handleLoadDraftError();
         }
-    }*/
+    }
+    
+    /**
+     * This helper method verifies that the user really wants to save their
+     * unsaved work, which they might not want to do. Note that the user will be
+     * presented with 3 options: YES, NO, and CANCEL. YES means the user wants
+     * to save their work and continue the other action, NO means don't save the 
+     * work but continue with the other action, CANCEL means don't save the work 
+     * and don't continue with the other action.
+     *
+     * @return true if the user presses the YES option to save, true if the user
+     * presses the NO option to not save, false if the user presses the CANCEL
+     * option to not continue.
+     */
+    private boolean promptToSave(DK_GUI gui) throws IOException {
+        // PROMPT THE USER TO SAVE UNSAVED WORK
+        yesNoCancelDialog.show(properties.getProperty(SAVE_UNSAVED_WORK_MESSAGE));
+        
+        // AND NOW GET THE USER'S SELECTION
+        String selection = yesNoCancelDialog.getSelection();
+
+        // IF THE USER SAID YES, THEN SAVE BEFORE MOVING ON
+        if (selection.equals(YesNoCancelDialog.YES)) {
+            // SAVE THE COURSE
+            DraftDataManager dataManager = gui.getDataManager();
+            draftIO.saveDraft(dataManager.getDraft());
+            saved = true;
+
+        } // IF THE USER SAID CANCEL, THEN WE'LL TELL WHOEVER
+        // CALLED THIS THAT THE USER IS NOT INTERESTED ANYMORE
+        else if (selection.equals(YesNoCancelDialog.CANCEL)) {
+            return false;
+        }
+
+        // IF THE USER SAID NO, WE JUST GO ON WITHOUT SAVING
+        // BUT FOR BOTH YES AND NO WE DO WHATEVER THE USER
+        // HAD IN MIND IN THE FIRST PLACE
+        return true;
+    }
+
+    /**
+     * This helper method asks the user for a file to open. The user-selected
+     * file is then loaded and the GUI updated. Note that if the user cancels
+     * the open process, nothing is done. If an error occurs loading the file, a
+     * message is displayed, but nothing changes.
+     */
+    private void promptToOpen(DK_GUI gui) {
+        // AND NOW ASK THE USER FOR THE COURSE TO OPEN
+        FileChooser courseFileChooser = new FileChooser();
+        courseFileChooser.setInitialDirectory(new File(PATH_DRAFTS));
+        File selectedFile = courseFileChooser.showOpenDialog(gui.getWindow());
+
+        // ONLY OPEN A NEW FILE IF THE USER SAYS OK
+        if (selectedFile != null) {
+            try {
+                Draft draftToLoad = gui.getDataManager().getDraft();
+                draftIO.loadDraft(draftToLoad, selectedFile.getAbsolutePath());
+                gui.reloadDraft(draftToLoad);
+                saved = true;
+                gui.updateTopToolbarControls(saved);
+            } catch (Exception e) {
+                ErrorHandler eH = ErrorHandler.getErrorHandler();
+                eH.handleLoadDraftError();
+            }
+        }
+    }
     
 }

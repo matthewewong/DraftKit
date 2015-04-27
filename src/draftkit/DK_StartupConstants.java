@@ -10,6 +10,7 @@ public class DK_StartupConstants {
     public static final String PROPERTIES_FILE_NAME = "properties.xml";
     public static final String PROPERTIES_SCHEMA_FILE_NAME = "properties_schema.xsd";    
     public static final String PATH_DATA = "./data/";
+    public static final String PATH_DRAFTS = PATH_DATA + "drafts/";
     public static final String PATH_IMAGES = "./images/";
     public static final String PATH_CSS = "dk/css/";
     public static final String PATH_EMPTY = ".";

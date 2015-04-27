@@ -23,6 +23,9 @@ public class Draft {
     ObservableList<Player> hittersList;
     ObservableList<Player> pitchersList;
     
+    //draft name
+    String draftName;
+    
     /**
      * Constructor for setting up a Draft
      */
@@ -40,6 +43,15 @@ public class Draft {
     }
     
     //Accessor and mutator methods for a draft.
+    
+    public String getDraftName() {
+        return draftName;
+    }
+    
+    public void setDraftName(String newDraftName) {
+        draftName = newDraftName;
+    }
+    
     public void clearPlayers() {
         players.clear();
     }

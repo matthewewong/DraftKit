@@ -11,7 +11,6 @@ import javafx.scene.control.TableView;
 public class Team {
     ObservableList<Player> startingPlayers;
     ObservableList<Player> taxiPlayers;
-    String draftName;
     String teamName;
     String ownerName;
     
@@ -53,14 +52,6 @@ public class Team {
         numU = 0;
         numOF = 0;
         numP = 0;
-    }
-    
-    public String getDraftName() {
-        return draftName;
-    }
-    
-    public void setDraftName(String newDraftName) {
-        draftName = newDraftName;
     }
     
     public String getTeamName() {

@@ -56,6 +56,12 @@ public class TeamHandler {
         }
     }
     
+    public void handleTextFieldChangeRequest(DK_GUI gui, String text) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        draft.setDraftName(text);
+    }
+    
     public void handleAddTeamRequest(DK_GUI gui) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();

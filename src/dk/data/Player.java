@@ -101,6 +101,10 @@ public class Player implements Comparable {
     public StringProperty firstNameProperty() {
         return first;
     }
+    
+    public StringProperty startingFirstNameProperty() {
+        return first;
+    }
 
     public String getLastName() {
         return last.get();
@@ -111,6 +115,10 @@ public class Player implements Comparable {
     }
     
     public StringProperty lastNameProperty() {
+        return last;
+    }
+    
+    public StringProperty startingLastNameProperty() {
         return last;
     }
     
@@ -126,6 +134,10 @@ public class Player implements Comparable {
         return proTeam;
     }
     
+    public StringProperty startingProTeamProperty() {
+        return proTeam;
+    }
+    
     public String getPositions() {
         return positions.get();
     }
@@ -135,6 +147,10 @@ public class Player implements Comparable {
     }
     
     public StringProperty positionsProperty() {
+        return positions;
+    }
+    
+    public StringProperty startingPositionsProperty() {
         return positions;
     }
     
@@ -233,6 +249,10 @@ public class Player implements Comparable {
         return value;
     }
     
+    public IntegerProperty startingValueProperty() {
+        return value;
+    }
+    
     public String getNotes() {
         return notes.get();
     }
@@ -311,6 +331,13 @@ public class Player implements Comparable {
         else
             return win;
     }
+    
+    public IntegerProperty startingRorWProperty() {
+        if (isHitter)
+            return r;
+        else
+            return win;
+    }
 
     public IntegerProperty HRorSVProperty() {
         if (isHitter)
@@ -318,8 +345,22 @@ public class Player implements Comparable {
         else
             return sv;
     }
+    
+    public IntegerProperty startingHRorSVProperty() {
+        if (isHitter)
+            return hr;
+        else
+            return sv;
+    }
 
     public IntegerProperty RBIorKProperty() {
+        if (isHitter)
+            return rbi;
+        else
+            return k;
+    }
+    
+    public IntegerProperty startingRBIorKProperty() {
         if (isHitter)
             return rbi;
         else
@@ -333,7 +374,21 @@ public class Player implements Comparable {
             return era;
     }
     
+    public DoubleProperty startingSBorERAProperty() {
+        if (isHitter)
+            return sb;
+        else
+            return era;
+    }
+    
     public DoubleProperty BAorWHIPProperty() {
+        if (isHitter)
+            return ba;
+        else
+            return whip;
+    }
+    
+    public DoubleProperty startingBAorWHIPProperty() {
         if (isHitter)
             return ba;
         else
