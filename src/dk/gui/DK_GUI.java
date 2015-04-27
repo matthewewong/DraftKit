@@ -868,6 +868,10 @@ public class DK_GUI implements DraftDataView {
             fileHandler.handleNewDraftRequest(this);
         });
         
+        saveDraftButton.setOnAction(e -> {
+            fileHandler.handleSaveDraftRequest(this, dataManager.getDraft());
+        });
+        
         playerScreenButton.setOnAction(e -> {
             newSelection = PLAYERS_BUTTON;
             screenSelectHandler(lastSelection, newSelection);

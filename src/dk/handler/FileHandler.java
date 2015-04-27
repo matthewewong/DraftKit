@@ -8,6 +8,7 @@ import dk.file.DraftFileManager;
 import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
 import dk.gui.YesNoCancelDialog;
+import static draftkit.DK_PropertyType.DRAFT_SAVED_MESSAGE;
 import static draftkit.DK_PropertyType.NEW_DRAFT_CREATED_MESSAGE;
 import static draftkit.DK_PropertyType.SAVE_UNSAVED_WORK_MESSAGE;
 import static draftkit.DK_StartupConstants.PATH_DRAFTS;
@@ -136,6 +137,33 @@ public class FileHandler {
     }
     
     /**
+     * This method will save the current course to a file. Note that we already
+     * know the name of the file, so we won't need to prompt the user.
+     * 
+     * @param gui The user interface editing the Course.
+     * 
+     * @param courseToSave The course being edited that is to be saved to a file.
+     */
+    public void handleSaveDraftRequest(DK_GUI gui, Draft draftToSave) {
+        try {
+            // SAVE IT TO A FILE
+            draftIO.saveDraft(draftToSave);
+
+            // MARK IT AS SAVED
+            saved = true;
+
+            // TELL THE USER THE FILE HAS BEEN SAVED
+            messageDialog.show(properties.getProperty(DRAFT_SAVED_MESSAGE));
+
+            // AND REFRESH THE GUI, WHICH WILL ENABLE AND DISABLE
+            // THE APPROPRIATE CONTROLS
+            gui.updateTopToolbarControls(saved);
+        } catch (IOException ioe) {
+            errorHandler.handleSaveDraftError();
+        }
+    }
+    
+    /**
      * This helper method verifies that the user really wants to save their
      * unsaved work, which they might not want to do. Note that the user will be
      * presented with 3 options: YES, NO, and CANCEL. YES means the user wants
@@ -158,6 +186,9 @@ public class FileHandler {
         if (selection.equals(YesNoCancelDialog.YES)) {
             // SAVE THE COURSE
             DraftDataManager dataManager = gui.getDataManager();
+            if (dataManager.getDraft().getDraftName().equals("")) { //no input
+                messageDialog.show("Please enter a draft name before saving.");
+            }
             draftIO.saveDraft(dataManager.getDraft());
             saved = true;
 
