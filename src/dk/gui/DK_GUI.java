@@ -743,16 +743,16 @@ public class DK_GUI implements DraftDataView {
         salaryColumn = new TableColumn(COL_SALARY);
         
         teamPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
-        teamFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingFirstName"));
-        teamLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingLastName"));
-        teamProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingProTeam"));
-        teamPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingPositions"));
-        teamRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("startingRorW"));
-        teamHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("startingHRorSV"));
-        teamRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("startingRBIorK"));
-        teamSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("startingSBorERA"));
-        teamBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("startingBAorWHIP"));
-        teamValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("startingValue"));
+        teamFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        teamLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        teamProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
+        teamPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        teamRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
+        teamHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
+        teamRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
+        teamSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
+        teamBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
+        teamValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
         contractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
         salaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
         
@@ -988,13 +988,17 @@ public class DK_GUI implements DraftDataView {
         //team handlers
         teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
         
+        teamSelectComboBox.setOnAction(e -> {
+            teamHandler.handleLoadTeam(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString(), teamsStartingTable, teamsTaxiTable);
+        });
+        
         addTeamButton.setOnAction(e -> {
             teamHandler.handleAddTeamRequest(this);
             teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
         });
         
         editTeamButton.setOnAction(e -> {
-            teamHandler.handleEditTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString());
+            teamHandler.handleEditTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString(), teamsStartingTable, teamsTaxiTable);
         });
         
         removeTeamButton.setOnAction(e -> {
@@ -1005,7 +1009,7 @@ public class DK_GUI implements DraftDataView {
         teamsStartingTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 //open the playerhandler editor
-                Player p = playersTable.getSelectionModel().getSelectedItem();
+                Player p = teamsStartingTable.getSelectionModel().getSelectedItem();
                 playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable);
             }
         });

@@ -84,7 +84,9 @@ public class TeamHandler {
         }
     }
     
-    public void handleEditTeamRequest(DK_GUI gui, String teamName) {
+    public void handleEditTeamRequest(DK_GUI gui, String teamName, TableView<Player> starting, TableView<Player> taxi) {
+        teamStartingTable = starting;
+        teamTaxiTable = taxi;
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         Team teamToEdit = draft.getTeam(teamName);
@@ -98,6 +100,8 @@ public class TeamHandler {
             teamToEdit.setTeamName(team.getTeamName());
             teamToEdit.setOwnerName(team.getOwnerName());
             gui.getTeamsComboBox().getItems().add(team.getTeamName());
+            teamStartingTable.setItems(team.getStartingPlayers());
+            teamTaxiTable.setItems(team.getTaxiPlayers());
             
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
@@ -125,5 +129,15 @@ public class TeamHandler {
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
+    }
+    
+    public void handleLoadTeam(DK_GUI gui, String teamName, TableView<Player> starting, TableView<Player> taxi) {
+        teamStartingTable = starting;
+        teamTaxiTable = taxi;
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        Team teamToEdit = draft.getTeam(teamName);
+        teamStartingTable.setItems(teamToEdit.getStartingPlayers());
+        teamTaxiTable.setItems(teamToEdit.getTaxiPlayers());
     }
 }

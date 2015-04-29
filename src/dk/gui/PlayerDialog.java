@@ -160,10 +160,9 @@ public class PlayerDialog extends Stage {
         fantasyTeamsComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (!(newValue.equals(null))) {
+                if (!(newValue == null)) {
                     String fantasyTeam = newValue.toString();
                     player.setFantasyTeam(fantasyTeam);
-                    //teamPositionComboBox = new ComboBox();
                     loadTeamPositionComboBox(teamPositionComboBox, draft.getTeam(fantasyTeam));
                 }
             }
@@ -176,7 +175,7 @@ public class PlayerDialog extends Stage {
         teamPositionComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (!(newValue.equals(null))) {
+                if (!(newValue == null)) {
                     String positions = newValue.toString();
                     player.setTeamPosition(positions);
                 }
@@ -201,7 +200,7 @@ public class PlayerDialog extends Stage {
         salaryLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
         salaryTextField = new TextField();
         salaryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!(newValue.equals(EMPTY_TEXT))) {
+            if (!(newValue.equals(EMPTY_TEXT) || newValue.equals(""))) {
                 String salary = newValue;
                 player.setSalary(Integer.parseInt(salary));
             }

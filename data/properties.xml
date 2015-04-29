@@ -72,6 +72,7 @@ Draft Kit.
         
         <!-- ERROR MESSAGES -->
         <property name="ILLEGAL_EDITING_MESSAGE"        value="Not all the fields are completed."></property>
+        <property name="ILLEGAL_DRAFT_NAME"             value="Please enter a draft name before saving."></property>
         <property name="CLOSE_BUTTON_TEXT"                          value="Close"></property>
 
         <!-- VERIFICATION MESSAGES -->

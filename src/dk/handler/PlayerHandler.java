@@ -28,6 +28,9 @@ public class PlayerHandler {
     //table
     TableView<Player> playersTable;
     
+    TableView<Player> teamStartingTable;
+    TableView<Player> teamTaxiTable;
+    
     //player lists
     ObservableList<Player> regularPlayerList; //list we loaded
     ObservableList<Player> hitterList; //all the hitters
@@ -403,6 +406,9 @@ public class PlayerHandler {
         Draft draft = ddm.getDraft();
         pdEdit.showEditPlayerDialog(playerToEdit, gui);
         
+        teamStartingTable = starting;
+        teamTaxiTable = taxi;
+        
         //did the user confirm?
         if (pdEdit.wasCompleteSelected()) {
             //get the player
@@ -417,6 +423,7 @@ public class PlayerHandler {
                     //player was a free agent
                     Team luckyTeam = draft.getTeam(player.getFantasyTeam());
                     luckyTeam.addStartingPlayer(playerToEdit, starting);
+                    teamStartingTable.setItems(luckyTeam.getStartingPlayers());
                     draft.removePlayer(playerToEdit);
                     initLists(gui);
                 }

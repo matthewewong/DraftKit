@@ -93,7 +93,6 @@ public class Team {
             numU++;
         else 
             numP++;
-        starting.setItems(startingPlayers);
     }
     
     public void removeStartingPlayer(Player p, TableView<Player> starting) {
@@ -120,7 +119,6 @@ public class Team {
             numU--;
         else 
             numP--;
-        starting.setItems(startingPlayers);
     }
     
     public ObservableList<Player> getStartingPlayers() {

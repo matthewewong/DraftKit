@@ -9,6 +9,7 @@ import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
 import dk.gui.YesNoCancelDialog;
 import static draftkit.DK_PropertyType.DRAFT_SAVED_MESSAGE;
+import static draftkit.DK_PropertyType.ILLEGAL_DRAFT_NAME;
 import static draftkit.DK_PropertyType.NEW_DRAFT_CREATED_MESSAGE;
 import static draftkit.DK_PropertyType.SAVE_UNSAVED_WORK_MESSAGE;
 import static draftkit.DK_StartupConstants.PATH_DRAFTS;
@@ -137,27 +138,31 @@ public class FileHandler {
     }
     
     /**
-     * This method will save the current course to a file. Note that we already
+     * This method will save the current draft to a file. Note that we already
      * know the name of the file, so we won't need to prompt the user.
      * 
-     * @param gui The user interface editing the Course.
+     * @param gui The user interface editing the Draft.
      * 
-     * @param courseToSave The course being edited that is to be saved to a file.
+     * @param draftToSave The draft being edited that is to be saved to a file.
      */
     public void handleSaveDraftRequest(DK_GUI gui, Draft draftToSave) {
         try {
             // SAVE IT TO A FILE
-            draftIO.saveDraft(draftToSave);
+            if (draftToSave.getDraftName() == null) //no draft name!
+                messageDialog.show(properties.getProperty(ILLEGAL_DRAFT_NAME));
+            else {
+                draftIO.saveDraft(draftToSave);
 
-            // MARK IT AS SAVED
-            saved = true;
+                // MARK IT AS SAVED
+                saved = true;
 
-            // TELL THE USER THE FILE HAS BEEN SAVED
-            messageDialog.show(properties.getProperty(DRAFT_SAVED_MESSAGE));
+                // TELL THE USER THE FILE HAS BEEN SAVED
+                messageDialog.show(properties.getProperty(DRAFT_SAVED_MESSAGE));
 
-            // AND REFRESH THE GUI, WHICH WILL ENABLE AND DISABLE
-            // THE APPROPRIATE CONTROLS
-            gui.updateTopToolbarControls(saved);
+                // AND REFRESH THE GUI, WHICH WILL ENABLE AND DISABLE
+                // THE APPROPRIATE CONTROLS
+                gui.updateTopToolbarControls(saved);
+            }
         } catch (IOException ioe) {
             errorHandler.handleSaveDraftError();
         }
@@ -184,11 +189,8 @@ public class FileHandler {
 
         // IF THE USER SAID YES, THEN SAVE BEFORE MOVING ON
         if (selection.equals(YesNoCancelDialog.YES)) {
-            // SAVE THE COURSE
+            // SAVE THE DRAFT
             DraftDataManager dataManager = gui.getDataManager();
-            if (dataManager.getDraft().getDraftName().equals("")) { //no input
-                messageDialog.show("Please enter a draft name before saving.");
-            }
             draftIO.saveDraft(dataManager.getDraft());
             saved = true;
 
@@ -211,7 +213,7 @@ public class FileHandler {
      * message is displayed, but nothing changes.
      */
     private void promptToOpen(DK_GUI gui) {
-        // AND NOW ASK THE USER FOR THE COURSE TO OPEN
+        // AND NOW ASK THE USER FOR THE DRAFT TO OPEN
         FileChooser courseFileChooser = new FileChooser();
         courseFileChooser.setInitialDirectory(new File(PATH_DRAFTS));
         File selectedFile = courseFileChooser.showOpenDialog(gui.getWindow());

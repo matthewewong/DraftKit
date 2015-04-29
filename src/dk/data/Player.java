@@ -35,11 +35,7 @@ public class Player implements Comparable {
     final IntegerProperty k;
     final DoubleProperty era;
     final DoubleProperty whip;
-    
-    final StringProperty teamPosition;
-    final StringProperty contract;
-    final IntegerProperty salary;
-    
+
     //used for ALL players
     final IntegerProperty RorW;
     final IntegerProperty HRorSV;
@@ -50,6 +46,32 @@ public class Player implements Comparable {
     
     ArrayList<String> positionsArray;
     String fantasyTeamName;
+    
+    //starting tables
+    final StringProperty teamPosition;
+    final StringProperty startingFirst;
+    final StringProperty startingLast;
+    final StringProperty startingProTeam;
+    final StringProperty startingPositions;
+    final IntegerProperty startingRorW;
+    final IntegerProperty startingHRorSV;
+    final IntegerProperty startingRBIorK;
+    final DoubleProperty startingSBorERA;
+    final DoubleProperty startingBAorWHIP;
+    final IntegerProperty startingValue;
+    final StringProperty contract;
+    final IntegerProperty salary;
+    
+    final IntegerProperty startingR;
+    final IntegerProperty startingHR;
+    final IntegerProperty startingRBI;
+    final DoubleProperty startingSB;
+    final DoubleProperty startingBA;
+    final IntegerProperty startingW;
+    final IntegerProperty startingSV;
+    final IntegerProperty startingK;
+    final DoubleProperty startingERA;
+    final DoubleProperty startingWHIP;
     
     public Player() {
         first = new SimpleStringProperty();
@@ -76,8 +98,28 @@ public class Player implements Comparable {
         SBorERA = new SimpleDoubleProperty();
         BAorWHIP = new SimpleDoubleProperty();
         teamPosition = new SimpleStringProperty();
+        startingFirst = new SimpleStringProperty();
+        startingLast = new SimpleStringProperty();
+        startingProTeam = new SimpleStringProperty();
+        startingPositions = new SimpleStringProperty();
+        startingRorW = new SimpleIntegerProperty();
+        startingHRorSV = new SimpleIntegerProperty();
+        startingRBIorK = new SimpleIntegerProperty();
+        startingSBorERA = new SimpleDoubleProperty();
+        startingBAorWHIP = new SimpleDoubleProperty();
+        startingValue = new SimpleIntegerProperty();
         contract = new SimpleStringProperty();
         salary = new SimpleIntegerProperty();
+        startingR = new SimpleIntegerProperty();
+        startingHR = new SimpleIntegerProperty();
+        startingRBI = new SimpleIntegerProperty();
+        startingSB = new SimpleDoubleProperty();
+        startingBA = new SimpleDoubleProperty();
+        startingW = new SimpleIntegerProperty();
+        startingSV = new SimpleIntegerProperty();
+        startingK = new SimpleIntegerProperty();
+        startingERA = new SimpleDoubleProperty();
+        startingWHIP = new SimpleDoubleProperty();
         positionsArray  = new ArrayList<String>();
         fantasyTeamName = "";
     }
@@ -96,6 +138,7 @@ public class Player implements Comparable {
     
     public void setFirstName(String initFirstName) {
         first.set(initFirstName);
+        startingFirst.set(initFirstName);
     }
     
     public StringProperty firstNameProperty() {
@@ -103,7 +146,7 @@ public class Player implements Comparable {
     }
     
     public StringProperty startingFirstNameProperty() {
-        return first;
+        return startingFirst;
     }
 
     public String getLastName() {
@@ -112,6 +155,7 @@ public class Player implements Comparable {
     
     public void setLastName(String initLastName) {
         last.set(initLastName);
+        startingLast.set(initLastName);
     }
     
     public StringProperty lastNameProperty() {
@@ -119,7 +163,7 @@ public class Player implements Comparable {
     }
     
     public StringProperty startingLastNameProperty() {
-        return last;
+        return startingLast;
     }
     
     public String getProTeam() {
@@ -128,6 +172,7 @@ public class Player implements Comparable {
     
     public void setProTeam(String initProTeam) {
         proTeam.set(initProTeam);
+        startingProTeam.set(initProTeam);
     }
     
     public StringProperty proTeamProperty() {
@@ -135,7 +180,7 @@ public class Player implements Comparable {
     }
     
     public StringProperty startingProTeamProperty() {
-        return proTeam;
+        return startingProTeam;
     }
     
     public String getPositions() {
@@ -144,6 +189,7 @@ public class Player implements Comparable {
     
     public void setPositions(String initPositions) {
         positions.set(initPositions);
+        startingPositions.set(initPositions);
     }
     
     public StringProperty positionsProperty() {
@@ -151,7 +197,7 @@ public class Player implements Comparable {
     }
     
     public StringProperty startingPositionsProperty() {
-        return positions;
+        return startingPositions;
     }
     
     public int getYearOfBirth() {
@@ -184,6 +230,7 @@ public class Player implements Comparable {
     
     public void setRuns(int initR) {
         r.set(initR);
+        startingR.set(initR);
     }
     
     public IntegerProperty runsProperty() {
@@ -196,6 +243,7 @@ public class Player implements Comparable {
     
     public void setHomeRuns(int initHR) {
         hr.set(initHR);
+        startingHR.set(initHR);
     }
     
     public IntegerProperty homeRunsProperty() {
@@ -208,6 +256,7 @@ public class Player implements Comparable {
     
     public void setRBIs(int initRBI) {
         rbi.set(initRBI);
+        startingRBI.set(initRBI);
     }
     
     public IntegerProperty rbiProperty() {
@@ -219,6 +268,7 @@ public class Player implements Comparable {
     
     public void setStolenBases(double initSB) {
         sb.set(initSB);
+        startingSB.set(initSB);
     }
     
     public DoubleProperty stolenBasesProperty() {
@@ -231,6 +281,7 @@ public class Player implements Comparable {
     
     public void setBA(double initBA) {
         ba.set(initBA);
+        startingBA.set(initBA);
     }
     
     public DoubleProperty baProperty() {
@@ -243,6 +294,7 @@ public class Player implements Comparable {
     
     public void setValue(int initValue) {
         value.set(initValue);
+        startingValue.set(initValue);
     }
     
     public IntegerProperty valueProperty() {
@@ -250,7 +302,7 @@ public class Player implements Comparable {
     }
     
     public IntegerProperty startingValueProperty() {
-        return value;
+        return startingValue;
     }
     
     public String getNotes() {
@@ -271,6 +323,7 @@ public class Player implements Comparable {
     
     public void setWins(int initWins) {
         win.set(initWins);
+        startingW.set(initWins);
     }
     
     public IntegerProperty winsProperty() {
@@ -283,6 +336,7 @@ public class Player implements Comparable {
     
     public void setSaves(int initSv) {
         sv.set(initSv);
+        startingSV.set(initSv);
     }
     
     public IntegerProperty savesProperty() {
@@ -295,6 +349,7 @@ public class Player implements Comparable {
     
     public void setStrikeouts(int initK) {
         k.set(initK);
+        startingK.set(initK);
     }
     
     public IntegerProperty strikeoutsProperty() {
@@ -307,6 +362,7 @@ public class Player implements Comparable {
     
     public void setERA(double initERA) {
         era.set(initERA);
+        startingERA.set(initERA);
     }
     
     public DoubleProperty eraProperty() {
@@ -319,6 +375,7 @@ public class Player implements Comparable {
     
     public void setWHIP(double initWHIP) {
         whip.set(initWHIP);
+        startingWHIP.set(initWHIP);
     }
     
     public DoubleProperty whipProperty() {
@@ -334,9 +391,9 @@ public class Player implements Comparable {
     
     public IntegerProperty startingRorWProperty() {
         if (isHitter)
-            return r;
+            return startingR;
         else
-            return win;
+            return startingW;
     }
 
     public IntegerProperty HRorSVProperty() {
@@ -348,9 +405,9 @@ public class Player implements Comparable {
     
     public IntegerProperty startingHRorSVProperty() {
         if (isHitter)
-            return hr;
+            return startingHR;
         else
-            return sv;
+            return startingSV;
     }
 
     public IntegerProperty RBIorKProperty() {
@@ -362,9 +419,9 @@ public class Player implements Comparable {
     
     public IntegerProperty startingRBIorKProperty() {
         if (isHitter)
-            return rbi;
+            return startingRBI;
         else
-            return k;
+            return startingK;
     }
 
     public DoubleProperty SBorERAProperty() {
@@ -376,9 +433,9 @@ public class Player implements Comparable {
     
     public DoubleProperty startingSBorERAProperty() {
         if (isHitter)
-            return sb;
+            return startingSB;
         else
-            return era;
+            return startingERA;
     }
     
     public DoubleProperty BAorWHIPProperty() {
@@ -390,9 +447,9 @@ public class Player implements Comparable {
     
     public DoubleProperty startingBAorWHIPProperty() {
         if (isHitter)
-            return ba;
+            return startingBA;
         else
-            return whip;
+            return startingWHIP;
     }
     
     public String getTeamPosition() {

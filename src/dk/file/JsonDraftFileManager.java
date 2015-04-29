@@ -1,9 +1,14 @@
 package dk.file;
 
 import dk.data.Draft;
+import dk.data.Player;
+import dk.data.Team;
+import static draftkit.DK_StartupConstants.PATH_DRAFTS;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.json.Json;
@@ -12,6 +17,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
+import javax.json.JsonWriter;
 
 /**
  * This is a DraftFileManager that uses the JSON file format to implement the 
@@ -23,18 +29,50 @@ public class JsonDraftFileManager implements DraftFileManager {
     //JSON file reading and writing constants
     String JSON_HITTERS = "Hitters";
     String JSON_PITCHERS = "Pitchers";
+    String JSON_DRAFT_NAME = "draft name";
+    String JSON_AVAILABLE_PLAYERS = "available players";
+    String JSON_OBSERVABLE_HITTERS = "hitters";
+    String JSON_OBSERVABLE_PITCHERS = "pitchers";
+    String JSON_TEAMS = "teams";
     String JSON_EXT = ".json";
-    String SLASH = "\"";
+    String SLASH = "/";
     
     /**
-     * Saves all the data associated with a draft to a JSON file; NOT FOR HW 5
+     * Saves all the data associated with a draft to a JSON file
      * @param draftToSave the draft whose data we are saving.
      * @throws IOException issues writing to the JSON file.
      */
     public void saveDraft(Draft draftToSave) throws IOException {
         // BUILD THE FILE PATH
-        //String draftListing = "";
-        //String jsonFilePath = PATH_COURSES + SLASH + draftListing + JSON_EXT;
+        String draftListing = "" + draftToSave.getDraftName();
+        String jsonFilePath = PATH_DRAFTS + SLASH + draftListing + JSON_EXT;
+        
+        // INIT THE WRITER
+        OutputStream os = new FileOutputStream(jsonFilePath);
+        JsonWriter jsonWriter = Json.createWriter(os);  
+        
+        // MAKE A JSON ARRAY FOR THE AVAILABLE PLAYERS ARRAY
+        JsonArray availPlayersJsonArray = makePlayersJsonArray(draftToSave.getPlayers());
+        
+        // MAKE A JSON ARRAY FOR THE HITTERS AND PITCHERS
+        JsonArray hittersJsonArray = makePlayersJsonArray(draftToSave.getObservableHitters());
+        JsonArray pitchersJsonArray = makePlayersJsonArray(draftToSave.getObservablePitchers());
+        
+        // THE TEAMS ARRAY
+        JsonArray teamsJsonArray = makeTeamsJsonArray(draftToSave.getTeams());
+        
+        // NOW BUILD THE DRAFT USING EVERYTHING WE'VE ALREADY MADE
+        JsonObject draftJsonObject = Json.createObjectBuilder()
+                                    .add(JSON_DRAFT_NAME, draftToSave.getDraftName())
+                                    .add(JSON_AVAILABLE_PLAYERS, availPlayersJsonArray)
+                                    .add(JSON_OBSERVABLE_HITTERS, hittersJsonArray)
+                                    .add(JSON_OBSERVABLE_PITCHERS, pitchersJsonArray)
+                                    .add(JSON_TEAMS, teamsJsonArray)
+                .build();
+        
+        // AND SAVE EVERYTHING AT ONCE
+        jsonWriter.writeObject(draftJsonObject);
+        
     }
     
     /**
@@ -113,5 +151,25 @@ public class JsonDraftFileManager implements DraftFileManager {
         }
         JsonArray jA = jsb.build();
         return jA;
+    }
+    
+    // BUILDS AND RETURNS A JsonArray CONTAINING ALL THE PLAYERS FOR THIS DRAFT
+    public JsonArray makePlayersJsonArray(List<Player> data) {
+        JsonArrayBuilder jsb = Json.createArrayBuilder();
+        for (Player p : data) {
+           jsb.add(p.toString());
+        }
+        JsonArray jA = jsb.build();
+        return jA;        
+    }
+    
+    // BUILDS AND RETURNS A JsonArray CONTAINING ALL THE TEAMS FOR THIS DRAFT
+    public JsonArray makeTeamsJsonArray(List<Team> data) {
+        JsonArrayBuilder jsb = Json.createArrayBuilder();
+        for (Team t : data) {
+           jsb.add(t.toString());
+        }
+        JsonArray jA = jsb.build();
+        return jA;        
     }
 }
