@@ -12,6 +12,7 @@ import dk.gui.YesNoCancelDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
@@ -139,5 +140,14 @@ public class TeamHandler {
         Team teamToEdit = draft.getTeam(teamName);
         teamStartingTable.setItems(teamToEdit.getStartingPlayers());
         teamTaxiTable.setItems(teamToEdit.getTaxiPlayers());
+    }
+    
+    public void handleLoadComboBoxRequest(DK_GUI gui, ComboBox cb) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        ObservableList<Team> teams = draft.getTeams();
+        for (Team t : teams) {
+            cb.getItems().add(t.getTeamName());
+        }
     }
 }

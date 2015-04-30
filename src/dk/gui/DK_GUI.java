@@ -433,6 +433,7 @@ public class DK_GUI implements DraftDataView {
      * 
      * @param draftToReload the draft whose data we'll load into the GUI.
      */
+    @Override
     public void reloadDraft(Draft draftToReload) {
         // if necessary, activate the workspace
         if (!workspaceActivated) {
@@ -441,7 +442,15 @@ public class DK_GUI implements DraftDataView {
         
         // we don't want to respond to events when initializing the selections
         //editHandler.enable(false); CHANGE
-
+        
+        draftPane.setCenter(teamPane);
+        lastSelection = TEAM_BUTTON;
+        allButton.setSelected(true);
+        playerHandler.handleAllRadioButtonRequest(this, playersTable);
+        lastRadioButtonClicked = ALL_RADIO_BUTTON;
+        teamSelectComboBox.getItems().clear();
+        teamHandler.handleLoadComboBoxRequest(this, teamSelectComboBox);
+        
         //get the players table
         
         // enable the handler so we can respond to user interactions
@@ -862,7 +871,7 @@ public class DK_GUI implements DraftDataView {
     //init the event handlers
     private void initEventHandlers() throws IOException {
         //file handlers
-        fileHandler = new FileHandler(messageDialog, draftFileManager);
+        fileHandler = new FileHandler(messageDialog, yesNoCancelDialog, draftFileManager);
         
         newDraftButton.setOnAction(e -> {
             fileHandler.handleNewDraftRequest(this);
@@ -870,6 +879,10 @@ public class DK_GUI implements DraftDataView {
         
         saveDraftButton.setOnAction(e -> {
             fileHandler.handleSaveDraftRequest(this, dataManager.getDraft());
+        });
+        
+        loadDraftButton.setOnAction(e -> {
+            fileHandler.handleLoadDraftRequest(this);
         });
         
         playerScreenButton.setOnAction(e -> {

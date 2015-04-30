@@ -118,6 +118,9 @@ public class Draft {
             p.setYearOfBirth(Integer.parseInt(values[11]));
             values[12] = values[12].substring(16, values[12].length() - 1); //gets rid of "NATION_OF_BIRTH:"
             p.setNationOfBirth(values[12]);
+            p.setTeamPosition("");
+            p.setContract("-");
+            p.setSalary(0);
             hittersList.add(p);
         }
     }
@@ -152,7 +155,11 @@ public class Draft {
             values[11] = values[11].substring(14); //gets rid of "YEAR_OF_BIRTH:"
             p.setYearOfBirth(Integer.parseInt(values[11]));
             values[12] = values[12].substring(16, values[12].length() - 1); //gets rid of "NATION_OF_BIRTH:"
+            p.setNationOfBirth(values[12]);
             p.setPositions("P");
+            p.setTeamPosition("");
+            p.setContract("-");
+            p.setSalary(0);
             p.setHitter(false);
             pitchersList.add(p);
         }
@@ -175,12 +182,24 @@ public class Draft {
         Collections.sort(players);
     }
     
+    public void setObservablePlayers(ObservableList<Player> players) {
+        this.players = players;
+    }
+    
     public ObservableList<Player> getObservableHitters() {
         return hittersList;
     }
     
+    public void setObservableHitters(ObservableList<Player> hitters) {
+        hittersList = hitters;
+    }
+    
     public ObservableList<Player> getObservablePitchers() {
         return pitchersList;
+    }
+    
+    public void setObservablePitchers(ObservableList<Player> pitchers) {
+        pitchersList = pitchers;
     }
     
     public void removePlayer(Player playerToRemove) {
@@ -212,5 +231,9 @@ public class Draft {
     
     public void addTeam(Team t) {
         teams.add(t);
+    }
+    
+    public void setTeams(ObservableList<Team> teams) {
+        this.teams = teams;
     }
 }

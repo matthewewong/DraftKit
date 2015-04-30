@@ -183,4 +183,84 @@ public class Team {
             availPositions.add(PITCHERS);
         return availPositions;
     }
+    
+    public int getNumC() {
+        return numC;
+    }
+    
+    public void setNumC(int initNumC) {
+        numC = initNumC;
+    }
+    
+    public int getNum1B() {
+        return num1B;
+    }
+    
+    public void setNum1B(int initNum1B) {
+        num1B = initNum1B;
+    }
+    
+    public int getNum2B() {
+        return num2B;
+    }
+    
+    public void setNum2B(int initNum2B) {
+        num2B = initNum2B;
+    }
+    
+    public int getNum3B() {
+        return num3B;
+    }
+    
+    public void setNum3B(int initNum3B) {
+        num3B = initNum3B;
+    }
+    
+    public int getNumSS() {
+        return numSS;
+    }
+    
+    public void setNumSS(int initNumSS) {
+        numSS = initNumSS;
+    }
+    
+    public int getNumCI() {
+        return numCI;
+    }
+    
+    public void setNumCI(int initNumCI) {
+        numCI = initNumCI;
+    }
+    
+    public int getNumMI() {
+        return numMI;
+    }
+    
+    public void setNumMI(int initNumMI) {
+        numMI = initNumMI;
+    }
+    
+    public int getNumOF() {
+        return numOF;
+    }
+    
+    public void setNumOF(int initNumOF) {
+        numOF = initNumOF;
+    }
+    
+    public int getNumU() {
+        return numU;
+    }
+    
+    public void setNumU(int initNumU) {
+        numU = initNumU;
+    }
+    
+    public int getNumP() {
+        return numP;
+    }
+    
+    public void setNumP(int initNumP) {
+        numP = initNumP;
+    }
 }

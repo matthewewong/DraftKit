@@ -51,7 +51,7 @@ public class FileHandler {
      * @param initMessageDialog message dialog.
      * @param initDraftIO object that will be reading/writing draft data.
      */
-    public FileHandler(MessageDialog initMessageDialog, DraftFileManager initDraftIO) {
+    public FileHandler(MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DraftFileManager initDraftIO) {
         //nothing yet
         saved = true;
         
@@ -63,6 +63,7 @@ public class FileHandler {
         
         //get ready to provide feedback
         messageDialog = initMessageDialog;
+        yesNoCancelDialog = initYesNoCancelDialog;
         properties = PropertiesManager.getPropertiesManager();
     }
     
@@ -85,31 +86,31 @@ public class FileHandler {
      * @param gui the UI editing the Draft.
      */
     public void handleNewDraftRequest(DK_GUI gui) {
-        //try {
+        try {
             //we may need to save
-            //boolean continueToMakeNew = true;
-            //if (!saved) {
+            boolean continueToMakeNew = true;
+            if (!saved) {
             //  user can opt out with a cancel
-            //  continueToMakeNew = promptToSave(gui);
-            //}
+             continueToMakeNew = promptToSave(gui);
+            }
             
             //if the user REALLY wants to make a new Draft
-            //if (continueToMakeNew) {
+            if (continueToMakeNew) {
                 //reset data
                 DraftDataManager dataManager = gui.getDataManager();
                 dataManager.reset();
                 saved = false;
                 
                 //refresh the GUI, to enable/disable appropriate controls
-                //gui.updateTopToolbarControls(saved);
+                gui.updateTopToolbarControls(saved);
                 
                 //tell the user the Draft has been created
                 messageDialog.show(properties.getProperty(NEW_DRAFT_CREATED_MESSAGE));
-            //}
-        //} catch (IOException ioe) {
+            }
+        } catch (IOException ioe) {
             //something went wrong, provide feedback
-        //    errorHandler.handleNewDraftError();
-        //}
+            errorHandler.handleNewDraftError();
+        }
     }
     
     /**
@@ -214,9 +215,9 @@ public class FileHandler {
      */
     private void promptToOpen(DK_GUI gui) {
         // AND NOW ASK THE USER FOR THE DRAFT TO OPEN
-        FileChooser courseFileChooser = new FileChooser();
-        courseFileChooser.setInitialDirectory(new File(PATH_DRAFTS));
-        File selectedFile = courseFileChooser.showOpenDialog(gui.getWindow());
+        FileChooser draftFileChooser = new FileChooser();
+        draftFileChooser.setInitialDirectory(new File(PATH_DRAFTS));
+        File selectedFile = draftFileChooser.showOpenDialog(gui.getWindow());
 
         // ONLY OPEN A NEW FILE IF THE USER SAYS OK
         if (selectedFile != null) {
