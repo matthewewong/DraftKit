@@ -1,5 +1,6 @@
 package dk.data;
 
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
@@ -70,34 +71,55 @@ public class Team {
         ownerName = newOwnerName;
     }
     
-    public void addStartingPlayer(Player p, TableView<Player> starting) {
+    public void addStartingPlayer(Player p) {
         startingPlayers.add(p);
         String position = p.getTeamPosition();
-        if (position.equals(CATCHERS))
+        if (position.equals(CATCHERS)) {
             numC++;
-        else if (position.equals(FIRST_BASE))
+            p.setPositionNumber(1);
+        }
+        else if (position.equals(FIRST_BASE)) {
             num1B++;
-        else if (position.equals(SECOND_BASE))
+            p.setPositionNumber(2);
+        }
+        else if (position.equals(SECOND_BASE)) {
             num2B++;
-        else if (position.equals(THIRD_BASE))
+            p.setPositionNumber(5);
+        }
+        else if (position.equals(THIRD_BASE)) {
             num3B++;
-        else if (position.equals(SHORTSTOP))
+            p.setPositionNumber(4);
+        }
+        else if (position.equals(SHORTSTOP)) {
             numSS++;
-        else if (position.equals(CORNER_INFIELD))
+            p.setPositionNumber(7);
+        }
+        else if (position.equals(CORNER_INFIELD)) {
             numCI++;
-        else if (position.equals(MIDDLE_INFIELD))
+            p.setPositionNumber(3);
+        }
+        else if (position.equals(MIDDLE_INFIELD)) {
             numMI++;
-        else if (position.equals(OUTFIELD))
+            p.setPositionNumber(6);
+        }
+        else if (position.equals(OUTFIELD)) {
             numOF++;
-        else if (position.equals(UTILITY))
+            p.setPositionNumber(8);
+        }
+        else if (position.equals(UTILITY)) {
             numU++;
-        else 
+            p.setPositionNumber(9);
+        }
+        else {
             numP++;
+            p.setPositionNumber(10);
+        }
+        
+        Collections.sort(startingPlayers, new PlayerPositionsComparator());
     }
     
-    public void removeStartingPlayer(Player p, TableView<Player> starting) {
+    public void removeStartingPlayer(Player p) {
         startingPlayers.remove(p);
-        starting.setItems(startingPlayers);
         String position = p.getTeamPosition();
         if (position.equals(CATCHERS))
             numC--;

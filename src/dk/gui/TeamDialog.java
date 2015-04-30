@@ -5,6 +5,7 @@ import dk.data.Team;
 import static dk.gui.DK_GUI.CLASS_HEADING_LABEL;
 import static dk.gui.DK_GUI.CLASS_PROMPT_LABEL;
 import static dk.gui.DK_GUI.PRIMARY_STYLE_SHEET;
+import draftkit.DK_PropertyType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import properties_manager.PropertiesManager;
 
 /**
  * This class makes a dialog for the team screen (adding/editing teams)
@@ -85,9 +87,19 @@ public class TeamDialog extends Stage {
         
         //event handlers for buttons
         EventHandler completeCancelHandler = (EventHandler<ActionEvent>) (ActionEvent ae) -> {
+            PropertiesManager props = PropertiesManager.getPropertiesManager();
             Button sourceButton = (Button)ae.getSource();
             TeamDialog.this.selection = sourceButton.getText();
-            TeamDialog.this.hide();
+            if (TeamDialog.this.selection.equals(COMPLETE)) {
+                if (teamNameTextField.getText() == null || ownerNameTextField.getText() == null)
+                    messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_EDITING_MESSAGE));
+                else if (teamNameTextField.getText().equals("") || ownerNameTextField.getText().equals(""))
+                    messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_EDITING_MESSAGE));
+                else
+                    TeamDialog.this.hide();
+            }
+            else
+                TeamDialog.this.hide();
         };
         
         completeButton.setOnAction(completeCancelHandler);

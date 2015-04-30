@@ -43,6 +43,7 @@ public class Player implements Comparable {
     final DoubleProperty SBorERA;
     final DoubleProperty BAorWHIP;
     boolean isHitter = true; //notify us if this is a hitter
+    int positionNumber; //tells us what position number the player is for sorting
     
     ArrayList<String> positionsArray;
     String fantasyTeamName;
@@ -122,6 +123,7 @@ public class Player implements Comparable {
         startingWHIP = new SimpleDoubleProperty();
         positionsArray  = new ArrayList<String>();
         fantasyTeamName = "";
+        positionNumber = 0;
     }
     
     public boolean isAHitter() {
@@ -528,6 +530,26 @@ public class Player implements Comparable {
         for (String s : positionsArray) {
             positions.add(s);
         }
+        
+        //check for CI
+        int index = positions.indexOf("1B");
+        if (index != -1) //first base is there, add CI
+            positions.add(index + 1, "CI");
+        else {
+            index = positions.indexOf("3B");
+            if (index != -1) //third base is there, add CI
+                positions.add(index, "CI");
+        }
+        
+        //check for MI
+        index = positions.indexOf("2B");
+        if (index != -1) //second base is there, add MI
+            positions.add(index + 1, "MI");
+        else {
+            index = positions.indexOf("SS");
+            if (index != -1) //shortstop is there, add MI
+                positions.add(index, "MI");
+        }
         return positions;
     }
     
@@ -561,6 +583,14 @@ public class Player implements Comparable {
     
     public void setFantasyTeam(String teamName) {
         fantasyTeamName = teamName;
+    }
+    
+    public int getPositionNumber() {
+        return positionNumber;
+    }
+    
+    public void setPositionNumber(int positionNumber) {
+        this.positionNumber = positionNumber;
     }
     
     @Override

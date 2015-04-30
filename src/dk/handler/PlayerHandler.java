@@ -59,6 +59,7 @@ public class PlayerHandler {
     static final String CI_RADIO_BUTTON = "Corner Infield";
     static final String MI_RADIO_BUTTON = "Middle Infield";
     static final String OF_RADIO_BUTTON = "Outfield";
+    public static final String FREE_AGENT = "Free Agent";
     
     //used for adding a player to a team
     public final String CATCHERS = "C";
@@ -115,7 +116,9 @@ public class PlayerHandler {
         pitchersList.clear();
         
         //fill the ALL list
-        allPlayersList = FXCollections.observableArrayList(regularPlayerList);
+        for (Player p : regularPlayerList) {
+            allPlayersList.add(p);
+        }
         
         //fill the CATCHERS list
         for (Player p : hitterList) {
@@ -192,10 +195,14 @@ public class PlayerHandler {
         }
         
         //fill the UTILITY list
-        utilityList = FXCollections.observableArrayList(hitterList);
+        for (Player p : hitterList) {
+            utilityList.add(p);
+        }
         
         //fill the PITCHERS list
-        pitchersList = FXCollections.observableArrayList(pitcherList);
+        for (Player p : pitcherList) {
+            pitchersList.add(p);
+        }
     }
     
     /**
@@ -422,20 +429,30 @@ public class PlayerHandler {
                 if (playerToEdit.getFantasyTeam().equals("")) {
                     //player was a free agent
                     Team luckyTeam = draft.getTeam(player.getFantasyTeam());
-                    luckyTeam.addStartingPlayer(playerToEdit, starting);
-                    teamStartingTable.setItems(luckyTeam.getStartingPlayers());
+                    luckyTeam.addStartingPlayer(playerToEdit);
                     draft.removePlayer(playerToEdit);
                     initLists(gui);
+                    
+                    playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
+                }
+                else if (player.getFantasyTeam().equals(FREE_AGENT)) {
+                    //player is now put into the free agents list
+                    Team unluckyTeam = draft.getTeam(playerToEdit.getFantasyTeam()); //get the previous team
+                    unluckyTeam.removeStartingPlayer(playerToEdit);
+                    draft.addPlayer(playerToEdit); //add the player to the free agent list
+                    initLists(gui);
+                    
+                    playerToEdit.setFantasyTeam("");
                 }
                 else {
                     Team unluckyTeam = draft.getTeam(playerToEdit.getFantasyTeam()); //get the previous team
-                    unluckyTeam.removeStartingPlayer(playerToEdit, starting);
+                    unluckyTeam.removeStartingPlayer(playerToEdit);
                     
                     Team luckyTeam = draft.getTeam(player.getFantasyTeam()); //get the new team
-                    luckyTeam.addStartingPlayer(playerToEdit, starting);
+                    luckyTeam.addStartingPlayer(playerToEdit);
+                    
+                    playerToEdit.setFantasyTeam(player.getFantasyTeam());
                 }
-                
-                playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
             }
             
             //since the draft was edited since it was last saved, update the top toolbar controls

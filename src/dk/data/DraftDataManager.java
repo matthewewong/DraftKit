@@ -41,7 +41,9 @@ public class DraftDataManager {
     
     //resets the draft to its default initialized settings
     public void reset() {
-        //clear tables
+        //clear team tables
+        draft.clearTeams();
+        draft.setDraftName("");
         
         //force UI to reload the updated draft
         view.reloadDraft(draft);

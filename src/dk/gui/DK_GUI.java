@@ -446,10 +446,12 @@ public class DK_GUI implements DraftDataView {
         draftPane.setCenter(teamPane);
         lastSelection = TEAM_BUTTON;
         allButton.setSelected(true);
+        playerHandler.initLists(this);      //gets the updated player lists
         playerHandler.handleAllRadioButtonRequest(this, playersTable);
         lastRadioButtonClicked = ALL_RADIO_BUTTON;
         teamSelectComboBox.getItems().clear();
         teamHandler.handleLoadComboBoxRequest(this, teamSelectComboBox);
+        draftNameTextField.setText(dataManager.getDraft().getDraftName());
         
         //get the players table
         
@@ -883,6 +885,10 @@ public class DK_GUI implements DraftDataView {
         
         loadDraftButton.setOnAction(e -> {
             fileHandler.handleLoadDraftRequest(this);
+        });
+        
+        exitButton.setOnAction(e -> {
+            fileHandler.handleExitRequest(this);
         });
         
         playerScreenButton.setOnAction(e -> {

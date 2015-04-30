@@ -151,6 +151,8 @@ public class FileHandler {
             // SAVE IT TO A FILE
             if (draftToSave.getDraftName() == null) //no draft name!
                 messageDialog.show(properties.getProperty(ILLEGAL_DRAFT_NAME));
+            else if (draftToSave.getDraftName().equals("")) //no draft name!
+                messageDialog.show(properties.getProperty(ILLEGAL_DRAFT_NAME));
             else {
                 draftIO.saveDraft(draftToSave);
 
@@ -166,6 +168,32 @@ public class FileHandler {
             }
         } catch (IOException ioe) {
             errorHandler.handleSaveDraftError();
+        }
+    }
+    
+    /**
+     * This method will exit the application, making sure the user doesn't lose
+     * any data first.
+     * 
+     * @param gui
+     */
+    public void handleExitRequest(DK_GUI gui) {
+        try {
+            // WE MAY HAVE TO SAVE CURRENT WORK
+            boolean continueToExit = true;
+            if (!saved) {
+                // THE USER CAN OPT OUT HERE
+                continueToExit = promptToSave(gui);
+            }
+
+            // IF THE USER REALLY WANTS TO EXIT THE APP
+            if (continueToExit) {
+                // EXIT THE APPLICATION
+                System.exit(0);
+            }
+        } catch (IOException ioe) {
+            ErrorHandler eH = ErrorHandler.getErrorHandler();
+            eH.handleExitError();
         }
     }
     

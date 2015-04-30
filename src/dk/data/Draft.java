@@ -14,7 +14,6 @@ import javafx.collections.ObservableList;
 public class Draft {
     //Strings of the players
     ObservableList<Player> players;
-    ObservableList<Player> totPlayers;
     ObservableList<Team> teams;
     ObservableList<String> hitters;
     ObservableList<String> pitchers;
@@ -32,7 +31,6 @@ public class Draft {
     public Draft() {
         //init the lists
         players = FXCollections.observableArrayList();
-        totPlayers = FXCollections.observableArrayList();
         teams = FXCollections.observableArrayList();
         hitters = FXCollections.observableArrayList();
         pitchers = FXCollections.observableArrayList();
@@ -57,6 +55,18 @@ public class Draft {
     }
     
     public void clearTeams() {
+        //removes every player on every team and adds them to the FA list
+        for (Team t : teams) {
+            for (Player p : t.getStartingPlayers()) {
+                addPlayer(p);
+            }
+            
+            for (Player p : t.getTaxiPlayers()) {
+                addPlayer(p);
+            }
+            t.clearStartingPlayers();
+            t.clearTaxiPlayers();
+        }
         teams.clear();
     }
     
@@ -169,13 +179,11 @@ public class Draft {
         //add hitters
         for (Player p : hittersList) {
             players.add(p);
-            totPlayers.add(p);
         }
         
         //add pitchers
         for (Player p : pitchersList) {
             players.add(p);
-            totPlayers.add(p);
         }
         
         //sort by name
@@ -217,7 +225,6 @@ public class Draft {
     public void addPlayer(Player p) {
         boolean b = false;
         players.add(p);
-        totPlayers.add(p);
         ObservableList<String> positions = p.getPositionsArray();
         for (int i = 0; i < positions.size(); i++) {
             if (positions.get(i).equals("P")) {      //he's a pitcher
@@ -227,6 +234,10 @@ public class Draft {
         }
         if (!b) //he's a hitter
             hittersList.add(p);
+        
+        Collections.sort(players);
+        Collections.sort(pitchersList);
+        Collections.sort(hittersList);
     }
     
     public void addTeam(Team t) {

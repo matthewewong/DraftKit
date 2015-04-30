@@ -164,6 +164,9 @@ public class PlayerDialog extends Stage {
                     String fantasyTeam = newValue.toString();
                     player.setFantasyTeam(fantasyTeam);
                     loadTeamPositionComboBox(teamPositionComboBox, draft.getTeam(fantasyTeam));
+                    teamPositionComboBox.getSelectionModel().select(0);
+                    contractComboBox.getSelectionModel().select(0);
+                    salaryTextField.setText(EMPTY_TEXT);
                 }
             }
         });
@@ -216,7 +219,7 @@ public class PlayerDialog extends Stage {
             Button sourceButton = (Button)ae.getSource();
             PlayerDialog.this.selection = sourceButton.getText();
             if (PlayerDialog.this.selection.equals(COMPLETE)) {
-                if (fantasyTeamsComboBox.getSelectionModel().getSelectedIndex() == 0 || teamPositionComboBox.getSelectionModel().getSelectedIndex() == 0 || contractComboBox.getSelectionModel().getSelectedIndex() == 0 || salaryTextField.getText().equals(EMPTY_TEXT))
+                if (teamPositionComboBox.getSelectionModel().getSelectedIndex() == 0 || contractComboBox.getSelectionModel().getSelectedIndex() == 0 || salaryTextField.getText().equals(EMPTY_TEXT))
                     messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_EDITING_MESSAGE));
                 else
                     PlayerDialog.this.hide();

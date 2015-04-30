@@ -57,6 +57,7 @@ public class JsonDraftFileManager implements DraftFileManager {
     String JSON_TEAM_POSITION = "teamPosition";
     String JSON_CONTRACT = "contract";
     String JSON_SALARY = "salary";
+    String JSON_POSITION_NUMBER = "positionNumber";
     String JSON_TEAM_NAME = "teamName";
     String JSON_OWNER_NAME = "ownerName";
     String JSON_TEAM_STARTING = "startingPlayers";
@@ -257,6 +258,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_CONTRACT, player.getContract())
                                                         .add(JSON_SALARY, player.getSalary())
                                                         .add(JSON_FANTASY_TEAM, player.getFantasyTeam())
+                                                        .add(JSON_POSITION_NUMBER, player.getPositionNumber())
                                                         .build();
         }
         else {
@@ -278,6 +280,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_CONTRACT, player.getContract())
                                                         .add(JSON_SALARY, player.getSalary())
                                                         .add(JSON_FANTASY_TEAM, player.getFantasyTeam())
+                                                        .add(JSON_POSITION_NUMBER, player.getPositionNumber())
                                                         .build();
         }
         return jso;
@@ -367,6 +370,7 @@ public class JsonDraftFileManager implements DraftFileManager {
             p.setTeamPosition(jso.getString(JSON_TEAM_POSITION));
             p.setContract(jso.getString(JSON_CONTRACT));
             p.setSalary(jso.getInt(JSON_SALARY)); 
+            p.setPositionNumber(jso.getInt(JSON_POSITION_NUMBER));
             players.add(p);
         }
         return players;
