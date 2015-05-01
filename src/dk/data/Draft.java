@@ -219,7 +219,17 @@ public class Draft {
     }
     
     public void removeTeam(Team teamToRemove) {
-        teams.remove(teamToRemove);
+        for (Player p : teamToRemove.getStartingPlayers()) {
+                p.setFantasyTeam("");
+                addPlayer(p);
+            }
+            
+            for (Player p : teamToRemove.getTaxiPlayers()) {
+                p.setFantasyTeam("");
+                addPlayer(p);
+            }
+            teamToRemove.clearStartingPlayers();
+            teamToRemove.clearTaxiPlayers();
     }
     
     public void addPlayer(Player p) {

@@ -444,7 +444,7 @@ public class DK_GUI implements DraftDataView {
         //editHandler.enable(false); CHANGE
         
         draftPane.setCenter(teamPane);
-        lastSelection = TEAM_BUTTON;
+        screenSelectHandler(lastSelection, TEAM_BUTTON);
         allButton.setSelected(true);
         playerHandler.initLists(this);      //gets the updated player lists
         playerHandler.handleAllRadioButtonRequest(this, playersTable);
@@ -515,13 +515,13 @@ public class DK_GUI implements DraftDataView {
         initStandingsScreenControls();
         initDraftScreenControls();
         initMLBTeamsScreenControls();
-
+        
         //this holds all the workspace components
         workspacePane = new BorderPane();
         workspacePane.setTop(topToolbarPane);
         workspacePane.setCenter(teamPane);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
-
+                
         // NOTE THAT WE HAVE NOT PUT THE WORKSPACE INTO THE WINDOW,
         // THAT WILL BE DONE WHEN THE USER EITHER CREATES A NEW
         // COURSE OR LOADS AN EXISTING ONE FOR EDITING
@@ -704,7 +704,7 @@ public class DK_GUI implements DraftDataView {
     }
     
     //initializes controls in the team screen
-    private void initTeamScreenControls() throws IOException {
+    private void initTeamScreenControls() throws IOException {        
         teamPane = new VBox();
         teamPane.setPadding(new Insets(10, 20, 20, 20));
         teamPane.setSpacing(10);
@@ -736,6 +736,7 @@ public class DK_GUI implements DraftDataView {
         
         //tables for the tables
         teamsStartingTable = new TableView();
+        teamsStartingTable.setMinHeight(250);
         teamsTaxiTable = new TableView();
         
         //columns for the tables
@@ -996,6 +997,10 @@ public class DK_GUI implements DraftDataView {
             playerHandler.handleAddNewPlayerRequest(this);
         });
         
+        removePlayerButton.setOnAction(e -> {
+           playerHandler.handleRemovePlayerRequest(this, playersTable.getSelectionModel().getSelectedItem());
+        });
+        
         playersTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 //open the playerhandler editor
@@ -1023,6 +1028,7 @@ public class DK_GUI implements DraftDataView {
         removeTeamButton.setOnAction(e -> {
             teamHandler.handleRemoveTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString());
             teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
+            playerHandler.initLists(this);
         });
         
         teamsStartingTable.setOnMouseClicked(e -> {

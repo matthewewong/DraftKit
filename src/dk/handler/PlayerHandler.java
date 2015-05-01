@@ -8,11 +8,13 @@ import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
 import dk.gui.PlayerDialog;
 import dk.gui.YesNoCancelDialog;
+import static draftkit.DK_PropertyType.REMOVE_PLAYER_MESSAGE;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import properties_manager.PropertiesManager;
 
 /**
  * This class deals with all of the stuff in the player screen
@@ -397,8 +399,35 @@ public class PlayerHandler {
             //get the player
             Player player = pd.getPlayer();
             
+            player.setNationOfBirth("");
+            player.setNotes("");
+            player.setTeamPosition("");
+            player.setContract("");
+            player.setSalary(0);
             //add it to the available players list
             draft.addPlayer(player);
+            initLists(gui);
+            //since the draft was edited since it was last saved, update the top toolbar controls
+            gui.getFileController().markAsEdited(gui);
+        }
+        else {
+            //do nothing
+        }
+    }
+    
+    public void handleRemovePlayerRequest(DK_GUI gui, Player playerToRemove) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        yesNoCancelDialog.show(props.getProperty(REMOVE_PLAYER_MESSAGE));
+        
+        //get the selection
+        String selection = yesNoCancelDialog.getSelection();
+
+        //if the user said yes, remove the player
+        if (selection.equals(YesNoCancelDialog.YES)) {
+            draft.removePlayer(playerToRemove);
             initLists(gui);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
