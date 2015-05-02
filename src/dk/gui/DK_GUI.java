@@ -466,6 +466,7 @@ public class DK_GUI implements DraftDataView {
         teamSelectComboBox.getItems().clear();
         teamHandler.handleLoadComboBoxRequest(this, teamSelectComboBox);
         draftNameTextField.setText(dataManager.getDraft().getDraftName());
+        teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
         
         //get the players table
         
@@ -812,7 +813,32 @@ public class DK_GUI implements DraftDataView {
         
         //cannot sort this column
         startingPositionColumn.setSortable(false);
+        startingFirstNameColumn.setSortable(false);
+        startingLastNameColumn.setSortable(false);
+        startingProTeamColumn.setSortable(false);
+        startingPositionsColumn.setSortable(false);
+        startingRorWColumn.setSortable(false);
+        startingHRorSVColumn.setSortable(false);
+        startingRBIorKColumn.setSortable(false);
+        startingSBorERAColumn.setSortable(false);
+        startingBAorWHIPColumn.setSortable(false);
+        startingValueColumn.setSortable(false);
+        startingContractColumn.setSortable(false);
+        startingSalaryColumn.setSortable(false);
+        
         taxiPositionColumn.setSortable(false);
+        taxiFirstNameColumn.setSortable(false);
+        taxiLastNameColumn.setSortable(false);
+        taxiProTeamColumn.setSortable(false);
+        taxiPositionsColumn.setSortable(false);
+        taxiRorWColumn.setSortable(false);
+        taxiHRorSVColumn.setSortable(false);
+        taxiRBIorKColumn.setSortable(false);
+        taxiSBorERAColumn.setSortable(false);
+        taxiBAorWHIPColumn.setSortable(false);
+        taxiValueColumn.setSortable(false);
+        taxiContractColumn.setSortable(false);
+        taxiSalaryColumn.setSortable(false);
         
         //link to the tables
         teamsStartingTable.getColumns().add(startingPositionColumn);
