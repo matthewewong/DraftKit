@@ -238,19 +238,33 @@ public class DK_GUI implements DraftDataView {
     TableColumn BAorWHIPColumn;
     
     //team columns
-    TableColumn teamPositionColumn;
-    TableColumn teamFirstNameColumn;
-    TableColumn teamLastNameColumn;
-    TableColumn teamProTeamColumn;
-    TableColumn teamPositionsColumn;
-    TableColumn teamRorWColumn;
-    TableColumn teamHRorSVColumn;
-    TableColumn teamRBIorKColumn;
-    TableColumn teamSBorERAColumn;
-    TableColumn teamBAorWHIPColumn;
-    TableColumn teamValueColumn;
-    TableColumn contractColumn;
-    TableColumn salaryColumn;
+    TableColumn startingPositionColumn;
+    TableColumn startingFirstNameColumn;
+    TableColumn startingLastNameColumn;
+    TableColumn startingProTeamColumn;
+    TableColumn startingPositionsColumn;
+    TableColumn startingRorWColumn;
+    TableColumn startingHRorSVColumn;
+    TableColumn startingRBIorKColumn;
+    TableColumn startingSBorERAColumn;
+    TableColumn startingBAorWHIPColumn;
+    TableColumn startingValueColumn;
+    TableColumn startingContractColumn;
+    TableColumn startingSalaryColumn;
+    
+    TableColumn taxiPositionColumn;
+    TableColumn taxiFirstNameColumn;
+    TableColumn taxiLastNameColumn;
+    TableColumn taxiProTeamColumn;
+    TableColumn taxiPositionsColumn;
+    TableColumn taxiRorWColumn;
+    TableColumn taxiHRorSVColumn;
+    TableColumn taxiRBIorKColumn;
+    TableColumn taxiSBorERAColumn;
+    TableColumn taxiBAorWHIPColumn;
+    TableColumn taxiValueColumn;
+    TableColumn taxiContractColumn;
+    TableColumn taxiSalaryColumn;
     
     //and the column description
     static final String COL_FIRST_NAME = "First";
@@ -740,65 +754,94 @@ public class DK_GUI implements DraftDataView {
         teamsTaxiTable = new TableView();
         
         //columns for the tables
-        teamPositionColumn = new TableColumn(COL_TEAM_POSITION);
-        teamFirstNameColumn = new TableColumn(COL_FIRST_NAME);
-        teamLastNameColumn = new TableColumn(COL_LAST_NAME);
-        teamProTeamColumn = new TableColumn(COL_PRO_TEAM);
-        teamPositionsColumn = new TableColumn(COL_POSITIONS);
-        teamRorWColumn = new TableColumn(COL_RORW);
-        teamHRorSVColumn = new TableColumn(COL_HRORSV);
-        teamRBIorKColumn = new TableColumn(COL_RBIORK);
-        teamSBorERAColumn = new TableColumn(COL_SBORERA);
-        teamBAorWHIPColumn = new TableColumn(COL_BAORWHIP);
-        teamValueColumn = new TableColumn(COL_ESTIMATED_VALUE);
-        contractColumn = new TableColumn(COL_CONTRACT);
-        salaryColumn = new TableColumn(COL_SALARY);
+        startingPositionColumn = new TableColumn(COL_TEAM_POSITION);
+        startingFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        startingLastNameColumn = new TableColumn(COL_LAST_NAME);
+        startingProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        startingPositionsColumn = new TableColumn(COL_POSITIONS);
+        startingRorWColumn = new TableColumn(COL_RORW);
+        startingHRorSVColumn = new TableColumn(COL_HRORSV);
+        startingRBIorKColumn = new TableColumn(COL_RBIORK);
+        startingSBorERAColumn = new TableColumn(COL_SBORERA);
+        startingBAorWHIPColumn = new TableColumn(COL_BAORWHIP);
+        startingValueColumn = new TableColumn(COL_ESTIMATED_VALUE);
+        startingContractColumn = new TableColumn(COL_CONTRACT);
+        startingSalaryColumn = new TableColumn(COL_SALARY);
         
-        teamPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
-        teamFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
-        teamLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
-        teamProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
-        teamPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
-        teamRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
-        teamHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
-        teamRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
-        teamSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
-        teamBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
-        teamValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
-        contractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
-        salaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
+        taxiPositionColumn = new TableColumn(COL_TEAM_POSITION);
+        taxiFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        taxiLastNameColumn = new TableColumn(COL_LAST_NAME);
+        taxiProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        taxiPositionsColumn = new TableColumn(COL_POSITIONS);
+        taxiRorWColumn = new TableColumn(COL_RORW);
+        taxiHRorSVColumn = new TableColumn(COL_HRORSV);
+        taxiRBIorKColumn = new TableColumn(COL_RBIORK);
+        taxiSBorERAColumn = new TableColumn(COL_SBORERA);
+        taxiBAorWHIPColumn = new TableColumn(COL_BAORWHIP);
+        taxiValueColumn = new TableColumn(COL_ESTIMATED_VALUE);
+        taxiContractColumn = new TableColumn(COL_CONTRACT);
+        taxiSalaryColumn = new TableColumn(COL_SALARY);
+        
+        startingPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
+        startingFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        startingLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        startingProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
+        startingPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        startingRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
+        startingHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
+        startingRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
+        startingSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
+        startingBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
+        startingValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
+        startingContractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
+        startingSalaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
+        
+        taxiPositionColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamPosition"));
+        taxiFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        taxiLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        taxiProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("proTeam"));
+        taxiPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        taxiRorWColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RorW"));
+        taxiHRorSVColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("HRorSV"));
+        taxiRBIorKColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("RBIorK"));
+        taxiSBorERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("SBorERA"));
+        taxiBAorWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("BAorWHIP"));
+        taxiValueColumn.setCellValueFactory(new PropertyValueFactory<String, String>("value"));
+        taxiContractColumn.setCellValueFactory(new PropertyValueFactory<String, String>("contract"));
+        taxiSalaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
         
         //cannot sort this column
-        teamPositionColumn.setSortable(false);
+        startingPositionColumn.setSortable(false);
+        taxiPositionColumn.setSortable(false);
         
         //link to the tables
-        teamsStartingTable.getColumns().add(teamPositionColumn);
-        teamsStartingTable.getColumns().add(teamFirstNameColumn);
-        teamsStartingTable.getColumns().add(teamLastNameColumn);
-        teamsStartingTable.getColumns().add(teamProTeamColumn);
-        teamsStartingTable.getColumns().add(teamPositionsColumn);
-        teamsStartingTable.getColumns().add(teamRorWColumn);
-        teamsStartingTable.getColumns().add(teamHRorSVColumn);
-        teamsStartingTable.getColumns().add(teamRBIorKColumn);
-        teamsStartingTable.getColumns().add(teamSBorERAColumn);
-        teamsStartingTable.getColumns().add(teamBAorWHIPColumn);
-        teamsStartingTable.getColumns().add(teamValueColumn);
-        teamsStartingTable.getColumns().add(contractColumn);
-        teamsStartingTable.getColumns().add(salaryColumn);
+        teamsStartingTable.getColumns().add(startingPositionColumn);
+        teamsStartingTable.getColumns().add(startingFirstNameColumn);
+        teamsStartingTable.getColumns().add(startingLastNameColumn);
+        teamsStartingTable.getColumns().add(startingProTeamColumn);
+        teamsStartingTable.getColumns().add(startingPositionsColumn);
+        teamsStartingTable.getColumns().add(startingRorWColumn);
+        teamsStartingTable.getColumns().add(startingHRorSVColumn);
+        teamsStartingTable.getColumns().add(startingRBIorKColumn);
+        teamsStartingTable.getColumns().add(startingSBorERAColumn);
+        teamsStartingTable.getColumns().add(startingBAorWHIPColumn);
+        teamsStartingTable.getColumns().add(startingValueColumn);
+        teamsStartingTable.getColumns().add(startingContractColumn);
+        teamsStartingTable.getColumns().add(startingSalaryColumn);
         
-        teamsTaxiTable.getColumns().add(teamPositionColumn);
-        teamsTaxiTable.getColumns().add(teamFirstNameColumn);
-        teamsTaxiTable.getColumns().add(teamLastNameColumn);
-        teamsTaxiTable.getColumns().add(teamProTeamColumn);
-        teamsTaxiTable.getColumns().add(teamPositionsColumn);
-        teamsTaxiTable.getColumns().add(teamRorWColumn);
-        teamsTaxiTable.getColumns().add(teamHRorSVColumn);
-        teamsTaxiTable.getColumns().add(teamRBIorKColumn);
-        teamsTaxiTable.getColumns().add(teamSBorERAColumn);
-        teamsTaxiTable.getColumns().add(teamBAorWHIPColumn);
-        teamsTaxiTable.getColumns().add(teamValueColumn);
-        teamsTaxiTable.getColumns().add(contractColumn);
-        teamsTaxiTable.getColumns().add(salaryColumn);
+        teamsTaxiTable.getColumns().add(taxiPositionColumn);
+        teamsTaxiTable.getColumns().add(taxiFirstNameColumn);
+        teamsTaxiTable.getColumns().add(taxiLastNameColumn);
+        teamsTaxiTable.getColumns().add(taxiProTeamColumn);
+        teamsTaxiTable.getColumns().add(taxiPositionsColumn);
+        teamsTaxiTable.getColumns().add(taxiRorWColumn);
+        teamsTaxiTable.getColumns().add(taxiHRorSVColumn);
+        teamsTaxiTable.getColumns().add(taxiRBIorKColumn);
+        teamsTaxiTable.getColumns().add(taxiSBorERAColumn);
+        teamsTaxiTable.getColumns().add(taxiBAorWHIPColumn);
+        teamsTaxiTable.getColumns().add(taxiValueColumn);
+        teamsTaxiTable.getColumns().add(taxiContractColumn);
+        teamsTaxiTable.getColumns().add(taxiSalaryColumn);
         
         //add everything to the pane
         teamPane.getChildren().add(teamDataPane);
