@@ -6,6 +6,7 @@ import dk.data.DraftDataView;
 import dk.data.Player;
 import dk.file.DraftFileManager;
 import dk.handler.FileHandler;
+import dk.handler.MLBHandler;
 import dk.handler.PlayerHandler;
 import dk.handler.TeamHandler;
 import static draftkit.DK_StartupConstants.*;
@@ -16,6 +17,7 @@ import java.util.Collection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -109,6 +111,9 @@ public class DK_GUI implements DraftDataView {
     //handles requests to edit draft screen stuff
     //DraftHandler draftHandler; NOT FOR HW 6
     
+    //handles requests to edit the mlb teams screen
+    MLBHandler mlbHandler;
+    
     //application window
     Stage primaryStage;
     
@@ -196,6 +201,7 @@ public class DK_GUI implements DraftDataView {
     //used for the mlbTeams pane
     GridPane mlbTeamsDataPane;
     Label mlbTeamsHeadingLabel;
+    ComboBox mlbTeamsComboBox;
     
     //used for getting the players
     ArrayList<String> hitters;
@@ -205,9 +211,9 @@ public class DK_GUI implements DraftDataView {
     TableView<Player> playersTable;
     TableView<Player> teamsStartingTable;
     TableView<Player> teamsTaxiTable;
-    //TableView<Team> standingsTable; //NOT USED FOR HW5
-    //TableView<Player> draftTable; //NOT USED FOR  HW5
-    //TableView<Player> mlbTeamsTable; //NOT USED FOR HW5
+    //TableView<Team> standingsTable; //NOT USED FOR HW5 name, players needed, $ Left, $ PP, R, HR, RBI, SB, BA, W, SV, K, ERA, WHIP, Tot
+    //TableView<Player> draftTable; //NOT USED FOR HW5 pick #, name, team, contract, salary
+    TableView<Player> mlbTeamsTable;
     
     //table columns
     TableColumn firstNameColumn;
@@ -266,6 +272,11 @@ public class DK_GUI implements DraftDataView {
     TableColumn taxiContractColumn;
     TableColumn taxiSalaryColumn;
     
+    //mlb teams columns
+    TableColumn mlbFirstNameColumn;
+    TableColumn mlbLastNameColumn;
+    TableColumn mlbPositionsColumn;
+    
     //and the column description
     static final String COL_FIRST_NAME = "First";
     static final String COL_LAST_NAME = "Last";
@@ -296,6 +307,22 @@ public class DK_GUI implements DraftDataView {
     static final String COL_TEAM_POSITION = "Position";
     static final String COL_CONTRACT = "Contract";
     static final String COL_SALARY = "Salary";
+    
+    public final String ATLANTA = "ATL";
+    public final String ARIZONA = "AZ";
+    public final String CHICAGO = "CHC";
+    public final String CINCINNATI = "CIN";
+    public final String COLORADO = "COL";
+    public final String LOS_ANGELES = "LAD";
+    public final String MIAMI = "MIA";
+    public final String MILWAUKEE = "MIL";
+    public final String NEW_YORK = "NYM";
+    public final String PHILADELPHIA = "PHI";
+    public final String PITTSBURGH = "PIT";
+    public final String SAN_DIEGO = "SD";
+    public final String SAN_FRANCISCO = "SF";
+    public final String ST_LOUIS = "STL";
+    public final String WASHINGTON = "WAS";
     
     //dialogs
     MessageDialog messageDialog;
@@ -467,6 +494,8 @@ public class DK_GUI implements DraftDataView {
         teamHandler.handleLoadComboBoxRequest(this, teamSelectComboBox);
         draftNameTextField.setText(dataManager.getDraft().getDraftName());
         teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
+        mlbTeamsComboBox.getSelectionModel().select(0);
+        mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
         
         //get the players table
         
@@ -908,10 +937,38 @@ public class DK_GUI implements DraftDataView {
         
         //used to get the data
         mlbTeamsDataPane = new GridPane();
+        mlbTeamsDataPane.setPadding(new Insets(10, 20, 20, 20));
+        mlbTeamsDataPane.setHgap(5);
         mlbTeamsHeadingLabel = initGridLabel(mlbTeamsDataPane, DK_PropertyType.MLB_TEAMS_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
-        //NOT FOR HW 5
+        mlbTeamsComboBox = initGridComboBox(mlbTeamsDataPane, 91, 5, 5, 4);
+        fillMLBTeamsComboBox(mlbTeamsComboBox);
+        mlbTeamsComboBox.getSelectionModel().select(0);
+        
+        mlbTeamsTable = new TableView();
+        mlbTeamsTable.setMaxWidth(515.0);
+        mlbTeamsTable.setMinHeight(485.0);
+        
+        //columns
+        mlbFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        mlbLastNameColumn = new TableColumn(COL_LAST_NAME);
+        mlbPositionsColumn = new TableColumn(COL_POSITIONS);
+        
+        mlbFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        mlbLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        mlbPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("positions"));
+        
+        mlbFirstNameColumn.setMinWidth(120.0);
+        mlbLastNameColumn.setMinWidth(160.0);
+        mlbPositionsColumn.setMinWidth(100.0);
+        
+        mlbTeamsTable.getColumns().add(mlbFirstNameColumn);
+        mlbTeamsTable.getColumns().add(mlbLastNameColumn);
+        mlbTeamsTable.getColumns().add(mlbPositionsColumn);
         
         MLBTeamsPane.getChildren().add(mlbTeamsDataPane);
+        MLBTeamsPane.getChildren().add(mlbTeamsTable);
+        MLBTeamsPane.setAlignment(Pos.CENTER);
+        MLBTeamsPane.getStyleClass().add(CLASS_BORDERED_PANE);
     }
     
     //set the window
@@ -1064,10 +1121,12 @@ public class DK_GUI implements DraftDataView {
         //add/edit players
         addPlayerButton.setOnAction(e -> {
             playerHandler.handleAddNewPlayerRequest(this);
+            mlbHandler.initLists(dataManager.getDraft());
         });
         
         removePlayerButton.setOnAction(e -> {
            playerHandler.handleRemovePlayerRequest(this, playersTable.getSelectionModel().getSelectedItem());
+           mlbHandler.initLists(dataManager.getDraft());
         });
         
         playersTable.setOnMouseClicked(e -> {
@@ -1106,6 +1165,14 @@ public class DK_GUI implements DraftDataView {
                 Player p = teamsStartingTable.getSelectionModel().getSelectedItem();
                 playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable);
             }
+        });
+        
+        //mlb teams handler
+        mlbHandler = new MLBHandler(dataManager.getDraft());
+        mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
+        
+        mlbTeamsComboBox.setOnAction(e -> {
+           mlbHandler.handleTeamChangeRequest(mlbTeamsTable, mlbTeamsComboBox.getSelectionModel().getSelectedItem().toString());
         });
     }
     
@@ -1155,7 +1222,7 @@ public class DK_GUI implements DraftDataView {
         return label;
     }
     
-    //init a combo box and put it in a grid pane; NOT USED FOR HW 5
+    //init a combo box and put it in a grid pane
     private ComboBox initGridComboBox(GridPane container, int col, int row, int colSpan, int rowSpan) throws IOException {
         ComboBox comboBox = new ComboBox();
         container.add(comboBox, col, row, colSpan, rowSpan);
@@ -1218,5 +1285,23 @@ public class DK_GUI implements DraftDataView {
             draftPane.setCenter(draftOptionsPane);
         else
             draftPane.setCenter(MLBTeamsPane);
+    }
+    
+    private void fillMLBTeamsComboBox(ComboBox cb) {
+        cb.getItems().add(ATLANTA);
+        cb.getItems().add(ARIZONA);
+        cb.getItems().add(CHICAGO);
+        cb.getItems().add(CINCINNATI);
+        cb.getItems().add(COLORADO);
+        cb.getItems().add(LOS_ANGELES);
+        cb.getItems().add(MIAMI);
+        cb.getItems().add(MILWAUKEE);
+        cb.getItems().add(NEW_YORK);
+        cb.getItems().add(PHILADELPHIA);
+        cb.getItems().add(PITTSBURGH);
+        cb.getItems().add(SAN_DIEGO);
+        cb.getItems().add(SAN_FRANCISCO);
+        cb.getItems().add(ST_LOUIS);
+        cb.getItems().add(WASHINGTON);
     }
 }
