@@ -4,6 +4,7 @@ import dk.data.Draft;
 import dk.data.DraftDataManager;
 import dk.data.DraftDataView;
 import dk.data.Player;
+import dk.data.Team;
 import dk.file.DraftFileManager;
 import dk.handler.FileHandler;
 import dk.handler.MLBHandler;
@@ -211,7 +212,7 @@ public class DK_GUI implements DraftDataView {
     TableView<Player> playersTable;
     TableView<Player> teamsStartingTable;
     TableView<Player> teamsTaxiTable;
-    //TableView<Team> standingsTable; //NOT USED FOR HW5 name, players needed, $ Left, $ PP, R, HR, RBI, SB, BA, W, SV, K, ERA, WHIP, Tot
+    TableView<Team> standingsTable;
     //TableView<Player> draftTable; //NOT USED FOR HW5 pick #, name, team, contract, salary
     TableView<Player> mlbTeamsTable;
     
@@ -277,6 +278,23 @@ public class DK_GUI implements DraftDataView {
     TableColumn mlbLastNameColumn;
     TableColumn mlbPositionsColumn;
     
+    //fantasy standings columns
+    TableColumn teamNameColumn;
+    TableColumn playersNeededColumn;
+    TableColumn moneyLeftColumn;
+    TableColumn moneyPerPlayerColumn;
+    TableColumn totRunsColumn;
+    TableColumn totHomeRunsColumn;
+    TableColumn totRBIsColumn;
+    TableColumn totSBColumn;
+    TableColumn avgBattingAverageColumn;
+    TableColumn totWinsColumn;
+    TableColumn totSavesColumn;
+    TableColumn totStrikeoutsColumn;
+    TableColumn avgERAColumn;
+    TableColumn avgWHIPColumn;
+    TableColumn totPointsColumn;
+    
     //and the column description
     static final String COL_FIRST_NAME = "First";
     static final String COL_LAST_NAME = "Last";
@@ -307,6 +325,12 @@ public class DK_GUI implements DraftDataView {
     static final String COL_TEAM_POSITION = "Position";
     static final String COL_CONTRACT = "Contract";
     static final String COL_SALARY = "Salary";
+    
+    static final String COL_TEAM_NAME = "Team Name";
+    static final String COL_PLAYERS_NEEDED = "Players Needed";
+    static final String COL_MONEY_LEFT = "$ Left";
+    static final String COL_MONEY_PER_PLAYER = "$ PP";
+    static final String COL_TOTAL_POINTS = "Total Points";
     
     public final String ATLANTA = "ATL";
     public final String ARIZONA = "AZ";
@@ -914,9 +938,28 @@ public class DK_GUI implements DraftDataView {
         //used for the data
         standingsDataPane = new GridPane();
         standingsHeadingLabel = initGridLabel(standingsDataPane, DK_PropertyType.STANDINGS_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
-        //NOT FOR HW 5
+        
+        standingsTable = new TableView();
+    
+        teamNameColumn = new TableColumn(COL_TEAM_NAME);
+        playersNeededColumn = new TableColumn(COL_PLAYERS_NEEDED);
+        moneyLeftColumn = new TableColumn(COL_MONEY_LEFT);
+        moneyPerPlayerColumn = new TableColumn(COL_MONEY_PER_PLAYER);
+        totRunsColumn = new TableColumn(COL_RUNS);
+        totHomeRunsColumn = new TableColumn(COL_HOMERUNS);
+        totRBIsColumn = new TableColumn(COL_RBIS);
+        totSBColumn = new TableColumn(COL_STOLEN_BASES);
+        avgBattingAverageColumn = new TableColumn(COL_BATTING_AVERAGE);
+        totWinsColumn = new TableColumn(COL_WINS);
+        totSavesColumn = new TableColumn(COL_SAVES);
+        totStrikeoutsColumn = new TableColumn(COL_STRIKEOUTS);
+        avgERAColumn = new TableColumn(COL_ERA);
+        avgWHIPColumn = new TableColumn(COL_WHIP);
+        totPointsColumn = new TableColumn(COL_TOTAL_POINTS);
         
         standingsPane.getChildren().add(standingsDataPane);
+        standingsPane.getChildren().add(standingsTable);
+        standingsPane.getStyleClass().add(CLASS_BORDERED_PANE);
     }
     
     //initializes controls in the draft screen

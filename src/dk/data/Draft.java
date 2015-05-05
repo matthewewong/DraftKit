@@ -112,10 +112,12 @@ public class Draft {
             values[3] = values[3] + "_U"; //adds Utility
             p.setPositions(values[3]);
             values[4] = values[4].substring(3); //gets rid of "AB:"
+            p.setAtBats(Integer.parseInt(values[4]));
             values[5] = values[5].substring(2); //gets rid of "R:"
             p.setRuns(Integer.parseInt(values[5]));
             values[6] = values[6].substring(2); //gets rid of "H:"
             p.calculateBA(Integer.parseInt(values[6]), Integer.parseInt(values[4])); //BA = hits/ab
+            p.setHits(Integer.parseInt(values[6]));
             values[7] = values[7].substring(3); //gets rid of "HR:"
             p.setHomeRuns(Integer.parseInt(values[7]));
             values[8] = values[8].substring(4); //gets rid of "RBI:"
@@ -149,15 +151,19 @@ public class Draft {
             values[2] = values[2].substring(11); //gets rid of "FIRST_NAME:"
             p.setFirstName(values[2]);
             values[3] = values[3].substring(3); //gets rid of "IP:"
+            p.setInningsPitched(Double.parseDouble(values[3]));
             values[4] = values[4].substring(3); //gets rid of "ER:"
             p.calculateERA(Double.parseDouble(values[3]), Integer.parseInt(values[4])); //ERA = (ER * 9) / IP
+            p.setEarnedRuns(Integer.parseInt(values[4]));
             values[5] = values[5].substring(2); //gets rid of "W:"
             p.setWins(Integer.parseInt(values[5]));
             values[6] = values[6].substring(3); //gets rid of "SV:"
             p.setSaves(Integer.parseInt(values[6]));
             values[7] = values[7].substring(2); //gets rid of "H:"
+            p.setHitsAllowed(Integer.parseInt(values[7]));
             values[8] = values[8].substring(3); //gets rid of "BB:"
             p.calculateWHIP(Integer.parseInt(values[7]), Integer.parseInt(values[8]), Double.parseDouble(values[3])); //WHIP = (H+BB)/IP
+            p.setWalksAllowed(Integer.parseInt(values[8]));
             values[9] = values[9].substring(2); //gets rid of "K:"
             p.setStrikeouts(Integer.parseInt(values[9]));
             values[10] = values[10].substring(6); //gets rid of "NOTES:"
