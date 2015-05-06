@@ -26,6 +26,7 @@ public class TeamHandler {
     MessageDialog messageDialog;
     YesNoCancelDialog yesNoCancelDialog;
     TeamDialog td;
+    StandingsHandler standingsHandler;
     
     //table
     TableView<Player> teamStartingTable;
@@ -40,6 +41,7 @@ public class TeamHandler {
         yesNoCancelDialog = initYesNoCancelDialog;
         teamStartingPlayers = FXCollections.observableArrayList();
         td = new TeamDialog(initPrimaryStage, draft, messageDialog);
+        standingsHandler = new StandingsHandler(draft);
     }
     
     public void updateButtons(DK_GUI gui, Button addTeam, Button removeTeam, Button editTeam) {
@@ -63,7 +65,7 @@ public class TeamHandler {
         draft.setDraftName(text);
     }
     
-    public void handleAddTeamRequest(DK_GUI gui) {
+    public void handleAddTeamRequest(DK_GUI gui, TableView<Team> table) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         td.showAddFantasyTeamDialog();
@@ -77,6 +79,7 @@ public class TeamHandler {
             gui.getTeamsComboBox().getItems().add(team.getTeamName());
             draft.addTeam(team);
             
+            standingsHandler.editStandingsTableContents(table, draft);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -85,7 +88,7 @@ public class TeamHandler {
         }
     }
     
-    public void handleEditTeamRequest(DK_GUI gui, String teamName, TableView<Player> starting, TableView<Player> taxi) {
+    public void handleEditTeamRequest(DK_GUI gui, String teamName, TableView<Player> starting, TableView<Player> taxi, TableView<Team> table) {
         teamStartingTable = starting;
         teamTaxiTable = taxi;
         DraftDataManager ddm = gui.getDataManager();
@@ -104,6 +107,7 @@ public class TeamHandler {
             teamStartingTable.setItems(team.getStartingPlayers());
             teamTaxiTable.setItems(team.getTaxiPlayers());
             
+            standingsHandler.editStandingsTableContents(table, draft);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -112,7 +116,7 @@ public class TeamHandler {
         }        
     }
     
-    public void handleRemoveTeamRequest(DK_GUI gui, String teamName) {
+    public void handleRemoveTeamRequest(DK_GUI gui, String teamName, TableView<Team> table) {
         //prompt to save unsaved work
         yesNoCancelDialog.show(PropertiesManager.getPropertiesManager().getProperty(REMOVE_TEAM_MESSAGE));
         
@@ -127,6 +131,7 @@ public class TeamHandler {
             draft.removeTeam(teamToRemove);
             gui.getTeamsComboBox().getItems().remove(teamName);
             
+            standingsHandler.editStandingsTableContents(table, draft);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }

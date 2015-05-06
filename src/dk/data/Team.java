@@ -59,8 +59,6 @@ public class Team {
     public final String OUTFIELD = "OF";
     public final String UTILITY = "U";
     public final String PITCHERS = "P";
-    public final int MAX_MONEY = 260;
-    public final int MAX_STARTING_PLAYERS = 23;
     
     public Team() {
         startingPlayers = FXCollections.observableArrayList();
@@ -219,7 +217,7 @@ public class Team {
     }
     
     /**
-     * This method is  used to  get all the available positions left for the team to draft.
+     * This method is  used to get all the available positions left for the team to draft.
      * These positions will go into the combo box after we finish this.
      * 
      * @return the available positions for this team to draft
@@ -495,137 +493,5 @@ public class Team {
     
     public void setNumP(int initNumP) {
         numP = initNumP;
-    }
-    
-    // MAX SIZE (23) - STARTING PLAYERS
-    public void calcPlayersNeeded() {
-        playersNeeded.set(MAX_STARTING_PLAYERS - startingPlayers.size());
-    }
-    
-    // MAX_MONEY (260) - (salary for each player)
-    public void calcMoneyLeft() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            total += p.getSalary();
-        }
-        moneyLeft.set(MAX_MONEY - total);
-    }
-    
-    //  MONEY LEFT / PLAYERS NEEDED
-    public void calcMoneyPerPlayer() {
-        if (playersNeeded.get() == 0)
-            moneyPerPlayer.set(-1.0);
-        else
-            moneyPerPlayer.set((double)moneyLeft.get() / playersNeeded.get());
-    }
-    
-    public void calcTotalR() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            if (p.isHitter) //ONLY IF THE PLAYER IS A HITTER
-                total += p.getRuns();
-        }
-        totR.set(total);
-    }
-    
-    public void calcTotalHR() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            if (p.isHitter) //ONLY IF THE PLAYER IS A HITTER
-                total += p.getHomeRuns();
-        }
-        totHR.set(total);
-    }
-    
-    public void calcTotalRBI() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            if (p.isHitter) //ONLY IF THE PLAYER IS A HITTER
-                total += p.getRBIs();
-        }
-        totRBI.set(total);
-    }
-    
-    public void calcTotalSB() {
-        double total = 0.0;
-        for (Player p : startingPlayers) {
-            if (p.isHitter) //ONLY IF THE PLAYER IS A HITTER
-                total += p.getStolenBases();
-        }
-        totSB.set(total);
-    }
-    
-    public void calcAvgBA() {
-        double hits = 0.0;
-        int ab = 0;
-        for (Player p : startingPlayers) {
-            if (p.isHitter) { //ONLY IF THE PLAYER IS A HITTER
-                hits += (double)p.getHits();
-                ab += p.getAtBats();
-            }
-        }
-        if (ab == 0)
-            avgBA.set(0.000);
-        else
-            avgBA.set(hits / ab);
-    }
-    
-    public void calcTotW() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            if (!(p.isHitter)) //IS A PITCHER
-                total += p.getWins();
-        }
-        totW.set(total);
-    }
-    
-    public void calcTotSV() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            if (!(p.isHitter)) //IS A PITCHER
-                total += p.getSaves();
-        }
-        totSV.set(total);
-    }
-    
-    public void calcTotK() {
-        int total = 0;
-        for (Player p : startingPlayers) {
-            if (!(p.isHitter)) //IS A PITCHER
-                total += p.getStrikeouts();
-        }
-        totK.set(total);
-    }
-    
-    public void calcAvgERA() {
-        double ip = 0.0;
-        int er = 0;
-        for (Player p : startingPlayers) {
-            if (!(p.isHitter)) {//IS A PITCHER
-                ip += p.getInningsPitched();
-                er += p.getEarnedRuns();
-            }
-        }
-        if (ip == 0.0)
-            avgERA.set(0.00);
-        else
-            avgERA.set((er * 9) / ip);
-    }
-    
-    public void calcAvgWHIP() {
-        double ip = 0.0;
-        int bb = 0;
-        int h = 0;
-        for (Player p : startingPlayers) {
-            if (!(p.isHitter)) {//IS A PITCHER
-                ip += p.getInningsPitched();
-                bb += p.getWalksAllowed();
-                h += p.getHitsAllowed();
-            }
-        }
-        if (ip == 0.0)
-            avgWHIP.set(0.00);
-        else
-            avgWHIP.set((h + bb) / ip);
     }
 }

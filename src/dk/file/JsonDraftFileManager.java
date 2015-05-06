@@ -45,10 +45,16 @@ public class JsonDraftFileManager implements DraftFileManager {
     String JSON_RBI = "RBI";
     String JSON_SB = "SB";
     String JSON_BA = "BA";
+    String JSON_H = "H";
+    String JSON_AB = "AB";
     String JSON_NOTES = "notes";
     String JSON_W = "W";
     String JSON_SV = "SV";
     String JSON_K = "K";
+    String JSON_IP = "IP";
+    String JSON_ER = "ER";
+    String JSON_H_ALLOWED = "hitsAllowed";
+    String JSON_BB_ALLOWED = "walksAllowed";
     String JSON_ERA = "ERA";
     String JSON_WHIP = "WHIP";
     String JSON_IS_HITTER = "isHitter";
@@ -251,6 +257,8 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_HR, player.getHomeRuns())
                                                         .add(JSON_RBI, player.getRBIs())
                                                         .add(JSON_SB, player.getStolenBases())
+                                                        .add(JSON_H, player.getHits())
+                                                        .add(JSON_AB, player.getAtBats())
                                                         .add(JSON_BA, player.getBA())
                                                         .add(JSON_VALUE, player.getValue())
                                                         .add(JSON_NOTES, player.getNotes())
@@ -272,6 +280,10 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_W, player.getWins())
                                                         .add(JSON_SV, player.getSaves())
                                                         .add(JSON_K, player.getStrikeouts())
+                                                        .add(JSON_IP, player.getInningsPitched())
+                                                        .add(JSON_ER, player.getEarnedRuns())
+                                                        .add(JSON_H_ALLOWED, player.getHitsAllowed())
+                                                        .add(JSON_BB_ALLOWED, player.getWalksAllowed())
                                                         .add(JSON_ERA, player.getERA())
                                                         .add(JSON_WHIP, player.getWHIP())
                                                         .add(JSON_VALUE, player.getValue())
@@ -354,13 +366,18 @@ public class JsonDraftFileManager implements DraftFileManager {
                 p.setHomeRuns(jso.getInt(JSON_HR));
                 p.setRBIs(jso.getInt(JSON_RBI));
                 p.setStolenBases(Double.parseDouble(jso.get(JSON_SB).toString()));
-                double sb = Double.parseDouble(jso.get(JSON_SB).toString());
+                p.setHits(jso.getInt(JSON_H));
+                p.setAtBats(jso.getInt(JSON_AB));
                 p.setBA(Double.parseDouble(jso.get(JSON_BA).toString()));
             }
             else { //(s)he's a pitcher
                 p.setWins(jso.getInt(JSON_W));
                 p.setSaves(jso.getInt(JSON_SV));
                 p.setStrikeouts(jso.getInt(JSON_K));
+                p.setInningsPitched(Double.parseDouble(jso.get(JSON_IP).toString()));
+                p.setEarnedRuns(jso.getInt(JSON_ER));
+                p.setHitsAllowed(jso.getInt(JSON_H_ALLOWED));
+                p.setWalksAllowed(jso.getInt(JSON_BB_ALLOWED));
                 p.setERA(Double.parseDouble(jso.get(JSON_ERA).toString()));
                 p.setWHIP(Double.parseDouble(jso.get(JSON_WHIP).toString()));
             }

@@ -278,7 +278,7 @@ public class PlayerDialog extends Stage {
         });
         
         //and the player last name
-        playerLastNameLabel = new Label(PLAYER_FIRST_NAME_PROMPT);
+        playerLastNameLabel = new Label(PLAYER_LAST_NAME_PROMPT);
         playerLastNameLabel.getStyleClass().add(CLASS_PROMPT_LABEL);
         playerLastNameTextField = new TextField();
         playerLastNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {

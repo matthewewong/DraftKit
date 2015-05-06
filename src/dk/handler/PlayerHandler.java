@@ -26,6 +26,8 @@ public class PlayerHandler {
     YesNoCancelDialog yesNoCancelDialog;
     PlayerDialog pd;
     PlayerDialog pdEdit;
+    MLBHandler mlbHandler;
+    StandingsHandler standingsHandler;
     
     //table
     TableView<Player> playersTable;
@@ -78,6 +80,8 @@ public class PlayerHandler {
     public PlayerHandler(Stage primaryStage, Draft draft, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
+        mlbHandler = new MLBHandler(gui);
+        standingsHandler = new StandingsHandler(draft);
         pdEdit = new PlayerDialog(primaryStage, draft, messageDialog);
         pd = new PlayerDialog(primaryStage, draft);
         regularPlayerList = FXCollections.observableArrayList();
@@ -407,6 +411,7 @@ public class PlayerHandler {
             //add it to the available players list
             draft.addPlayer(player);
             initLists(gui);
+            mlbHandler.initLists(gui);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -429,6 +434,7 @@ public class PlayerHandler {
         if (selection.equals(YesNoCancelDialog.YES)) {
             draft.removePlayer(playerToRemove);
             initLists(gui);
+            mlbHandler.initLists(gui);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -437,7 +443,7 @@ public class PlayerHandler {
         }
     }
     
-    public void handleEditPlayerRequest(DK_GUI gui, Player playerToEdit, TableView<Player> starting, TableView<Player> taxi) {
+    public void handleEditPlayerRequest(DK_GUI gui, Player playerToEdit, TableView<Player> starting, TableView<Player> taxi, TableView<Team> standings) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         pdEdit.showEditPlayerDialog(playerToEdit, gui);
@@ -461,6 +467,7 @@ public class PlayerHandler {
                     luckyTeam.addStartingPlayer(playerToEdit);
                     draft.removePlayer(playerToEdit);
                     initLists(gui);
+                    standingsHandler.editStandingsTableContents(standings, draft);
                     
                     playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
                 }
@@ -470,6 +477,7 @@ public class PlayerHandler {
                     unluckyTeam.removeStartingPlayer(playerToEdit);
                     draft.addPlayer(playerToEdit); //add the player to the free agent list
                     initLists(gui);
+                    standingsHandler.editStandingsTableContents(standings, draft);
                     
                     playerToEdit.setFantasyTeam("");
                 }
@@ -480,6 +488,7 @@ public class PlayerHandler {
                     Team luckyTeam = draft.getTeam(player.getFantasyTeam()); //get the new team
                     luckyTeam.addStartingPlayer(playerToEdit);
                     
+                    standingsHandler.editStandingsTableContents(standings, draft);
                     playerToEdit.setFantasyTeam(player.getFantasyTeam());
                 }
             }

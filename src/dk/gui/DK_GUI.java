@@ -9,6 +9,7 @@ import dk.file.DraftFileManager;
 import dk.handler.FileHandler;
 import dk.handler.MLBHandler;
 import dk.handler.PlayerHandler;
+import dk.handler.StandingsHandler;
 import dk.handler.TeamHandler;
 import static draftkit.DK_StartupConstants.*;
 import draftkit.DK_PropertyType;
@@ -108,6 +109,9 @@ public class DK_GUI implements DraftDataView {
     
     //handles requests to add or edit team stuff
     TeamHandler teamHandler;
+    
+    //handles requests to edit the standings screen
+    StandingsHandler standingsHandler;
     
     //handles requests to edit draft screen stuff
     //DraftHandler draftHandler; NOT FOR HW 6
@@ -518,6 +522,7 @@ public class DK_GUI implements DraftDataView {
         teamHandler.handleLoadComboBoxRequest(this, teamSelectComboBox);
         draftNameTextField.setText(dataManager.getDraft().getDraftName());
         teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
+        standingsHandler.editStandingsTableContents(standingsTable, draftToReload);
         mlbTeamsComboBox.getSelectionModel().select(0);
         mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
         
@@ -957,6 +962,54 @@ public class DK_GUI implements DraftDataView {
         avgWHIPColumn = new TableColumn(COL_WHIP);
         totPointsColumn = new TableColumn(COL_TOTAL_POINTS);
         
+        teamNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("teamName"));
+        playersNeededColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("playersNeeded"));
+        moneyLeftColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("moneyLeft"));
+        moneyPerPlayerColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("moneyPerPlayer"));
+        totRunsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totRuns"));
+        totHomeRunsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totHomeRuns"));
+        totRBIsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totRBIs"));
+        totSBColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totStolenBases"));
+        avgBattingAverageColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("avgBattingAverage"));
+        totWinsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totWins"));
+        totSavesColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totSaves"));
+        totStrikeoutsColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("totStrikeouts"));
+        avgERAColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("avgERA"));
+        avgWHIPColumn.setCellValueFactory(new PropertyValueFactory<Double, String>("avgWHIP"));
+        totPointsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("totalPoints"));
+        
+        teamNameColumn.setMinWidth(150.0);
+        playersNeededColumn.setMinWidth(100.0);
+        moneyLeftColumn.setMinWidth(70.0);
+        moneyPerPlayerColumn.setMinWidth(70.0);
+        totRunsColumn.setMinWidth(45.0);
+        totHomeRunsColumn.setMinWidth(60.0);
+        totRBIsColumn.setMinWidth(60.0);
+        totSBColumn.setMinWidth(65.0);
+        avgBattingAverageColumn.setMinWidth(75.0);
+        totWinsColumn.setMinWidth(45.0);
+        totSavesColumn.setMinWidth(60.0);
+        totStrikeoutsColumn.setMinWidth(60.0);
+        avgERAColumn.setMinWidth(65.0);
+        avgWHIPColumn.setMinWidth(75.0);
+        totPointsColumn.setMinWidth(70.0);
+        
+        standingsTable.getColumns().add(teamNameColumn);
+        standingsTable.getColumns().add(playersNeededColumn);
+        standingsTable.getColumns().add(moneyLeftColumn);
+        standingsTable.getColumns().add(moneyPerPlayerColumn);
+        standingsTable.getColumns().add(totRunsColumn);
+        standingsTable.getColumns().add(totHomeRunsColumn);
+        standingsTable.getColumns().add(totRBIsColumn);
+        standingsTable.getColumns().add(totSBColumn);
+        standingsTable.getColumns().add(avgBattingAverageColumn);
+        standingsTable.getColumns().add(totWinsColumn);
+        standingsTable.getColumns().add(totSavesColumn);
+        standingsTable.getColumns().add(totStrikeoutsColumn);
+        standingsTable.getColumns().add(avgERAColumn);
+        standingsTable.getColumns().add(avgWHIPColumn);
+        standingsTable.getColumns().add(totPointsColumn);
+        
         standingsPane.getChildren().add(standingsDataPane);
         standingsPane.getChildren().add(standingsTable);
         standingsPane.getStyleClass().add(CLASS_BORDERED_PANE);
@@ -1164,19 +1217,17 @@ public class DK_GUI implements DraftDataView {
         //add/edit players
         addPlayerButton.setOnAction(e -> {
             playerHandler.handleAddNewPlayerRequest(this);
-            mlbHandler.initLists(dataManager.getDraft());
         });
         
         removePlayerButton.setOnAction(e -> {
            playerHandler.handleRemovePlayerRequest(this, playersTable.getSelectionModel().getSelectedItem());
-           mlbHandler.initLists(dataManager.getDraft());
         });
         
         playersTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 //open the playerhandler editor
                 Player p = playersTable.getSelectionModel().getSelectedItem();
-                playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable);
+                playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable, standingsTable);
             }
         });
         
@@ -1188,16 +1239,16 @@ public class DK_GUI implements DraftDataView {
         });
         
         addTeamButton.setOnAction(e -> {
-            teamHandler.handleAddTeamRequest(this);
+            teamHandler.handleAddTeamRequest(this, standingsTable);
             teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
         });
         
         editTeamButton.setOnAction(e -> {
-            teamHandler.handleEditTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString(), teamsStartingTable, teamsTaxiTable);
+            teamHandler.handleEditTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString(), teamsStartingTable, teamsTaxiTable, standingsTable);
         });
         
         removeTeamButton.setOnAction(e -> {
-            teamHandler.handleRemoveTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString());
+            teamHandler.handleRemoveTeamRequest(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString(), standingsTable);
             teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
             playerHandler.initLists(this);
         });
@@ -1206,12 +1257,15 @@ public class DK_GUI implements DraftDataView {
             if (e.getClickCount() == 2) {
                 //open the playerhandler editor
                 Player p = teamsStartingTable.getSelectionModel().getSelectedItem();
-                playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable);
+                playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable, standingsTable);
             }
         });
         
+        //standings handler
+        standingsHandler = new StandingsHandler(dataManager.getDraft());
+        
         //mlb teams handler
-        mlbHandler = new MLBHandler(dataManager.getDraft());
+        mlbHandler = new MLBHandler(this);
         mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
         
         mlbTeamsComboBox.setOnAction(e -> {

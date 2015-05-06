@@ -1,7 +1,9 @@
 package dk.handler;
 
 import dk.data.Draft;
+import dk.data.DraftDataManager;
 import dk.data.Player;
+import dk.gui.DK_GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
@@ -47,7 +49,7 @@ public class MLBHandler {
     ObservableList<Player> StLouisList;
     ObservableList<Player> WashingtonList;
     
-    public MLBHandler(Draft draft) {
+    public MLBHandler(DK_GUI gui) {
         totPlayers = FXCollections.observableArrayList();
         
         AtlantaList = FXCollections.observableArrayList();
@@ -66,12 +68,14 @@ public class MLBHandler {
         StLouisList = FXCollections.observableArrayList();
         WashingtonList = FXCollections.observableArrayList();
         
-        initLists(draft);
+        initLists(gui);
     }
     
-    public void initLists(Draft draft) {
-        totPlayers.clear();
-        totPlayers = draft.getPlayers();
+    public void initLists(DK_GUI gui) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
+        
+        totPlayers = FXCollections.observableArrayList(draft.getPlayers());
         
         for (Player p : totPlayers) {
             if (p.getProTeam().equals(ATLANTA))
