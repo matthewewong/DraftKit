@@ -1,9 +1,20 @@
 package dk.handler;
 
+import dk.comparator.TeamBattingAverageComparator;
+import dk.comparator.TeamERAComparator;
+import dk.comparator.TeamHomeRunsComparator;
+import dk.comparator.TeamRBIsComparator;
+import dk.comparator.TeamRunsComparator;
+import dk.comparator.TeamSavesComparator;
+import dk.comparator.TeamStolenBasesComparator;
+import dk.comparator.TeamStrikeoutsComparator;
+import dk.comparator.TeamWHIPComparator;
+import dk.comparator.TeamWinsComparator;
 import dk.data.Draft;
 import dk.data.Player;
 import dk.data.Team;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
@@ -16,6 +27,17 @@ import javafx.scene.control.TableView;
  */
 public class StandingsHandler {
     ObservableList<Team> teams;
+    
+    ObservableList<Team> totRList;
+    ObservableList<Team> totHRList;
+    ObservableList<Team> totRBIList;
+    ObservableList<Team> totSBList;
+    ObservableList<Team> avgBAList;
+    ObservableList<Team> totWList;
+    ObservableList<Team> totSVList;
+    ObservableList<Team> totKList;
+    ObservableList<Team> avgERAList;
+    ObservableList<Team> avgWHIPList;
     
     public final int MAX_MONEY = 260;
     public final int MAX_STARTING_PLAYERS = 23;
@@ -43,6 +65,32 @@ public class StandingsHandler {
             
         }
         table.setItems(teams);
+        
+        totRList = FXCollections.observableArrayList(teams);
+        totHRList = FXCollections.observableArrayList(teams);
+        totRBIList = FXCollections.observableArrayList(teams);
+        totSBList = FXCollections.observableArrayList(teams);
+        avgBAList = FXCollections.observableArrayList(teams);
+        totWList = FXCollections.observableArrayList(teams);
+        totSVList = FXCollections.observableArrayList(teams);
+        totKList = FXCollections.observableArrayList(teams);
+        avgERAList = FXCollections.observableArrayList(teams);
+        avgWHIPList = FXCollections.observableArrayList(teams);
+        
+        Collections.sort(totRList, new TeamRunsComparator()); //sorts the runs
+        Collections.sort(totHRList, new TeamHomeRunsComparator()); //sorts the homers
+        Collections.sort(totRBIList, new TeamRBIsComparator()); //sorts the RBIs
+        Collections.sort(totSBList, new TeamStolenBasesComparator()); //sorts the stolen bases
+        Collections.sort(avgBAList, new TeamBattingAverageComparator()); //sorts the batting averages
+        Collections.sort(totWList, new TeamWinsComparator()); //sorts the wins
+        Collections.sort(totSVList, new TeamSavesComparator()); //sorts the saves
+        Collections.sort(totKList, new TeamStrikeoutsComparator()); //sorts the strikeouts
+        Collections.sort(avgERAList, new TeamERAComparator()); //sorts the ERA
+        Collections.sort(avgWHIPList, new TeamWHIPComparator()); //sorts the WHIP
+        
+        for (Team t : teams) {
+            calcTotalPoints(t);
+        }
     }
     
      // MAX SIZE (23) - STARTING PLAYERS
@@ -197,5 +245,23 @@ public class StandingsHandler {
             whip = Double.parseDouble(df.format(whip));
         }
         team.setAvgWHIP(whip);
+    }
+    
+    public void calcTotalPoints(Team team) {
+        int runsRank = (totRList.indexOf(team) + 1);
+        int homeRunsRank = (totHRList.indexOf(team) + 1);
+        int RBIsRank = (totRBIList.indexOf(team) + 1);
+        int SBsRank = (totSBList.indexOf(team) + 1);
+        int baRank = (avgBAList.indexOf(team) + 1);
+        int winsRank = (totWList.indexOf(team) + 1);
+        int savesRank = (totSVList.indexOf(team) + 1);
+        int ksRank = (totKList.indexOf(team) + 1);
+        int eraRank = (avgERAList.indexOf(team) + 1);
+        int whipRank = (avgWHIPList.indexOf(team) + 1);
+        
+        int totalRank = runsRank + homeRunsRank + RBIsRank + SBsRank + baRank + 
+                winsRank + savesRank + ksRank + eraRank + whipRank;
+        
+        team.setTotalPoints(totalRank);
     }
 }
