@@ -95,14 +95,8 @@ public class DK_GUI implements DraftDataView {
     //manage the draft I/O
     DraftFileManager draftFileManager;
     
-    //manages the exporting of the pages
-    //DraftExporter draftExporter;
-    
     //handles interactions with files
     FileHandler fileHandler;
-    
-    //handles interactions with draft info controls
-    //DraftEditHandler editHandler; CHANGE
     
     //handles requests to add or edit player stuff
     PlayerHandler playerHandler;
@@ -199,6 +193,7 @@ public class DK_GUI implements DraftDataView {
     //used for the draft pane
     GridPane draftOptionsPane;
     Label draftHeadingLabel;
+    HBox draftToolbar;
     Button draftBestPlayerButton;
     Button startAutoDraftButton;
     Button pauseAutoDraftButton;
@@ -217,7 +212,7 @@ public class DK_GUI implements DraftDataView {
     TableView<Player> teamsStartingTable;
     TableView<Player> teamsTaxiTable;
     TableView<Team> standingsTable;
-    //TableView<Player> draftTable; //NOT USED FOR HW5 pick #, name, team, contract, salary
+    TableView<Player> draftTable;
     TableView<Player> mlbTeamsTable;
     
     //table columns
@@ -299,6 +294,14 @@ public class DK_GUI implements DraftDataView {
     TableColumn avgWHIPColumn;
     TableColumn totPointsColumn;
     
+    //draft table columns
+    TableColumn pickNumColumn;
+    TableColumn draftFirstNameColumn;
+    TableColumn draftLastNameColumn;
+    TableColumn draftTeamNameColumn;
+    TableColumn draftContractColumn;
+    TableColumn draftSalaryColumn;
+    
     //and the column description
     static final String COL_FIRST_NAME = "First";
     static final String COL_LAST_NAME = "Last";
@@ -335,6 +338,8 @@ public class DK_GUI implements DraftDataView {
     static final String COL_MONEY_LEFT = "$ Left";
     static final String COL_MONEY_PER_PLAYER = "$ PP";
     static final String COL_TOTAL_POINTS = "Total Points";
+    
+    static final String COL_PICK_NUMBER = "Pick #";
     
     public final String ATLANTA = "ATL";
     public final String ARIZONA = "AZ";
@@ -1022,9 +1027,16 @@ public class DK_GUI implements DraftDataView {
         //used for the data
         draftOptionsPane = new GridPane();
         draftHeadingLabel = initGridLabel(draftOptionsPane, DK_PropertyType.DRAFT_SCREEN_HEADING_LABEL, CLASS_HEADING_LABEL, 0, 0, 4, 1);
-        //NOT FOR HW 5
+        draftToolbar = initGridHBox(draftOptionsPane, 0, 2, 1, 1);
+        draftBestPlayerButton = initChildButton(draftToolbar, DK_PropertyType.STAR_ICON, DK_PropertyType.DRAFT_BEST_PLAYER_TOOLTIP, false);
+        startAutoDraftButton = initChildButton(draftToolbar, DK_PropertyType.PLAY_ICON, DK_PropertyType.START_AUTO_DRAFT_TOOLTIP, false);
+        pauseAutoDraftButton = initChildButton(draftToolbar, DK_PropertyType.PAUSE_ICON, DK_PropertyType.PAUSE_AUTO_DRAFT_TOOLTIP, true);
+        
+        draftTable = new TableView();
         
         draftSelectPane.getChildren().add(draftOptionsPane);
+        draftSelectPane.getChildren().add(draftTable);
+        draftSelectPane.getStyleClass().add(CLASS_BORDERED_PANE);
     }
     
     //initializes controls in the MLB Teams screen
@@ -1216,11 +1228,11 @@ public class DK_GUI implements DraftDataView {
         
         //add/edit players
         addPlayerButton.setOnAction(e -> {
-            playerHandler.handleAddNewPlayerRequest(this);
+            playerHandler.handleAddNewPlayerRequest(this, mlbHandler);
         });
         
         removePlayerButton.setOnAction(e -> {
-           playerHandler.handleRemovePlayerRequest(this, playersTable.getSelectionModel().getSelectedItem());
+           playerHandler.handleRemovePlayerRequest(this, playersTable.getSelectionModel().getSelectedItem(), mlbHandler);
         });
         
         playersTable.setOnMouseClicked(e -> {
@@ -1379,7 +1391,7 @@ public class DK_GUI implements DraftDataView {
         else if (newSelection.equals(STANDINGS_BUTTON))
             draftPane.setCenter(standingsPane);
         else if (newSelection.equals(DRAFT_BUTTON))
-            draftPane.setCenter(draftOptionsPane);
+            draftPane.setCenter(draftSelectPane);
         else
             draftPane.setCenter(MLBTeamsPane);
     }

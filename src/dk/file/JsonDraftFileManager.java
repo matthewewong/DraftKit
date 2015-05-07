@@ -78,6 +78,7 @@ public class JsonDraftFileManager implements DraftFileManager {
     String JSON_TEAM_OF = "numOF";
     String JSON_TEAM_U = "numU";
     String JSON_TEAM_P = "numP";
+    String JSON_TEAM_TOT_POINTS = "totPoints";
     String JSON_EXT = ".json";
     String SLASH = "/";
     
@@ -169,6 +170,7 @@ public class JsonDraftFileManager implements DraftFileManager {
             t.setNumOF(jso.getInt(JSON_TEAM_OF));
             t.setNumU(jso.getInt(JSON_TEAM_U));
             t.setNumP(jso.getInt(JSON_TEAM_P));
+            t.setTotalPoints(jso.getInt(JSON_TEAM_TOT_POINTS));
             
             // ADD TEAMS TO THE DRAFT
             draftToLoad.addTeam(t);
@@ -325,6 +327,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                     .add(JSON_TEAM_OF, team.getNumOF())
                                                     .add(JSON_TEAM_U, team.getNumU())
                                                     .add(JSON_TEAM_P, team.getNumP())
+                                                    .add(JSON_TEAM_TOT_POINTS, team.getTotalPoints())
                                                     .build();
         return jso;
     }

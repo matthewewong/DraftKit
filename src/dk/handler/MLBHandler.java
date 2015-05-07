@@ -76,6 +76,21 @@ public class MLBHandler {
         Draft draft = ddm.getDraft();
         
         totPlayers = FXCollections.observableArrayList(draft.getPlayers());
+        AtlantaList.clear();
+        ArizonaList.clear();
+        ChicagoList.clear();
+        CincinnatiList.clear();
+        ColoradoList.clear();
+        LosAngelesList.clear();
+        MiamiList.clear();
+        MilwaukeeList.clear();
+        NewYorkList.clear();
+        PhiladelphiaList.clear();
+        PittsburghList.clear();
+        SanDiegoList.clear();
+        SanFranciscoList.clear();
+        StLouisList.clear();
+        WashingtonList.clear();
         
         for (Player p : totPlayers) {
             if (p.getProTeam().equals(ATLANTA))

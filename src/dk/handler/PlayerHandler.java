@@ -26,7 +26,6 @@ public class PlayerHandler {
     YesNoCancelDialog yesNoCancelDialog;
     PlayerDialog pd;
     PlayerDialog pdEdit;
-    MLBHandler mlbHandler;
     StandingsHandler standingsHandler;
     
     //table
@@ -80,7 +79,6 @@ public class PlayerHandler {
     public PlayerHandler(Stage primaryStage, Draft draft, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DK_GUI gui) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
-        mlbHandler = new MLBHandler(gui);
         standingsHandler = new StandingsHandler(draft);
         pdEdit = new PlayerDialog(primaryStage, draft, messageDialog);
         pd = new PlayerDialog(primaryStage, draft);
@@ -393,7 +391,7 @@ public class PlayerHandler {
         playersTable.setItems(changedList);
     }
     
-    public void handleAddNewPlayerRequest(DK_GUI gui) {
+    public void handleAddNewPlayerRequest(DK_GUI gui, MLBHandler mlbHandler) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         pd.showAddPlayerDialog();
@@ -420,7 +418,7 @@ public class PlayerHandler {
         }
     }
     
-    public void handleRemovePlayerRequest(DK_GUI gui, Player playerToRemove) {
+    public void handleRemovePlayerRequest(DK_GUI gui, Player playerToRemove, MLBHandler mlbHandler) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         

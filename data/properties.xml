@@ -18,6 +18,9 @@ Draft Kit.
         <property name="ADD_ICON"           value="Add.png"></property>
         <property name="EDIT_ICON"          value="Edit.png"></property>
         <property name="MINUS_ICON"         value="Minus.png"></property>
+        <property name="PLAY_ICON"          value="play.png"></property>
+        <property name="PAUSE_ICON"         value="pause.png"></property>
+        <property name="STAR_ICON"          value="star.png"></property>
         <property name="PLAYER_SELECT_ICON"    value="players.png"></property>
         <property name="TEAM_SELECT_ICON"        value="teams.png"></property>
         <property name="STANDINGS_SELECT_ICON"   value="standings.png"></property>
@@ -37,6 +40,9 @@ Draft Kit.
         <property name="ADD_TEAM_TOOLTIP"           value="Add Team"></property>
         <property name="EDIT_TEAM_TOOLTIP"          value="Edit Team"></property>
         <property name="REMOVE_TEAM_TOOLTIP"        value="Remove Team"></property>
+        <property name="DRAFT_BEST_PLAYER_TOOLTIP"      value="Draft the best available player"></property>
+        <property name="START_AUTO_DRAFT_TOOLTIP"       value="Start an automated draft (one pick per second)"></property>
+        <property name="PAUSE_AUTO_DRAFT_TOOLTIP"       value="Pause an automated draft"></property>
         <property name="PLAYER_SELECT_TOOLTIP"      value="Select the Players Screen"></property>
         <property name="TEAM_SELECT_TOOLTIP"      value="Select the Teams Screen"></property>
         <property name="STANDINGS_SELECT_TOOLTIP"      value="Select the Team Standings Screen"></property>
