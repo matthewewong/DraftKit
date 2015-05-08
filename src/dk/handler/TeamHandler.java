@@ -27,6 +27,7 @@ public class TeamHandler {
     YesNoCancelDialog yesNoCancelDialog;
     TeamDialog td;
     StandingsHandler standingsHandler;
+    DraftHandler draftHandler;
     
     //table
     TableView<Player> teamStartingTable;
@@ -36,12 +37,13 @@ public class TeamHandler {
     ObservableList<Player> teamStartingPlayers;
     ObservableList<Player> teamTaxiPlayers;
     
-    public TeamHandler(Stage initPrimaryStage, Draft draft, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog) {
+    public TeamHandler(Stage initPrimaryStage, Draft draft, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog, DraftHandler dH) {
         messageDialog = initMessageDialog;
         yesNoCancelDialog = initYesNoCancelDialog;
         teamStartingPlayers = FXCollections.observableArrayList();
         td = new TeamDialog(initPrimaryStage, draft, messageDialog);
         standingsHandler = new StandingsHandler(draft);
+        draftHandler = dH;
     }
     
     public void updateButtons(DK_GUI gui, Button addTeam, Button removeTeam, Button editTeam) {
@@ -81,6 +83,7 @@ public class TeamHandler {
             
             standingsHandler.editStandingsTableContents(table, draft);
             draft.calcEstimatedValue();
+            draftHandler.sortValuedPlayers(gui);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -134,6 +137,7 @@ public class TeamHandler {
             
             standingsHandler.editStandingsTableContents(table, draft);
             draft.calcEstimatedValue();
+            draftHandler.sortValuedPlayers(gui);
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }

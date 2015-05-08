@@ -6,6 +6,7 @@ import dk.data.DraftDataView;
 import dk.data.Player;
 import dk.data.Team;
 import dk.file.DraftFileManager;
+import dk.handler.DraftHandler;
 import dk.handler.FileHandler;
 import dk.handler.MLBHandler;
 import dk.handler.PlayerHandler;
@@ -108,7 +109,7 @@ public class DK_GUI implements DraftDataView {
     StandingsHandler standingsHandler;
     
     //handles requests to edit draft screen stuff
-    //DraftHandler draftHandler; NOT FOR HW 6
+    DraftHandler draftHandler;
     
     //handles requests to edit the mlb teams screen
     MLBHandler mlbHandler;
@@ -1262,9 +1263,14 @@ public class DK_GUI implements DraftDataView {
                 playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable, standingsTable);
             }
         });
+        //standings handler
+        standingsHandler = new StandingsHandler(dataManager.getDraft());
+        
+        //draft handler
+        draftHandler = new DraftHandler(this, playerHandler, standingsHandler);
         
         //team handlers
-        teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
+        teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog, draftHandler);
         
         teamSelectComboBox.setOnAction(e -> {
             teamHandler.handleLoadTeam(this, teamSelectComboBox.getSelectionModel().getSelectedItem().toString(), teamsStartingTable, teamsTaxiTable);
@@ -1293,8 +1299,12 @@ public class DK_GUI implements DraftDataView {
             }
         });
         
-        //standings handler
-        standingsHandler = new StandingsHandler(dataManager.getDraft());
+        //draft stuff
+        
+        draftBestPlayerButton.setOnAction(e -> {
+            draftHandler.handleDraftBestPlayerRequest(this, standingsTable);
+            draftTable.setItems(draftHandler.getDraftedList());
+        });
         
         //mlb teams handler
         mlbHandler = new MLBHandler(this);
