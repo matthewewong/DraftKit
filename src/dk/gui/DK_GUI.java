@@ -1027,7 +1027,7 @@ public class DK_GUI implements DraftDataView {
         pauseAutoDraftButton = initChildButton(draftToolbar, DK_PropertyType.PAUSE_ICON, DK_PropertyType.PAUSE_AUTO_DRAFT_TOOLTIP, true);
         
         draftTable = new TableView();
-        draftTable.setMaxWidth(650.0);
+        draftTable.setMaxWidth(750.0);
         draftTable.setMinHeight(500.0);
     
         pickNumColumn = new TableColumn(COL_PICK_NUMBER);
@@ -1037,8 +1037,8 @@ public class DK_GUI implements DraftDataView {
         draftContractColumn = new TableColumn(COL_CONTRACT);
         draftSalaryColumn = new TableColumn(COL_SALARY);
         
-        firstNameColumn.setMinWidth(75.0);
-        lastNameColumn.setMinWidth(95.0);
+        firstNameColumn.setMinWidth(95.0);
+        lastNameColumn.setMinWidth(120.0);
         draftTeamNameColumn.setMinWidth(150.0);
         
         pickNumColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("pickNum"));
@@ -1261,6 +1261,7 @@ public class DK_GUI implements DraftDataView {
                 //open the playerhandler editor
                 Player p = playersTable.getSelectionModel().getSelectedItem();
                 playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable, standingsTable);
+                draftTable.setItems(draftHandler.getDraftedList());
             }
         });
         //standings handler
@@ -1296,6 +1297,7 @@ public class DK_GUI implements DraftDataView {
                 //open the playerhandler editor
                 Player p = teamsStartingTable.getSelectionModel().getSelectedItem();
                 playerHandler.handleEditPlayerRequest(this, p, teamsStartingTable, teamsTaxiTable, standingsTable);
+                draftTable.setItems(draftHandler.getDraftedList());
             }
         });
         

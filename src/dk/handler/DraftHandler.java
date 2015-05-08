@@ -36,6 +36,7 @@ public class DraftHandler {
         rankedValuedPlayers = FXCollections.observableArrayList(draft.getPlayers());
         pH = playerHandler;
         sH = standingsHandler;
+        pH.setDraftHandler(this);
         sortValuedPlayers(gui);
     }
     
@@ -106,5 +107,36 @@ public class DraftHandler {
         rankedValuedPlayers.remove(player);
         pH.initLists(gui);
         sH.editStandingsTableContents(standings, draft);
+    }
+    
+    //ADDS A PLAYER TO THE DRAFT TABLE
+    public void addDraftedPlayer(Player p) {
+        p.setPickNumber(draftedPlayers.size() + 1);
+        draftedPlayers.add(p);
+        rankedValuedPlayers.remove(p);
+    }
+    
+    //PLAYER'S CONTRACT CHANGED
+    public void removeDraftedPlayerFromTable(Player p) {
+        int index = draftedPlayers.indexOf(p); //gets the index of the player
+        
+        for (int i = index + 1; i < draftedPlayers.size(); i++) {
+            //iterate through the players in the drafted list, decreasing their pick num by 1
+            Player pickNumPlayer = draftedPlayers.get(i);
+            pickNumPlayer.setPickNumber(pickNumPlayer.getPickNumber() - 1);
+        }
+        draftedPlayers.remove(index);
+    }
+    
+    //PLAYER MOVED TO FA
+    public void removeDraftedPlayerToFreeAgency(Player p) {
+        int index = draftedPlayers.indexOf(p); //get the index of the player to remove
+        for (int i = index + 1; i < draftedPlayers.size(); i++) {
+            //iterate through the players in the drafted list, decreasing their pick num by 1
+            Player pickNumPlayer = draftedPlayers.get(i);
+            pickNumPlayer.setPickNumber(pickNumPlayer.getPickNumber() - 1);
+        }
+        draftedPlayers.remove(p);
+        rankedValuedPlayers.add(p);
     }
 }

@@ -219,7 +219,8 @@ public class PlayerDialog extends Stage {
             Button sourceButton = (Button)ae.getSource();
             PlayerDialog.this.selection = sourceButton.getText();
             if (PlayerDialog.this.selection.equals(COMPLETE)) {
-                if (teamPositionComboBox.getSelectionModel().getSelectedIndex() == 0 || contractComboBox.getSelectionModel().getSelectedIndex() == 0 || salaryTextField.getText().equals(EMPTY_TEXT))
+                if (!(fantasyTeamsComboBox.getSelectionModel().getSelectedIndex() == 0) && (teamPositionComboBox.getSelectionModel().getSelectedItem().equals(EMPTY_TEXT) || 
+                        contractComboBox.getSelectionModel().getSelectedItem().equals(EMPTY_TEXT) || salaryTextField.getText().equals(EMPTY_TEXT)))
                     messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_EDITING_MESSAGE));
                 else
                     PlayerDialog.this.hide();

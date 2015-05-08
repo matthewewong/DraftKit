@@ -27,6 +27,7 @@ public class PlayerHandler {
     PlayerDialog pd;
     PlayerDialog pdEdit;
     StandingsHandler standingsHandler;
+    DraftHandler draftHandler;
     
     //table
     TableView<Player> playersTable;
@@ -63,6 +64,7 @@ public class PlayerHandler {
     static final String MI_RADIO_BUTTON = "Middle Infield";
     static final String OF_RADIO_BUTTON = "Outfield";
     public static final String FREE_AGENT = "Free Agent";
+    public final String CONTRACT_S2 = "S2";
     
     //used for adding a player to a team
     public final String CATCHERS = "C";
@@ -455,6 +457,18 @@ public class PlayerHandler {
         if (pdEdit.wasCompleteSelected()) {
             //get the player
             Player player = pdEdit.getPlayer();
+            
+            boolean draftedThisYear = false;
+            boolean formerlyDraftedThisYear = false;
+            
+            //if this player was just drafted this year, make the boolean true
+            if (player.getContract().equals(CONTRACT_S2)) 
+                draftedThisYear = true;
+            
+            //if this player used to have an S2 contract, make the boolean true
+            if (playerToEdit.getContract().equals(CONTRACT_S2))
+                formerlyDraftedThisYear = true;
+            
             playerToEdit.setContract(player.getContract());
             playerToEdit.setSalary(player.getSalary());
             playerToEdit.setTeamPosition(player.getTeamPosition());
@@ -470,6 +484,11 @@ public class PlayerHandler {
                     standingsHandler.editStandingsTableContents(standings, draft);
                     draft.calcEstimatedValue();
                     
+                    if (draftedThisYear) {
+                        //player was a free agent, and now joins a team this year
+                        draftHandler.addDraftedPlayer(playerToEdit);
+                    }
+                    
                     playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
                 }
                 else if (player.getFantasyTeam().equals(FREE_AGENT)) {
@@ -480,6 +499,12 @@ public class PlayerHandler {
                     initLists(gui);
                     standingsHandler.editStandingsTableContents(standings, draft);
                     draft.calcEstimatedValue();
+                    
+                    if (formerlyDraftedThisYear) {
+                        //player had an S2 contract before he was placed back into FA, so remove him
+                        draftHandler.removeDraftedPlayerToFreeAgency(playerToEdit);
+                        draftHandler.sortValuedPlayers(gui);
+                    }
                     
                     playerToEdit.setFantasyTeam("");
                 }
@@ -492,7 +517,23 @@ public class PlayerHandler {
                     
                     standingsHandler.editStandingsTableContents(standings, draft);
                     draft.calcEstimatedValue();
+                    
+                    if (formerlyDraftedThisYear && !(draftedThisYear)) {
+                        //this player was drafted this year before, but the contract changed when he changed teams
+                        draftHandler.removeDraftedPlayerFromTable(playerToEdit);
+                    }
                     playerToEdit.setFantasyTeam(player.getFantasyTeam());
+                }
+            }
+            else {
+                //player is still on the same fantasy team
+                if (formerlyDraftedThisYear && !(draftedThisYear)) {
+                    //this player was drafted this year before, but the contract changed
+                    draftHandler.removeDraftedPlayerFromTable(playerToEdit);
+                }
+                else if (!(formerlyDraftedThisYear) && draftedThisYear) {
+                    //this player was not drafted this year, but the contract changed
+                    draftHandler.addDraftedPlayer(playerToEdit);
                 }
             }
             
@@ -502,5 +543,9 @@ public class PlayerHandler {
         else {
             //do nothing
         }
+    }
+    
+    public void setDraftHandler(DraftHandler dH) {
+        draftHandler = dH;
     }
 }
