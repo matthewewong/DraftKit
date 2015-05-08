@@ -80,6 +80,7 @@ public class TeamHandler {
             draft.addTeam(team);
             
             standingsHandler.editStandingsTableContents(table, draft);
+            draft.calcEstimatedValue();
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -132,6 +133,7 @@ public class TeamHandler {
             gui.getTeamsComboBox().getItems().remove(teamName);
             
             standingsHandler.editStandingsTableContents(table, draft);
+            draft.calcEstimatedValue();
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }

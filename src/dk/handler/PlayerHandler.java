@@ -410,6 +410,7 @@ public class PlayerHandler {
             draft.addPlayer(player);
             initLists(gui);
             mlbHandler.initLists(gui);
+            draft.calcEstimatedValue();
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -433,6 +434,7 @@ public class PlayerHandler {
             draft.removePlayer(playerToRemove);
             initLists(gui);
             mlbHandler.initLists(gui);
+            draft.calcEstimatedValue();
             //since the draft was edited since it was last saved, update the top toolbar controls
             gui.getFileController().markAsEdited(gui);
         }
@@ -466,6 +468,7 @@ public class PlayerHandler {
                     draft.removePlayer(playerToEdit);
                     initLists(gui);
                     standingsHandler.editStandingsTableContents(standings, draft);
+                    draft.calcEstimatedValue();
                     
                     playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
                 }
@@ -476,6 +479,7 @@ public class PlayerHandler {
                     draft.addPlayer(playerToEdit); //add the player to the free agent list
                     initLists(gui);
                     standingsHandler.editStandingsTableContents(standings, draft);
+                    draft.calcEstimatedValue();
                     
                     playerToEdit.setFantasyTeam("");
                 }
@@ -487,6 +491,7 @@ public class PlayerHandler {
                     luckyTeam.addStartingPlayer(playerToEdit);
                     
                     standingsHandler.editStandingsTableContents(standings, draft);
+                    draft.calcEstimatedValue();
                     playerToEdit.setFantasyTeam(player.getFantasyTeam());
                 }
             }

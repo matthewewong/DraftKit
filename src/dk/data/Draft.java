@@ -1,5 +1,10 @@
 package dk.data;
 
+import dk.comparator.PlayerBAorWHIPComparator;
+import dk.comparator.PlayerHRorSVComparator;
+import dk.comparator.PlayerRBIorKComparator;
+import dk.comparator.PlayerRorWComparator;
+import dk.comparator.PlayerSBorERAComparator;
 import dk.data.Player;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +26,9 @@ public class Draft {
     //Player lists
     ObservableList<Player> hittersList;
     ObservableList<Player> pitchersList;
+    
+    ObservableList<Player> hitterSortList;
+    ObservableList<Player> pitcherSortList;
     
     //draft name
     String draftName;
@@ -236,6 +244,7 @@ public class Draft {
             }
             teamToRemove.clearStartingPlayers();
             teamToRemove.clearTaxiPlayers();
+            teams.remove(teamToRemove);
     }
     
     public void addPlayer(Player p) {
@@ -262,5 +271,71 @@ public class Draft {
     
     public void setTeams(ObservableList<Team> teams) {
         this.teams = teams;
+    }
+    
+    public void calcEstimatedValue() {
+        hitterSortList = FXCollections.observableArrayList(hittersList);
+        pitcherSortList = FXCollections.observableArrayList(pitchersList);
+        int totalMoneyRemaining = 0;
+        double medianSalaryHitters;
+        double medianSalaryPitchers;
+        int estimatedValue;
+        for (Team t : teams) {
+            totalMoneyRemaining += t.getMoneyLeft(); //calculates the total money remaining in the draft
+        }
+        
+        for (Player p : hittersList) {
+            calcHittersRank(p); //calculates the average rank for each hitter and sets it
+        }
+        
+        for (Player p : pitchersList) {
+            calcPitchersRank(p); //calculates the average rank for each pitcher and sets it
+        }
+        
+        medianSalaryHitters = (double)totalMoneyRemaining / (2 * hittersList.size()); //sets median hitter salary
+        medianSalaryPitchers = (double)totalMoneyRemaining / pitchersList.size(); //sets median pitcher salary
+        
+        for (Player p : players) {
+            if (p.isAHitter()) { //player is a hitter
+                estimatedValue = (int)((medianSalaryHitters * (hittersList.size() * (2.0 / p.getAvgRank()))) + 0.5);
+                p.setValue(estimatedValue); //sets the player's esimated value
+            }
+            else { //player is a pitcher
+                estimatedValue = (int)((medianSalaryPitchers * (pitchersList.size() * (2.0 / p.getAvgRank()))) + 0.5);
+                p.setValue(estimatedValue); //sets the player's esimated value
+            }
+        }
+    }
+    
+    public void calcHittersRank(Player p) {
+        Collections.sort(hitterSortList, new PlayerRorWComparator());
+        int runsRank = (hitterSortList.indexOf(p) + 1);
+        Collections.sort(hitterSortList, new PlayerHRorSVComparator());
+        int hrRank = (hitterSortList.indexOf(p) + 1);
+        Collections.sort(hitterSortList, new PlayerRBIorKComparator());
+        int rbiRank = (hitterSortList.indexOf(p) + 1);
+        Collections.sort(hitterSortList, new PlayerSBorERAComparator());
+        int sbRank = (hitterSortList.indexOf(p) + 1);
+        Collections.sort(hitterSortList, new PlayerBAorWHIPComparator());
+        int baRank = (hitterSortList.indexOf(p) + 1);
+        
+        int avgRank = (int)(((runsRank + hrRank + rbiRank + sbRank + baRank) / 5.0) + 0.5);
+        p.setAvgRank(avgRank);
+    }
+    
+    public void calcPitchersRank(Player p) {
+        Collections.sort(pitcherSortList, new PlayerRorWComparator());
+        int winsRank = (pitcherSortList.indexOf(p) + 1);
+        Collections.sort(pitcherSortList, new PlayerHRorSVComparator());
+        int savesRank = (pitcherSortList.indexOf(p) + 1);
+        Collections.sort(pitcherSortList, new PlayerRBIorKComparator());
+        int ksRank = (pitcherSortList.indexOf(p) + 1);
+        Collections.sort(pitcherSortList, new PlayerSBorERAComparator());
+        int eraRank = (pitcherSortList.indexOf(p) + 1);
+        Collections.sort(pitcherSortList, new PlayerBAorWHIPComparator());
+        int whipRank = (pitcherSortList.indexOf(p) + 1);
+        
+        int avgRank = (int)(((winsRank + savesRank + ksRank + eraRank + whipRank) / 5.0) + 0.5);
+        p.setAvgRank(avgRank);
     }
 }

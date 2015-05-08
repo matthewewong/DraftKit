@@ -220,9 +220,18 @@ public class FileHandler {
         if (selection.equals(YesNoCancelDialog.YES)) {
             // SAVE THE DRAFT
             DraftDataManager dataManager = gui.getDataManager();
-            draftIO.saveDraft(dataManager.getDraft());
-            saved = true;
-
+            if (dataManager.getDraft().getDraftName() == null) { //no draft name!
+                messageDialog.show(properties.getProperty(ILLEGAL_DRAFT_NAME));
+                return false;
+            }
+            else if (dataManager.getDraft().getDraftName().equals("")) {//no draft name!
+                messageDialog.show(properties.getProperty(ILLEGAL_DRAFT_NAME));
+                return false;
+            }
+            else {
+                draftIO.saveDraft(dataManager.getDraft());
+                saved = true;
+            }
         } // IF THE USER SAID CANCEL, THEN WE'LL TELL WHOEVER
         // CALLED THIS THAT THE USER IS NOT INTERESTED ANYMORE
         else if (selection.equals(YesNoCancelDialog.CANCEL)) {

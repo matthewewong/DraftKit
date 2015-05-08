@@ -53,6 +53,9 @@ public class Player implements Comparable {
     int hitsAllowed;
     int walksAllowed;
     
+    int averageRank;
+    int rank;
+    
     ArrayList<String> positionsArray;
     String fantasyTeamName;
     
@@ -97,6 +100,8 @@ public class Player implements Comparable {
         earnedRuns = 0;
         hitsAllowed = 0;
         walksAllowed = 0;
+        averageRank = 0;
+        rank = 0;
     }
     
     public boolean isAHitter() {
@@ -542,6 +547,14 @@ public class Player implements Comparable {
     
     public void setWalksAllowed(int BB) {
         walksAllowed = BB;
+    }
+    
+    public int getAvgRank() {
+        return averageRank;
+    }
+    
+    public void setAvgRank(int avgRank) {
+        averageRank = avgRank;
     }
     
     @Override

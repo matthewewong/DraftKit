@@ -60,6 +60,8 @@ public class Team {
     public final String UTILITY = "U";
     public final String PITCHERS = "P";
     
+    public final int MAX_MONEY = 260;
+    
     public Team() {
         startingPlayers = FXCollections.observableArrayList();
         taxiPlayers = FXCollections.observableArrayList();

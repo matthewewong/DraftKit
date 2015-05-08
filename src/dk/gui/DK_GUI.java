@@ -514,9 +514,6 @@ public class DK_GUI implements DraftDataView {
             activateWorkspace();
         }
         
-        // we don't want to respond to events when initializing the selections
-        //editHandler.enable(false); CHANGE
-        
         draftPane.setCenter(teamPane);
         screenSelectHandler(lastSelection, TEAM_BUTTON);
         allButton.setSelected(true);
@@ -530,11 +527,7 @@ public class DK_GUI implements DraftDataView {
         standingsHandler.editStandingsTableContents(standingsTable, draftToReload);
         mlbTeamsComboBox.getSelectionModel().select(0);
         mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
-        
-        //get the players table
-        
-        // enable the handler so we can respond to user interactions
-        //editHandler.enable(true); CHANGE
+        dataManager.getDraft().calcEstimatedValue();
     }
     
     /**
