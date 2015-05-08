@@ -1026,6 +1026,33 @@ public class DK_GUI implements DraftDataView {
         pauseAutoDraftButton = initChildButton(draftToolbar, DK_PropertyType.PAUSE_ICON, DK_PropertyType.PAUSE_AUTO_DRAFT_TOOLTIP, true);
         
         draftTable = new TableView();
+        draftTable.setMaxWidth(650.0);
+        draftTable.setMinHeight(500.0);
+    
+        pickNumColumn = new TableColumn(COL_PICK_NUMBER);
+        draftFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        draftLastNameColumn = new TableColumn(COL_LAST_NAME);
+        draftTeamNameColumn = new TableColumn(COL_TEAM_NAME);
+        draftContractColumn = new TableColumn(COL_CONTRACT);
+        draftSalaryColumn = new TableColumn(COL_SALARY);
+        
+        firstNameColumn.setMinWidth(75.0);
+        lastNameColumn.setMinWidth(95.0);
+        draftTeamNameColumn.setMinWidth(150.0);
+        
+        pickNumColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("pickNum"));
+        draftFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        draftLastNameColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("lastName"));
+        draftTeamNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("fantasyTeam"));
+        draftContractColumn.setCellValueFactory(new PropertyValueFactory<Integer, String>("contract"));
+        draftSalaryColumn.setCellValueFactory(new PropertyValueFactory<String, String>("salary"));
+        
+        draftTable.getColumns().add(pickNumColumn);
+        draftTable.getColumns().add(draftFirstNameColumn);
+        draftTable.getColumns().add(draftLastNameColumn);
+        draftTable.getColumns().add(draftTeamNameColumn);
+        draftTable.getColumns().add(draftContractColumn);
+        draftTable.getColumns().add(draftSalaryColumn);
         
         draftSelectPane.getChildren().add(draftOptionsPane);
         draftSelectPane.getChildren().add(draftTable);

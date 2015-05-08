@@ -63,6 +63,7 @@ public class JsonDraftFileManager implements DraftFileManager {
     String JSON_TEAM_POSITION = "teamPosition";
     String JSON_CONTRACT = "contract";
     String JSON_SALARY = "salary";
+    String JSON_PICK_NUMBER = "pickNumber";
     String JSON_POSITION_NUMBER = "positionNumber";
     String JSON_TEAM_NAME = "teamName";
     String JSON_OWNER_NAME = "ownerName";
@@ -268,6 +269,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_CONTRACT, player.getContract())
                                                         .add(JSON_SALARY, player.getSalary())
                                                         .add(JSON_FANTASY_TEAM, player.getFantasyTeam())
+                                                        .add(JSON_PICK_NUMBER, player.getPickNumber())
                                                         .add(JSON_POSITION_NUMBER, player.getPositionNumber())
                                                         .build();
         }
@@ -294,6 +296,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_CONTRACT, player.getContract())
                                                         .add(JSON_SALARY, player.getSalary())
                                                         .add(JSON_FANTASY_TEAM, player.getFantasyTeam())
+                                                        .add(JSON_PICK_NUMBER, player.getPickNumber())
                                                         .add(JSON_POSITION_NUMBER, player.getPositionNumber())
                                                         .build();
         }
@@ -390,6 +393,7 @@ public class JsonDraftFileManager implements DraftFileManager {
             p.setTeamPosition(jso.getString(JSON_TEAM_POSITION));
             p.setContract(jso.getString(JSON_CONTRACT));
             p.setSalary(jso.getInt(JSON_SALARY)); 
+            p.setPickNumber(jso.getInt(JSON_PICK_NUMBER));
             p.setPositionNumber(jso.getInt(JSON_POSITION_NUMBER));
             players.add(p);
         }

@@ -57,12 +57,15 @@ public class Player implements Comparable {
     int rank;
     
     ArrayList<String> positionsArray;
-    String fantasyTeamName;
+    final StringProperty fantasyTeamName;
     
     //starting tables
     final StringProperty teamPosition;
     final StringProperty contract;
     final IntegerProperty salary;
+    
+    //draft table
+    final IntegerProperty pickNum;
     
     public Player() {
         first = new SimpleStringProperty();
@@ -91,8 +94,9 @@ public class Player implements Comparable {
         teamPosition = new SimpleStringProperty();
         contract = new SimpleStringProperty();
         salary = new SimpleIntegerProperty();
+        pickNum = new SimpleIntegerProperty();
+        fantasyTeamName = new SimpleStringProperty("");
         positionsArray  = new ArrayList<String>();
-        fantasyTeamName = "";
         positionNumber = 0;
         hits = 0;
         atBats = 0;
@@ -398,6 +402,18 @@ public class Player implements Comparable {
         return salary;
     }
     
+    public int getPickNumber() {
+        return pickNum.get();
+    }
+    
+    public void setPickNumber(int initPickNum) {
+        pickNum.set(initPickNum);
+    }
+    
+    public IntegerProperty pickNumProperty() {
+        return pickNum;
+    }
+    
     public void calculateBA(int hits, int ab) {
         DecimalFormat df = new DecimalFormat("0.000");
         double ba;
@@ -486,11 +502,15 @@ public class Player implements Comparable {
     }
     
     public String getFantasyTeam() {
-        return fantasyTeamName;
+        return fantasyTeamName.get();
     }
     
     public void setFantasyTeam(String teamName) {
-        fantasyTeamName = teamName;
+        fantasyTeamName.set(teamName);
+    }
+    
+    public StringProperty fantasyTeamProperty() {
+        return fantasyTeamName;
     }
     
     public int getPositionNumber() {
