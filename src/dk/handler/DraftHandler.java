@@ -146,6 +146,7 @@ public class DraftHandler {
         rankedValuedPlayers.remove(player);
         pH.initLists(gui);
         sH.editStandingsTableContents(standings, draft);
+        draft.setDraftList(draftedPlayers);
     }
     
     public void addPlayerToTaxiTeam(DK_GUI gui, Draft draft, Team team, Player player, String position, TableView<Team> standings) {
@@ -161,17 +162,19 @@ public class DraftHandler {
         rankedValuedPlayers.remove(player);
         pH.initLists(gui);
         sH.editStandingsTableContents(standings, draft);
+        draft.setDraftList(draftedPlayers);
     }
     
     //ADDS A PLAYER TO THE DRAFT TABLE
-    public void addDraftedPlayer(Player p) {
+    public void addDraftedPlayer(Player p, Draft draft) {
         p.setPickNumber(draftedPlayers.size() + 1);
         draftedPlayers.add(p);
         rankedValuedPlayers.remove(p);
+        draft.setDraftList(draftedPlayers);
     }
     
     //PLAYER'S CONTRACT CHANGED
-    public void removeDraftedPlayerFromTable(Player p) {
+    public void removeDraftedPlayerFromTable(Player p, Draft draft) {
         int index = draftedPlayers.indexOf(p); //gets the index of the player
         
         for (int i = index + 1; i < draftedPlayers.size(); i++) {
@@ -180,10 +183,11 @@ public class DraftHandler {
             pickNumPlayer.setPickNumber(pickNumPlayer.getPickNumber() - 1);
         }
         draftedPlayers.remove(index);
+        draft.setDraftList(draftedPlayers);
     }
     
     //PLAYER MOVED TO FA
-    public void removeDraftedPlayerToFreeAgency(Player p) {
+    public void removeDraftedPlayerToFreeAgency(Player p, Draft draft) {
         int index = draftedPlayers.indexOf(p); //get the index of the player to remove
         for (int i = index + 1; i < draftedPlayers.size(); i++) {
             //iterate through the players in the drafted list, decreasing their pick num by 1
@@ -192,5 +196,6 @@ public class DraftHandler {
         }
         draftedPlayers.remove(p);
         rankedValuedPlayers.add(p);
+        draft.setDraftList(draftedPlayers);
     }
 }

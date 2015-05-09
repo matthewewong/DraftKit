@@ -59,6 +59,7 @@ public class JsonDraftFileManager implements DraftFileManager {
     String JSON_WHIP = "WHIP";
     String JSON_IS_HITTER = "isHitter";
     String JSON_FANTASY_TEAM = "fantasyTeam";
+    String JSON_RANK = "rank";
     String JSON_VALUE = "value";
     String JSON_TEAM_POSITION = "teamPosition";
     String JSON_CONTRACT = "contract";
@@ -80,6 +81,7 @@ public class JsonDraftFileManager implements DraftFileManager {
     String JSON_TEAM_U = "numU";
     String JSON_TEAM_P = "numP";
     String JSON_TEAM_TOT_POINTS = "totPoints";
+    String JSON_DRAFT_LIST = "draftList";
     String JSON_EXT = ".json";
     String SLASH = "/";
     
@@ -103,11 +105,15 @@ public class JsonDraftFileManager implements DraftFileManager {
         // THE TEAMS ARRAY
         JsonArray teamsJsonArray = makeTeamsJsonArray(draftToSave.getTeams());
         
+        // THE DRAFT ARRAY
+        JsonArray draftJsonArray = makePlayersJsonArray(draftToSave.getDraftList());
+        
         // NOW BUILD THE DRAFT USING EVERYTHING WE'VE ALREADY MADE
         JsonObject draftJsonObject = Json.createObjectBuilder()
                                     .add(JSON_DRAFT_NAME, draftToSave.getDraftName())
                                     .add(JSON_AVAILABLE_PLAYERS, availPlayersJsonArray)
                                     .add(JSON_TEAMS, teamsJsonArray)
+                                    .add(JSON_DRAFT_LIST, draftJsonArray)
                 .build();
         
         // AND SAVE EVERYTHING AT ONCE
@@ -140,6 +146,13 @@ public class JsonDraftFileManager implements DraftFileManager {
         for (Player p : players) {
             draftToLoad.addPlayer(p);
         }
+        
+        // GET THE DRAFT LIST
+        JsonArray jsonDraftListArray = json.getJsonArray(JSON_DRAFT_LIST);
+        ObservableList<Player> playerDraftList = createPlayerLists(jsonDraftListArray);
+        
+        // SET THE DRAFT LIST
+        draftToLoad.setDraftList(playerDraftList);
         
         // GET THE TEAMS TO INCLUDE
         draftToLoad.clearTeams();
@@ -263,6 +276,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_H, player.getHits())
                                                         .add(JSON_AB, player.getAtBats())
                                                         .add(JSON_BA, player.getBA())
+                                                        .add(JSON_RANK, player.getAvgRank())
                                                         .add(JSON_VALUE, player.getValue())
                                                         .add(JSON_NOTES, player.getNotes())
                                                         .add(JSON_TEAM_POSITION, player.getTeamPosition())
@@ -290,6 +304,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                         .add(JSON_BB_ALLOWED, player.getWalksAllowed())
                                                         .add(JSON_ERA, player.getERA())
                                                         .add(JSON_WHIP, player.getWHIP())
+                                                        .add(JSON_RANK, player.getAvgRank())
                                                         .add(JSON_VALUE, player.getValue())
                                                         .add(JSON_NOTES, player.getNotes())
                                                         .add(JSON_TEAM_POSITION, player.getTeamPosition())
@@ -389,6 +404,7 @@ public class JsonDraftFileManager implements DraftFileManager {
             }
             p.setNotes(jso.getString(JSON_NOTES));
             p.setFantasyTeam(jso.getString(JSON_FANTASY_TEAM));
+            p.setAvgRank(jso.getInt(JSON_RANK));
             p.setValue(jso.getInt(JSON_VALUE));
             p.setTeamPosition(jso.getString(JSON_TEAM_POSITION));
             p.setContract(jso.getString(JSON_CONTRACT));

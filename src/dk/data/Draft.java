@@ -33,6 +33,9 @@ public class Draft {
     //draft name
     String draftName;
     
+    //draft list
+    ObservableList<Player> draftList;
+    
     /**
      * Constructor for setting up a Draft
      */
@@ -46,6 +49,9 @@ public class Draft {
         //init the Player lists
         hittersList = FXCollections.observableArrayList();
         pitchersList = FXCollections.observableArrayList();
+        
+        //init the draft list
+        draftList = FXCollections.observableArrayList();
     }
     
     //Accessor and mutator methods for a draft.
@@ -93,6 +99,14 @@ public class Draft {
                 team = teams.get(i);
         }
         return team;
+    }
+    
+    public ObservableList<Player> getDraftList() {
+        return draftList;
+    }
+    
+    public void setDraftList(ObservableList<Player> draftList) {
+        this.draftList = draftList;
     }
     
     public ObservableList<String> getHitters() {

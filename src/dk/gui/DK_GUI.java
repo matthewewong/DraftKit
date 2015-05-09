@@ -529,6 +529,7 @@ public class DK_GUI implements DraftDataView {
         mlbTeamsComboBox.getSelectionModel().select(0);
         mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
         dataManager.getDraft().calcEstimatedValue();
+        draftTable.getItems().clear();
     }
     
     /**

@@ -519,7 +519,7 @@ public class PlayerHandler {
                             initLists(gui);
                             standingsHandler.editStandingsTableContents(standings, draft);
                             draft.calcEstimatedValue();
-                            draftHandler.addDraftedPlayer(playerToEdit);
+                            draftHandler.addDraftedPlayer(playerToEdit, draft);
                         }
                     }
                     else { //starting draft!
@@ -533,7 +533,7 @@ public class PlayerHandler {
                     
                     if (draftedThisYear) {
                         //player was a free agent, and now joins a team this year
-                        draftHandler.addDraftedPlayer(playerToEdit);
+                        draftHandler.addDraftedPlayer(playerToEdit, draft);
                     }
                     
                     playerToEdit.setFantasyTeam(player.getFantasyTeam()); //we do this regardless
@@ -549,7 +549,7 @@ public class PlayerHandler {
                     
                     if (formerlyDraftedThisYear) {
                         //player had an S2 contract before he was placed back into FA, so remove him
-                        draftHandler.removeDraftedPlayerToFreeAgency(playerToEdit);
+                        draftHandler.removeDraftedPlayerToFreeAgency(playerToEdit, draft);
                         draftHandler.sortValuedPlayers(gui);
                     }
                     
@@ -567,7 +567,7 @@ public class PlayerHandler {
                     
                     if (formerlyDraftedThisYear && !(draftedThisYear)) {
                         //this player was drafted this year before, but the contract changed when he changed teams
-                        draftHandler.removeDraftedPlayerFromTable(playerToEdit);
+                        draftHandler.removeDraftedPlayerFromTable(playerToEdit, draft);
                     }
                     playerToEdit.setFantasyTeam(player.getFantasyTeam());
                 }
@@ -576,11 +576,11 @@ public class PlayerHandler {
                 //player is still on the same fantasy team
                 if (formerlyDraftedThisYear && !(draftedThisYear)) {
                     //this player was drafted this year before, but the contract changed
-                    draftHandler.removeDraftedPlayerFromTable(playerToEdit);
+                    draftHandler.removeDraftedPlayerFromTable(playerToEdit, draft);
                 }
                 else if (!(formerlyDraftedThisYear) && draftedThisYear) {
                     //this player was not drafted this year, but the contract changed
-                    draftHandler.addDraftedPlayer(playerToEdit);
+                    draftHandler.addDraftedPlayer(playerToEdit, draft);
                 }
             }
             
