@@ -8,6 +8,7 @@ import dk.gui.DK_GUI;
 import dk.gui.MessageDialog;
 import dk.gui.PlayerDialog;
 import dk.gui.YesNoCancelDialog;
+import draftkit.DK_PropertyType;
 import static draftkit.DK_PropertyType.REMOVE_PLAYER_MESSAGE;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,7 +65,12 @@ public class PlayerHandler {
     static final String MI_RADIO_BUTTON = "Middle Infield";
     static final String OF_RADIO_BUTTON = "Outfield";
     public static final String FREE_AGENT = "Free Agent";
+    
     public final String CONTRACT_S2 = "S2";
+    public final int MAX_STARTING_PLAYERS = 23;
+    public final int MAX_TAXI_PLAYERS = 8;
+    public boolean isDoneWithStarters = false;
+    public boolean isDoneWithDraft = false;
     
     //used for adding a player to a team
     public final String CATCHERS = "C";
@@ -448,6 +454,27 @@ public class PlayerHandler {
     public void handleEditPlayerRequest(DK_GUI gui, Player playerToEdit, TableView<Player> starting, TableView<Player> taxi, TableView<Team> standings) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
+        
+        ObservableList<Team> teams = draft.getTeams();
+        for (int i = 0; i < teams.size(); i++) {
+            if (teams.get(i).getStartingPlayers().size() == MAX_STARTING_PLAYERS) { //this team is done
+                if (i == teams.size() - 1) { //last team in the starting lineup has all players; taxi!
+                    isDoneWithStarters = true;
+                    pdEdit.setIsTaxi(true); //time for the taxi draft!
+                }
+            }
+            if (pdEdit.getIsTaxi()) {//if we are in the taxi draft
+                if (teams.get(i).getTaxiPlayers().size() == MAX_TAXI_PLAYERS) { //team is done
+                    if (i == teams.size() - 1) { //last team in the taxi players has all players; end!
+                        isDoneWithDraft = true;
+                    }
+                }
+            }
+        }
+        
+        if (isDoneWithDraft) //we finished the draft!
+            return;
+        
         pdEdit.showEditPlayerDialog(playerToEdit, gui);
         
         teamStartingTable = starting;
@@ -477,12 +504,32 @@ public class PlayerHandler {
                 //different teams, so move it
                 if (playerToEdit.getFantasyTeam().equals("")) {
                     //player was a free agent
-                    Team luckyTeam = draft.getTeam(player.getFantasyTeam());
-                    luckyTeam.addStartingPlayer(playerToEdit);
-                    draft.removePlayer(playerToEdit);
-                    initLists(gui);
-                    standingsHandler.editStandingsTableContents(standings, draft);
-                    draft.calcEstimatedValue();
+                    if (isDoneWithStarters) { //taxi draft!
+                        Team luckyTeam = draft.getTeam(player.getFantasyTeam());
+                        if (luckyTeam.getTaxiPlayers().size() == MAX_TAXI_PLAYERS) {//no room left!
+                            PropertiesManager props = PropertiesManager.getPropertiesManager();
+                            messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_TAXI_ADDING));
+                            playerToEdit.setFantasyTeam(FREE_AGENT);
+                            playerToEdit.setContract("-");
+                            playerToEdit.setSalary(0);
+                        }
+                        else {
+                            luckyTeam.addTaxiPlayer(playerToEdit);
+                            draft.removePlayer(playerToEdit);
+                            initLists(gui);
+                            standingsHandler.editStandingsTableContents(standings, draft);
+                            draft.calcEstimatedValue();
+                            draftHandler.addDraftedPlayer(playerToEdit);
+                        }
+                    }
+                    else { //starting draft!
+                        Team luckyTeam = draft.getTeam(player.getFantasyTeam());
+                        luckyTeam.addStartingPlayer(playerToEdit);
+                        draft.removePlayer(playerToEdit);
+                        initLists(gui);
+                        standingsHandler.editStandingsTableContents(standings, draft);
+                        draft.calcEstimatedValue();
+                    }
                     
                     if (draftedThisYear) {
                         //player was a free agent, and now joins a team this year

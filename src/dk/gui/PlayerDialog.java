@@ -81,6 +81,9 @@ public class PlayerDialog extends Stage {
     //see which button the user pressed
     String selection;
     
+    //see if we're doing the taxi draft (true if we are)
+    boolean isTaxi = false;
+    
     //constants
     public static final String EMPTY_TEXT = "<ENTER VALUE>";
     public static final String FREE_AGENT = "Free Agent";
@@ -165,8 +168,14 @@ public class PlayerDialog extends Stage {
                     player.setFantasyTeam(fantasyTeam);
                     loadTeamPositionComboBox(teamPositionComboBox, draft.getTeam(fantasyTeam));
                     teamPositionComboBox.getSelectionModel().select(0);
+                    loadContractComboBox(contractComboBox);
                     contractComboBox.getSelectionModel().select(0);
-                    salaryTextField.setText(EMPTY_TEXT);
+                    if (isTaxi) {//taxi draft!
+                        salaryTextField.setText("1");
+                        salaryTextField.setEditable(false);
+                    }
+                    else
+                        salaryTextField.setText(EMPTY_TEXT);
                 }
             }
         });
@@ -378,6 +387,14 @@ public class PlayerDialog extends Stage {
         return player;
     }
     
+    public boolean getIsTaxi() {
+        return isTaxi;
+    }
+    
+    public void setIsTaxi(boolean taxi) {
+        isTaxi = taxi;
+    }
+    
     /**
      * This method loads a custom message into the label and pops open the dialog.
      * 
@@ -496,21 +513,36 @@ public class PlayerDialog extends Stage {
         Player p = getPlayerToEdit();
         cb.getItems().clear();
         cb.getItems().add(EMPTY_TEXT);
-        ObservableList<String> availablePositions = team.getAvailablePositions();
-        ObservableList<String> playerPositions = p.getPositionsArray();
-        for (int i = 0; i < availablePositions.size(); i++) {           //sorts through each available position
-            for (int j = 0; j < playerPositions.size(); j++) {          //sorts through player's eligible positions
-                if (availablePositions.get(i).equals(playerPositions.get(j))) //eligible AND available!
-                    cb.getItems().add(availablePositions.get(i));
+        if (isTaxi) { //draft!!
+            ObservableList<String> playerPositions = p.getPositionsArray();
+            for (String s : playerPositions) {
+                cb.getItems().add(s);
+            }
+        }
+        else {
+            ObservableList<String> availablePositions = team.getAvailablePositions();
+            ObservableList<String> playerPositions = p.getPositionsArray();
+            for (int i = 0; i < availablePositions.size(); i++) {           //sorts through each available position
+                for (int j = 0; j < playerPositions.size(); j++) {          //sorts through player's eligible positions
+                    if (availablePositions.get(i).equals(playerPositions.get(j))) //eligible AND available!
+                        cb.getItems().add(availablePositions.get(i));
+                }
             }
         }
     }
     
     private void loadContractComboBox(ComboBox cb) {
-        cb.getItems().add(EMPTY_TEXT);
-        cb.getItems().add(S2_CONTRACT);
-        cb.getItems().add(S1_CONTRACT);
-        cb.getItems().add(X_CONTRACT);
+        cb.getItems().clear();
+        if (isTaxi) { //taxi draft!
+            cb.getItems().add(EMPTY_TEXT);
+            cb.getItems().add(X_CONTRACT);
+        }
+        else {
+            cb.getItems().add(EMPTY_TEXT);
+            cb.getItems().add(S2_CONTRACT);
+            cb.getItems().add(S1_CONTRACT);
+            cb.getItems().add(X_CONTRACT);
+        }
     }
     
     private Player getPlayerToEdit() {

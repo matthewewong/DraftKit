@@ -79,6 +79,7 @@ Draft Kit.
         <!-- ERROR MESSAGES -->
         <property name="ILLEGAL_EDITING_MESSAGE"        value="Not all the fields are completed."></property>
         <property name="ILLEGAL_DRAFT_NAME"             value="Please enter a draft name before saving."></property>
+        <property name="ILLEGAL_TAXI_ADDING"            value="Player will not be added to the team. There are no spots left."></property>
         <property name="CLOSE_BUTTON_TEXT"                          value="Close"></property>
 
         <!-- VERIFICATION MESSAGES -->

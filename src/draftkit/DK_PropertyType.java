@@ -82,6 +82,7 @@ public enum DK_PropertyType {
     //error dialog messages
     ILLEGAL_EDITING_MESSAGE,
     ILLEGAL_DRAFT_NAME,
+    ILLEGAL_TAXI_ADDING,
     
     //verification messages
     NEW_DRAFT_CREATED_MESSAGE,
