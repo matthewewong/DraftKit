@@ -83,6 +83,7 @@ public enum DK_PropertyType {
     ILLEGAL_EDITING_MESSAGE,
     ILLEGAL_DRAFT_NAME,
     ILLEGAL_TAXI_ADDING,
+    ILLEGAL_SALARY_MESSAGE,
     
     //verification messages
     NEW_DRAFT_CREATED_MESSAGE,

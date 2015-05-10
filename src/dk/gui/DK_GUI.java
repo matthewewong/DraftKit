@@ -530,6 +530,9 @@ public class DK_GUI implements DraftDataView {
         mlbTeamsTable.setItems(mlbHandler.getAtlantaTeamList());
         dataManager.getDraft().calcEstimatedValue();
         draftTable.getItems().clear();
+        draftTable.setItems(draftToReload.getDraftList());
+        draftHandler.setDraftedList(draftToReload.getDraftList());
+        draftHandler.sortValuedPlayers(this);
     }
     
     /**
@@ -1270,6 +1273,7 @@ public class DK_GUI implements DraftDataView {
         
         //draft handler
         draftHandler = new DraftHandler(this, playerHandler, standingsHandler);
+        draftHandler.getButtons(startAutoDraftButton, pauseAutoDraftButton);
         
         //team handlers
         teamHandler = new TeamHandler(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog, draftHandler);
@@ -1307,6 +1311,19 @@ public class DK_GUI implements DraftDataView {
         draftBestPlayerButton.setOnAction(e -> {
             draftHandler.handleDraftBestPlayerRequest(this, standingsTable);
             draftTable.setItems(draftHandler.getDraftedList());
+        });
+        
+        startAutoDraftButton.setOnAction(e -> {
+            pauseAutoDraftButton.setDisable(false);
+            startAutoDraftButton.setDisable(true);
+            draftTable.setItems(draftHandler.getDraftedList());
+            draftHandler.handleStartAutoDraftRequest(this, standingsTable);
+        });
+        
+        pauseAutoDraftButton.setOnAction(e -> {
+            pauseAutoDraftButton.setDisable(true);
+            startAutoDraftButton.setDisable(false);
+            draftHandler.handlePauseAutoDraftRequest();
         });
         
         //mlb teams handler

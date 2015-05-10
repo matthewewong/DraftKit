@@ -7,8 +7,11 @@ import dk.data.PlayerValueComparator;
 import dk.data.Team;
 import dk.gui.DK_GUI;
 import java.util.Collections;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 
 /**
@@ -30,11 +33,18 @@ public class DraftHandler {
     public final int MAX_STARTER_SIZE = 23;
     public final int MAX_TAXI_SIZE = 8;
     
+    //boolean for the thread
+    public boolean running = false;
+    
+    //buttons
+    Button sad;
+    Button pad;
+    
     public DraftHandler(DK_GUI gui, PlayerHandler playerHandler, StandingsHandler standingsHandler) {
         DraftDataManager ddm = gui.getDataManager();
         Draft draft = ddm.getDraft();
         draftedPlayers = FXCollections.observableArrayList();
-        rankedValuedPlayers = FXCollections.observableArrayList(draft.getPlayers());
+        rankedValuedPlayers = FXCollections.observableArrayList();
         pH = playerHandler;
         sH = standingsHandler;
         pH.setDraftHandler(this);
@@ -101,9 +111,11 @@ public class DraftHandler {
             }
         }
         
-        if (isTaxisDone)
+        if (isTaxisDone) {
+            running = false;
+            resetButtons();
             return;
-        
+        }
         //RESET i
         i = 0;
         
@@ -116,6 +128,8 @@ public class DraftHandler {
                     //starters lineup is done; accept everyone now!
                     addPlayerToTaxiTeam(gui, draft, luckyTeam, p, positions.get(index), standings);
                     isDrafted = true;
+                    //the draft is now dirty; update the toolbar
+                    gui.updateTopToolbarControls(false);
                     break;
                 }
                 else {
@@ -124,6 +138,8 @@ public class DraftHandler {
                     if (teamPositions.indexOf(positions.get(index)) != -1) { //we found it!
                         addPlayerToTeam(gui, draft, luckyTeam, p, positions.get(index), standings);
                         isDrafted = true;
+                        //the draft is now dirty; update the toolbar
+                        gui.updateTopToolbarControls(false);
                         break;
                     }
                 }
@@ -197,5 +213,46 @@ public class DraftHandler {
         draftedPlayers.remove(p);
         rankedValuedPlayers.add(p);
         draft.setDraftList(draftedPlayers);
+    }
+    
+    public void handleStartAutoDraftRequest(DK_GUI gui, TableView<Team> standings) {
+        //tell the thread you can start
+        running = true;
+        
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                while(running) { //while we can still run the thread
+                    //update the progress
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            handleDraftBestPlayerRequest(gui, standings);
+                        }
+                    });
+                    
+                    //sleep for one second
+                    Thread.sleep(1000);
+                }
+                return null;
+            }
+        };
+        
+        Thread thread = new Thread(task);
+        thread.start();
+    }
+    
+    public void handlePauseAutoDraftRequest() {
+        running = false;
+    }
+    
+    public void getButtons(Button startDraft, Button pauseDraft) {
+        sad = startDraft;
+        pad = pauseDraft;
+    }
+    
+    public void resetButtons() {
+        sad.setDisable(false);
+        pad.setDisable(true);
     }
 }

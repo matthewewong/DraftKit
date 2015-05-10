@@ -231,8 +231,12 @@ public class PlayerDialog extends Stage {
                 if (!(fantasyTeamsComboBox.getSelectionModel().getSelectedIndex() == 0) && (teamPositionComboBox.getSelectionModel().getSelectedItem().equals(EMPTY_TEXT) || 
                         contractComboBox.getSelectionModel().getSelectedItem().equals(EMPTY_TEXT) || salaryTextField.getText().equals(EMPTY_TEXT)))
                     messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_EDITING_MESSAGE));
-                else
-                    PlayerDialog.this.hide();
+                else {
+                    if (player.getSalary() > (draft.getTeam(player.getFantasyTeam()).getMoneyLeft() - draft.getTeam(player.getFantasyTeam()).getPlayersNeeded() + 1))
+                        messageDialog.show(props.getProperty(DK_PropertyType.ILLEGAL_SALARY_MESSAGE));
+                    else
+                        PlayerDialog.this.hide();
+                }
             }
             else
                 PlayerDialog.this.hide();
