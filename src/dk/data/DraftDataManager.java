@@ -45,6 +45,13 @@ public class DraftDataManager {
         draft.clearTeams();
         draft.setDraftName("");
         
+        for (int i = 0; i < draft.getPlayers().size(); i++) {
+            draft.getPlayers().get(i).setFantasyTeam("");
+            draft.getPlayers().get(i).setTeamPosition("");
+            draft.getPlayers().get(i).setContract("-");
+            draft.getPlayers().get(i).setSalary(0);
+        }
+        
         //force UI to reload the updated draft
         view.reloadDraft(draft);
     }

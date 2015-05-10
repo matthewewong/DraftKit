@@ -523,6 +523,8 @@ public class DK_GUI implements DraftDataView {
         lastRadioButtonClicked = ALL_RADIO_BUTTON;
         teamSelectComboBox.getItems().clear();
         teamHandler.handleLoadComboBoxRequest(this, teamSelectComboBox);
+        teamsStartingTable.getItems().clear();
+        teamsTaxiTable.getItems().clear();
         draftNameTextField.setText(dataManager.getDraft().getDraftName());
         teamHandler.updateButtons(this, addTeamButton, removeTeamButton, editTeamButton);
         standingsHandler.editStandingsTableContents(standingsTable, draftToReload);

@@ -84,6 +84,10 @@ public class Draft {
         teams.clear();
     }
     
+    public void loadDraftClearTeams() {
+        teams.clear();
+    }
+    
     public ObservableList<Player> getPlayers() {
         return players;
     }

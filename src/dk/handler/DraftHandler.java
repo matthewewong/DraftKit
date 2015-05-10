@@ -129,7 +129,7 @@ public class DraftHandler {
                     addPlayerToTaxiTeam(gui, draft, luckyTeam, p, positions.get(index), standings);
                     isDrafted = true;
                     //the draft is now dirty; update the toolbar
-                    gui.updateTopToolbarControls(false);
+                    gui.getFileController().markAsEdited(gui);
                     break;
                 }
                 else {
@@ -139,7 +139,7 @@ public class DraftHandler {
                         addPlayerToTeam(gui, draft, luckyTeam, p, positions.get(index), standings);
                         isDrafted = true;
                         //the draft is now dirty; update the toolbar
-                        gui.updateTopToolbarControls(false);
+                        gui.getFileController().markAsEdited(gui);
                         break;
                     }
                 }

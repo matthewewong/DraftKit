@@ -147,15 +147,12 @@ public class JsonDraftFileManager implements DraftFileManager {
             draftToLoad.addPlayer(p);
         }
         
-        // GET THE DRAFT LIST
-        JsonArray jsonDraftListArray = json.getJsonArray(JSON_DRAFT_LIST);
-        ObservableList<Player> playerDraftList = createPlayerLists(jsonDraftListArray);
-        
-        // SET THE DRAFT LIST
-        draftToLoad.setDraftList(playerDraftList);
+        int pickNum = 1; //FIRST PICK
+        ObservableList<Player> playerDraftList = FXCollections.observableArrayList();
+        ObservableList<Player> notYetFoundList = FXCollections.observableArrayList();
         
         // GET THE TEAMS TO INCLUDE
-        draftToLoad.clearTeams();
+        draftToLoad.loadDraftClearTeams();
         JsonArray jsonTeamsArray = json.getJsonArray(JSON_TEAMS);
         for (int i = 0; i < jsonTeamsArray.size(); i++) {
             JsonObject jso = jsonTeamsArray.getJsonObject(i);
@@ -189,6 +186,12 @@ public class JsonDraftFileManager implements DraftFileManager {
             // ADD TEAMS TO THE DRAFT
             draftToLoad.addTeam(t);
         }
+        
+        JsonArray jsonDraftListArray = json.getJsonArray(JSON_DRAFT_LIST);
+        ObservableList<Player> jsonDraftedPlayers = createPlayerLists(jsonDraftListArray);
+        
+        //SET THE DRAFT LIST
+        draftToLoad.setDraftList(jsonDraftedPlayers);
     }
     
     /**
